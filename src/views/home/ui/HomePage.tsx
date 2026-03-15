@@ -1,11 +1,11 @@
 import { Header } from "@/widgets/header";
 import { ScheduleView } from "./ScheduleView";
 import type { StudentGroup } from "@/entities/student-group";
-import type { ScheduleResponse } from "@/entities/schedule";
+import type { NormalizedScheduleResponse } from "@/entities/schedule";
 
 interface HomePageProps {
   groups: StudentGroup[];
-  schedule: ScheduleResponse | null;
+  schedule: NormalizedScheduleResponse | null;
   currentWeek: number;
 }
 

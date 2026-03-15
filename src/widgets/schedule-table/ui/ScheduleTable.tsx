@@ -3,7 +3,7 @@
 import {
   SCHEDULE_DAY_KEYS,
   filterLessonsByWeek,
-  type ScheduleResponse,
+  type NormalizedScheduleResponse,
   type ScheduleDayKey,
   type ScheduleLesson,
 } from "@/entities/schedule";
@@ -13,16 +13,16 @@ import { ClockIcon, MapPinIcon, UserIcon } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 interface ScheduleTableProps {
-  schedule: ScheduleResponse | null;
+  schedule: NormalizedScheduleResponse | null;
   weekNumber: number;
   className?: string;
 }
 
 type TimeSlot = string;
 
-function getTimeSlots(schedule: ScheduleResponse, weekNumber: number): TimeSlot[] {
+function getTimeSlots(schedule: NormalizedScheduleResponse, weekNumber: number): TimeSlot[] {
   const times = new Set<string>();
-  const schedules: Partial<Record<ScheduleDayKey, ScheduleLesson[]>> = schedule.schedules ?? {};
+  const { schedules } = schedule;
   for (const day of SCHEDULE_DAY_KEYS) {
     const lessons = filterLessonsByWeek(schedules[day] ?? [], weekNumber);
     for (const lesson of lessons) {
@@ -33,13 +33,12 @@ function getTimeSlots(schedule: ScheduleResponse, weekNumber: number): TimeSlot[
 }
 
 function getLessonAt(
-  schedule: ScheduleResponse,
+  schedule: NormalizedScheduleResponse,
   day: ScheduleDayKey,
   timeSlot: TimeSlot,
   weekNumber: number
 ): ScheduleLesson | undefined {
-  const schedules: Partial<Record<ScheduleDayKey, ScheduleLesson[]>> = schedule.schedules ?? {};
-  const lessons = filterLessonsByWeek(schedules[day] ?? [], weekNumber);
+  const lessons = filterLessonsByWeek(schedule.schedules[day] ?? [], weekNumber);
   return lessons.find((l) => l.startLessonTime === timeSlot);
 }
 

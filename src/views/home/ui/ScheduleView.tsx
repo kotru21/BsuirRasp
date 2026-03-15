@@ -2,10 +2,10 @@
 
 import { WeekSwitcher, useWeekNumber } from "@/features/week-switcher";
 import { ScheduleTable } from "@/widgets/schedule-table";
-import type { ScheduleResponse } from "@/entities/schedule";
+import type { NormalizedScheduleResponse } from "@/entities/schedule";
 
 interface ScheduleViewProps {
-  schedule: ScheduleResponse | null;
+  schedule: NormalizedScheduleResponse | null;
   currentWeek: number;
 }
 

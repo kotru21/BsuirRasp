@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui";
 import {
   DropdownMenu,
@@ -28,17 +29,24 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Placeholder до монтирования, чтобы сервер и первый клиентский рендер совпадали (гидрация next-themes).
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: avoid hydration mismatch with theme-dependent UI
+    setMounted(true);
+  }, []);
 
   const currentTheme = (theme ?? "system") as ThemeValue;
   const displayTheme = resolvedTheme ?? "light";
 
-  if (resolvedTheme === undefined) {
+  if (!mounted) {
     return (
       <Button
         variant="ghost"
         size="icon"
         className={cn("size-9", className)}
-        aria-label="Переключить тему"
+        aria-label="Выбрать тему"
       >
         <SunIcon className="size-4" />
       </Button>

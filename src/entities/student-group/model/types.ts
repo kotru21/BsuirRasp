@@ -9,3 +9,4 @@ export interface StudentGroup {
   calendarId: string;
   educationDegree?: number;
 }
+

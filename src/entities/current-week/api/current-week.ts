@@ -1,9 +1,6 @@
-import { api } from "@/shared/api";
+import { bsuirClient } from "@/shared/api";
 
-/**
- * Номер текущей недели в семестре (1, 2, 3, 4, …).
- * Используется для фильтрации пар по полю weekNumber.
- */
+/** Номер текущей недели в 4-недельном цикле (1–4). */
 export async function getCurrentWeek(): Promise<number> {
-  return api.get<number>("/schedule/current-week");
+  return bsuirClient.currentWeek.getCycle();
 }

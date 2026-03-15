@@ -1,7 +1,8 @@
-import { api } from "@/shared/api";
-import type { ScheduleResponse } from "../model/types";
+import { bsuirClient } from "@/shared/api";
+import type { NormalizedScheduleResponse } from "../model/types";
 
-export async function getGroupSchedule(groupNumber: string): Promise<ScheduleResponse> {
-  const params = new URLSearchParams({ studentGroup: groupNumber });
-  return api.get<ScheduleResponse>(`/schedule?${params.toString()}`);
+export async function getGroupSchedule(
+  groupNumber: string
+): Promise<NormalizedScheduleResponse> {
+  return bsuirClient.schedule.getGroup(groupNumber);
 }
