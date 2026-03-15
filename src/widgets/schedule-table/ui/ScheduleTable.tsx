@@ -42,8 +42,8 @@ function getLessonAt(
   return lessons.find((l) => l.startLessonTime === timeSlot);
 }
 
-function getLessonTypeVariant(type: string): "default" | "secondary" | "destructive" | "outline" {
-  const t = type.toLowerCase();
+function getLessonTypeVariant(type: string | null | undefined): "default" | "secondary" | "destructive" | "outline" {
+  const t = (type ?? "").toLowerCase();
   if (t.includes("лк") || t.includes("лекция")) return "default";
   if (t.includes("лр") || t.includes("лабораторная")) return "destructive";
   if (t.includes("пз") || t.includes("практика")) return "secondary";
