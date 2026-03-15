@@ -25,7 +25,7 @@ export function WeekSwitcher({
   return (
     <div
       className={cn(
-        "inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+        "flex flex-wrap items-center justify-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground",
         className
       )}
     >
@@ -38,15 +38,16 @@ export function WeekSwitcher({
             key={w}
             onClick={() => setWeekNumber(w)}
             className={cn(
-              "inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+              "inline-flex min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 sm:px-4",
               isActive
                 ? "bg-background text-foreground shadow-sm"
                 : "hover:bg-background/50 hover:text-foreground"
             )}
           >
-            {w} неделя
+            <span>{w}</span>
+            <span className="hidden sm:inline">неделя</span>
             {isCurrent && (
-              <span className="ml-1.5 flex size-2 rounded-full bg-primary" title="Текущая неделя" />
+              <span className="flex size-2 shrink-0 rounded-full bg-primary" title="Текущая неделя" />
             )}
           </button>
         );

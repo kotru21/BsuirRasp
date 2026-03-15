@@ -1,6 +1,7 @@
 "use client";
 
 import { WeekSwitcher, useWeekNumber } from "@/features/week-switcher";
+import { SubgroupSwitcher, useSubgroup } from "@/features/subgroup-switcher";
 import { ScheduleTable } from "@/widgets/schedule-table";
 import type { NormalizedScheduleResponse } from "@/entities/schedule";
 
@@ -15,27 +16,40 @@ export function ScheduleView({ schedule, currentWeek }: ScheduleViewProps) {
     minWeek: 1,
     maxWeek: 4,
   });
+  const { subgroupFilter, setSubgroupFilter } = useSubgroup();
 
   return (
     <div className="mx-auto w-full max-w-7xl flex-1 space-y-6 p-4 sm:p-6 lg:p-8">
       {schedule && (
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Группа {schedule.studentGroupDto?.name}
-            </h2>
-            <p className="text-muted-foreground">{schedule.studentGroupDto?.specialityName}</p>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">
+                Группа {schedule.studentGroupDto?.name}
+              </h2>
+              <p className="text-muted-foreground">{schedule.studentGroupDto?.specialityName}</p>
+            </div>
+            <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+              <WeekSwitcher
+                weekNumber={weekNumber}
+                setWeekNumber={setWeekNumber}
+                minWeek={minWeek}
+                maxWeek={maxWeek}
+                currentWeek={currentWeek}
+              />
+              <SubgroupSwitcher
+                subgroupFilter={subgroupFilter}
+                setSubgroupFilter={setSubgroupFilter}
+              />
+            </div>
           </div>
-          <WeekSwitcher
-            weekNumber={weekNumber}
-            setWeekNumber={setWeekNumber}
-            minWeek={minWeek}
-            maxWeek={maxWeek}
-            currentWeek={currentWeek}
-          />
         </div>
       )}
-      <ScheduleTable schedule={schedule} weekNumber={weekNumber} />
+      <ScheduleTable
+        schedule={schedule}
+        weekNumber={weekNumber}
+        subgroupFilter={subgroupFilter}
+      />
     </div>
   );
 }

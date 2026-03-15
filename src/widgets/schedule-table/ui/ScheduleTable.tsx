@@ -3,9 +3,11 @@
 import {
   SCHEDULE_DAY_KEYS,
   filterLessonsByWeek,
+  filterLessonsBySubgroup,
   type NormalizedScheduleResponse,
   type ScheduleDayKey,
   type ScheduleLesson,
+  type SubgroupFilter,
 } from "@/entities/schedule";
 import { Card, CardContent, Badge } from "@/shared/ui";
 import { formatEmployees } from "../lib/format-lesson";
@@ -15,31 +17,39 @@ import { cn } from "@/shared/lib/utils";
 interface ScheduleTableProps {
   schedule: NormalizedScheduleResponse | null;
   weekNumber: number;
+  subgroupFilter?: SubgroupFilter;
   className?: string;
 }
 
 type TimeSlot = string;
 
-function getTimeSlots(schedule: NormalizedScheduleResponse, weekNumber: number): TimeSlot[] {
+function getTimeSlots(
+  schedule: NormalizedScheduleResponse,
+  weekNumber: number,
+  subgroupFilter: SubgroupFilter
+): TimeSlot[] {
   const times = new Set<string>();
   const { schedules } = schedule;
   for (const day of SCHEDULE_DAY_KEYS) {
-    const lessons = filterLessonsByWeek(schedules[day] ?? [], weekNumber);
-    for (const lesson of lessons) {
+    const byWeek = filterLessonsByWeek(schedules[day] ?? [], weekNumber);
+    const bySubgroup = filterLessonsBySubgroup(byWeek, subgroupFilter);
+    for (const lesson of bySubgroup) {
       times.add(lesson.startLessonTime);
     }
   }
   return Array.from(times).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }
 
-function getLessonAt(
+function getLessonsAt(
   schedule: NormalizedScheduleResponse,
   day: ScheduleDayKey,
   timeSlot: TimeSlot,
-  weekNumber: number
-): ScheduleLesson | undefined {
-  const lessons = filterLessonsByWeek(schedule.schedules[day] ?? [], weekNumber);
-  return lessons.find((l) => l.startLessonTime === timeSlot);
+  weekNumber: number,
+  subgroupFilter: SubgroupFilter
+): ScheduleLesson[] {
+  const byWeek = filterLessonsByWeek(schedule.schedules[day] ?? [], weekNumber);
+  const bySubgroup = filterLessonsBySubgroup(byWeek, subgroupFilter);
+  return bySubgroup.filter((l) => l.startLessonTime === timeSlot);
 }
 
 function getLessonTypeVariant(type: string | null | undefined): "default" | "secondary" | "destructive" | "outline" {
@@ -50,7 +60,12 @@ function getLessonTypeVariant(type: string | null | undefined): "default" | "sec
   return "outline";
 }
 
-export function ScheduleTable({ schedule, weekNumber, className }: ScheduleTableProps) {
+export function ScheduleTable({
+  schedule,
+  weekNumber,
+  subgroupFilter = "all",
+  className,
+}: ScheduleTableProps) {
   if (!schedule) {
     return (
       <div
@@ -72,7 +87,7 @@ export function ScheduleTable({ schedule, weekNumber, className }: ScheduleTable
     );
   }
 
-  const timeSlots = getTimeSlots(schedule, weekNumber);
+  const timeSlots = getTimeSlots(schedule, weekNumber, subgroupFilter);
 
   if (timeSlots.length === 0) {
     return (
@@ -110,7 +125,7 @@ export function ScheduleTable({ schedule, weekNumber, className }: ScheduleTable
               {SCHEDULE_DAY_KEYS.map((day) => (
                 <th
                   key={day}
-                  className="min-w-[240px] px-4 py-3 text-left font-medium text-muted-foreground"
+                  className="min-w-[240px] px-4 py-3 text-center font-medium text-muted-foreground"
                 >
                   {day}
                 </th>
@@ -127,52 +142,69 @@ export function ScheduleTable({ schedule, weekNumber, className }: ScheduleTable
                   </div>
                 </td>
                 {SCHEDULE_DAY_KEYS.map((day) => {
-                  const lesson = getLessonAt(schedule, day, timeSlot, weekNumber);
+                  const lessons = getLessonsAt(
+                    schedule,
+                    day,
+                    timeSlot,
+                    weekNumber,
+                    subgroupFilter
+                  );
                   return (
                     <td key={day} className="p-2 align-top">
-                      {lesson ? (
-                        <Card className="h-full border-border/50 bg-background/50 transition-colors hover:bg-accent/50">
-                          <CardContent className="flex flex-col gap-2.5 p-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <Badge
-                                variant={getLessonTypeVariant(lesson.lessonTypeAbbrev)}
-                                className="px-1.5 py-0 text-[10px] leading-4 font-semibold uppercase tracking-wider"
-                              >
-                                {lesson.lessonTypeAbbrev}
-                              </Badge>
-                              {lesson.numSubgroup !== 0 && (
-                                <span className="text-[10px] font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm">
-                                  {lesson.numSubgroup} подгр.
-                                </span>
-                              )}
-                            </div>
-
-                            <div
-                              className="font-semibold leading-tight line-clamp-2"
-                              title={lesson.subjectFullName}
+                      {lessons.length > 0 ? (
+                        <div className="flex flex-col gap-2">
+                          {lessons.map((lesson, idx) => (
+                            <Card
+                              key={idx}
+                              className="border-border/50 bg-background/50 transition-colors hover:bg-accent/50"
                             >
-                              {lesson.subject}
-                            </div>
-
-                            <div className="mt-auto flex flex-col gap-1.5 text-xs text-muted-foreground">
-                              {lesson.auditories?.length > 0 && (
-                                <div className="flex items-center gap-1.5">
-                                  <MapPinIcon className="size-3.5 shrink-0" />
-                                  <span className="truncate">{lesson.auditories.join(", ")}</span>
+                              <CardContent className="flex flex-col gap-2.5 p-3">
+                                <div className="flex items-start justify-between gap-2">
+                                  <Badge
+                                    variant={getLessonTypeVariant(lesson.lessonTypeAbbrev)}
+                                    className="px-1.5 py-0 text-[10px] leading-4 font-semibold uppercase tracking-wider"
+                                  >
+                                    {lesson.lessonTypeAbbrev}
+                                  </Badge>
+                                  {lesson.numSubgroup !== 0 && (
+                                    <span className="text-[10px] font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm">
+                                      {lesson.numSubgroup} подгр.
+                                    </span>
+                                  )}
                                 </div>
-                              )}
 
-                              {lesson.employees && lesson.employees.length > 0 && (
-                                <div className="flex items-center gap-1.5">
-                                  <UserIcon className="size-3.5 shrink-0" />
-                                  <span className="truncate">{formatEmployees(lesson)}</span>
+                                <div
+                                  className="font-semibold leading-tight line-clamp-2"
+                                  title={lesson.subjectFullName}
+                                >
+                                  {lesson.subject}
                                 </div>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
+
+                                <div className="mt-auto flex flex-col gap-1.5 text-xs text-muted-foreground">
+                                  {lesson.auditories?.length > 0 && (
+                                    <div className="flex items-center gap-1.5">
+                                      <MapPinIcon className="size-3.5 shrink-0" />
+                                      <span className="truncate">
+                                        {lesson.auditories.join(", ")}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  {lesson.employees && lesson.employees.length > 0 && (
+                                    <div className="flex items-center gap-1.5">
+                                      <UserIcon className="size-3.5 shrink-0" />
+                                      <span className="truncate">
+                                        {formatEmployees(lesson)}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
                       ) : (
-                        <div className="flex h-full min-h-[120px] items-center justify-center rounded-xl border border-dashed border-transparent p-3 text-muted-foreground/30">
+                        <div className="flex min-h-[80px] items-center justify-center rounded-xl border border-dashed border-transparent p-3 text-muted-foreground/30">
                           —
                         </div>
                       )}
