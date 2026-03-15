@@ -1,17 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Расписание БГУИР
+
+Сайт-расписание на [Next.js](https://nextjs.org) (App Router) + [shadcn/ui](https://ui.shadcn.com) с архитектурой [Feature-Sliced Design](https://feature-sliced.design).
+
+## Структура (FSD)
+
+- `app/` — маршруты Next.js (layout, page, loading, error, not-found).
+- `src/` — бизнес-код по слоям:
+  - `root` — провайдеры приложения;
+  - `shared` — ui (shadcn), lib, config, api;
+  - `entities` — доменные сущности;
+  - `features` — сценарии;
+  - `widgets` — составные блоки;
+  - `views` — страницы (композиция виджетов). Импорт в `app/page.tsx` из `@/views/...`.
+
+Алиас `@/*` → `src/*`. Линтинг: ESLint + Prettier (интеграция в IDE через `.vscode/`).
 
 ## Getting Started
 
-First, run the development server:
+Установка зависимостей и запуск (используется [Bun](https://bun.sh)):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
