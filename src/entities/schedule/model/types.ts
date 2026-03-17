@@ -1,7 +1,6 @@
 import type {
   NormalizedScheduleResponse as BsuirNormalizedScheduleResponse,
   ScheduleItem,
-  ScheduleResponse as BsuirScheduleResponse,
   Weekday,
 } from "bsuir-iis-api";
 
@@ -17,7 +16,6 @@ export const SCHEDULE_DAY_KEYS: Weekday[] = [
 
 export type ScheduleDayKey = Weekday;
 export type ScheduleLesson = ScheduleItem;
-export type ScheduleResponse = BsuirScheduleResponse;
 /** Нормализованный ответ: schedules всегда объект (не null). */
 export type NormalizedScheduleResponse = BsuirNormalizedScheduleResponse;
 

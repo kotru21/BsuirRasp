@@ -1,6 +1,5 @@
 export type {
   NormalizedScheduleResponse,
-  ScheduleResponse,
   ScheduleLesson,
   ScheduleDayKey,
 } from "./model/types";
@@ -10,4 +9,8 @@ export {
   filterLessonsBySubgroup,
   type SubgroupFilter,
 } from "./model/filter-by-subgroup";
-export { getGroupSchedule } from "./api/schedule";
+export { getGroupSchedule, getEmployeeSchedule } from "./api/schedule";
+export {
+  getScheduleLastUpdate,
+  getScheduleLastUpdateByEmployee,
+} from "./api/last-update";

@@ -6,3 +6,9 @@ export async function getGroupSchedule(
 ): Promise<NormalizedScheduleResponse> {
   return bsuirClient.schedule.getGroup(groupNumber);
 }
+
+export async function getEmployeeSchedule(
+  urlId: string
+): Promise<NormalizedScheduleResponse> {
+  return bsuirClient.schedule.getEmployee(urlId);
+}

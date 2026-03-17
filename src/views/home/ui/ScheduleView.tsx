@@ -8,9 +8,20 @@ import type { NormalizedScheduleResponse } from "@/entities/schedule";
 interface ScheduleViewProps {
   schedule: NormalizedScheduleResponse | null;
   currentWeek: number;
+  lastUpdateDate?: string | null;
 }
 
-export function ScheduleView({ schedule, currentWeek }: ScheduleViewProps) {
+function formatLastUpdate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return Number.isNaN(date.getTime()) ? dateStr : date.toLocaleDateString("ru-RU");
+}
+
+export function ScheduleView({
+  schedule,
+  currentWeek,
+  lastUpdateDate,
+}: ScheduleViewProps) {
+  const isEmployeeSchedule = Boolean(schedule?.employeeDto);
   const { weekNumber, setWeekNumber, minWeek, maxWeek } = useWeekNumber({
     defaultWeek: currentWeek,
     minWeek: 1,
@@ -24,10 +35,43 @@ export function ScheduleView({ schedule, currentWeek }: ScheduleViewProps) {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                Группа {schedule.studentGroupDto?.name}
-              </h2>
-              <p className="text-muted-foreground">{schedule.studentGroupDto?.specialityName}</p>
+              {schedule.studentGroupDto ? (
+                <>
+                  <h2 className="text-2xl font-bold tracking-tight">
+                    Группа {schedule.studentGroupDto.name}
+                  </h2>
+                  <p className="text-muted-foreground">
+                    {schedule.studentGroupDto.specialityName}
+                  </p>
+                </>
+              ) : schedule.employeeDto ? (
+                <>
+                  <h2 className="text-2xl font-bold tracking-tight">
+                    Преподаватель{" "}
+                    {[
+                      schedule.employeeDto.lastName,
+                      schedule.employeeDto.firstName,
+                      schedule.employeeDto.middleName,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  </h2>
+                  {(schedule.employeeDto.rank || schedule.employeeDto.degree) && (
+                    <p className="text-muted-foreground">
+                      {[schedule.employeeDto.rank, schedule.employeeDto.degree]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <h2 className="text-2xl font-bold tracking-tight">Расписание</h2>
+              )}
+              {lastUpdateDate && (
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Обновлено: {formatLastUpdate(lastUpdateDate)}
+                </p>
+              )}
             </div>
             <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
               <WeekSwitcher
@@ -37,10 +81,12 @@ export function ScheduleView({ schedule, currentWeek }: ScheduleViewProps) {
                 maxWeek={maxWeek}
                 currentWeek={currentWeek}
               />
-              <SubgroupSwitcher
-                subgroupFilter={subgroupFilter}
-                setSubgroupFilter={setSubgroupFilter}
-              />
+              {!isEmployeeSchedule && (
+                <SubgroupSwitcher
+                  subgroupFilter={subgroupFilter}
+                  setSubgroupFilter={setSubgroupFilter}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -48,7 +94,8 @@ export function ScheduleView({ schedule, currentWeek }: ScheduleViewProps) {
       <ScheduleTable
         schedule={schedule}
         weekNumber={weekNumber}
-        subgroupFilter={subgroupFilter}
+        subgroupFilter={isEmployeeSchedule ? "all" : subgroupFilter}
+        showStudentGroups={isEmployeeSchedule}
       />
     </div>
   );

@@ -9,15 +9,15 @@ import {
   type ScheduleLesson,
   type SubgroupFilter,
 } from "@/entities/schedule";
-import { Card, CardContent, Badge } from "@/shared/ui";
-import { formatEmployees } from "../lib/format-lesson";
-import { ClockIcon, MapPinIcon, UserIcon } from "lucide-react";
+import { ClockIcon } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { LessonCard } from "./LessonCard";
 
 interface ScheduleTableProps {
   schedule: NormalizedScheduleResponse | null;
   weekNumber: number;
   subgroupFilter?: SubgroupFilter;
+  showStudentGroups?: boolean;
   className?: string;
 }
 
@@ -52,18 +52,19 @@ function getLessonsAt(
   return bySubgroup.filter((l) => l.startLessonTime === timeSlot);
 }
 
-function getLessonTypeVariant(type: string | null | undefined): "default" | "secondary" | "destructive" | "outline" {
-  const t = (type ?? "").toLowerCase();
-  if (t.includes("лк") || t.includes("лекция")) return "default";
-  if (t.includes("лр") || t.includes("лабораторная")) return "destructive";
-  if (t.includes("пз") || t.includes("практика")) return "secondary";
-  return "outline";
+function EmptyCell() {
+  return (
+    <div className="flex min-h-[80px] items-center justify-center rounded-xl border border-dashed border-transparent p-3 text-muted-foreground/30">
+      —
+    </div>
+  );
 }
 
 export function ScheduleTable({
   schedule,
   weekNumber,
   subgroupFilter = "all",
+  showStudentGroups = false,
   className,
 }: ScheduleTableProps) {
   if (!schedule) {
@@ -142,71 +143,21 @@ export function ScheduleTable({
                   </div>
                 </td>
                 {SCHEDULE_DAY_KEYS.map((day) => {
-                  const lessons = getLessonsAt(
-                    schedule,
-                    day,
-                    timeSlot,
-                    weekNumber,
-                    subgroupFilter
-                  );
+                  const lessons = getLessonsAt(schedule, day, timeSlot, weekNumber, subgroupFilter);
                   return (
                     <td key={day} className="p-2 align-top">
                       {lessons.length > 0 ? (
                         <div className="flex flex-col gap-2">
                           {lessons.map((lesson, idx) => (
-                            <Card
+                            <LessonCard
                               key={idx}
-                              className="border-border/50 bg-background/50 transition-colors hover:bg-accent/50"
-                            >
-                              <CardContent className="flex flex-col gap-2.5 p-3">
-                                <div className="flex items-start justify-between gap-2">
-                                  <Badge
-                                    variant={getLessonTypeVariant(lesson.lessonTypeAbbrev)}
-                                    className="px-1.5 py-0 text-[10px] leading-4 font-semibold uppercase tracking-wider"
-                                  >
-                                    {lesson.lessonTypeAbbrev}
-                                  </Badge>
-                                  {lesson.numSubgroup !== 0 && (
-                                    <span className="text-[10px] font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm">
-                                      {lesson.numSubgroup} подгр.
-                                    </span>
-                                  )}
-                                </div>
-
-                                <div
-                                  className="font-semibold leading-tight line-clamp-2"
-                                  title={lesson.subjectFullName}
-                                >
-                                  {lesson.subject}
-                                </div>
-
-                                <div className="mt-auto flex flex-col gap-1.5 text-xs text-muted-foreground">
-                                  {lesson.auditories?.length > 0 && (
-                                    <div className="flex items-center gap-1.5">
-                                      <MapPinIcon className="size-3.5 shrink-0" />
-                                      <span className="truncate">
-                                        {lesson.auditories.join(", ")}
-                                      </span>
-                                    </div>
-                                  )}
-
-                                  {lesson.employees && lesson.employees.length > 0 && (
-                                    <div className="flex items-center gap-1.5">
-                                      <UserIcon className="size-3.5 shrink-0" />
-                                      <span className="truncate">
-                                        {formatEmployees(lesson)}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                              </CardContent>
-                            </Card>
+                              lesson={lesson}
+                              showStudentGroups={showStudentGroups}
+                            />
                           ))}
                         </div>
                       ) : (
-                        <div className="flex min-h-[80px] items-center justify-center rounded-xl border border-dashed border-transparent p-3 text-muted-foreground/30">
-                          —
-                        </div>
+                        <EmptyCell />
                       )}
                     </td>
                   );
