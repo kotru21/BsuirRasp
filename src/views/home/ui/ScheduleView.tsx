@@ -68,8 +68,8 @@ export function ScheduleView({
                 <h2 className="text-2xl font-bold tracking-tight">Расписание</h2>
               )}
               {lastUpdateDate && (
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  Обновлено: {formatLastUpdate(lastUpdateDate)}
+                <p className="mt-0.5 text-xs text-muted-foreground" title="ИИС может выдавать странные значения">
+                  Обновлено: {formatLastUpdate(lastUpdateDate)} (ИИС может выдавать странные значения)
                 </p>
               )}
             </div>
