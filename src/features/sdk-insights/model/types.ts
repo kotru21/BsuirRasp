@@ -18,11 +18,7 @@ export interface SdkInsightsData {
     auditories: number;
   };
   weeks: {
-    semesterFromCurrentWeek: number | null;
-    cycleFromCurrentWeek: number | null;
-    semesterFromSchedule: number | null;
-    cycleFromSchedule: number | null;
-    cycleFromUtil: number | null;
+    currentWeek: number | null;
   };
   schedule: {
     examsCount: number | null;
@@ -70,5 +66,15 @@ export interface SdkInsightsData {
     subgroup2: FlattenedScheduleLesson[];
     lastUpdateDate: string | null;
   };
+}
+
+export interface SummaryRow {
+  label: string;
+  value: number | null | boolean;
+}
+
+export interface SummarySection {
+  title: string;
+  rows: SummaryRow[];
 }
 

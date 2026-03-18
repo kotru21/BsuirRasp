@@ -20,8 +20,6 @@ export {
   getEmployeeExams,
   getGroupScheduleBySubgroup,
   getEmployeeScheduleBySubgroup,
-  getCurrentSemesterWeekBySchedule,
-  getCurrentCycleWeekBySchedule,
 } from "./api/schedule";
 export {
   getScheduleLastUpdate,

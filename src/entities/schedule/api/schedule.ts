@@ -56,13 +56,3 @@ export async function getEmployeeScheduleBySubgroup(
 ): Promise<FlattenedScheduleLesson[]> {
   return bsuirClient.schedule.getEmployeeBySubgroup(urlId, subgroup);
 }
-
-export async function getCurrentSemesterWeekBySchedule(): Promise<number> {
-  return bsuirClient.schedule.getCurrentWeek();
-}
-
-export async function getCurrentCycleWeekBySchedule(
-  weeksPerCycle?: number
-): Promise<number> {
-  return bsuirClient.schedule.getCurrentCycleWeek({ weeksPerCycle });
-}

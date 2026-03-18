@@ -1,5 +1,1 @@
-export {
-  getCurrentWeek,
-  getCurrentSemesterWeek,
-  getCurrentCycleWeek,
-} from "./api/current-week";
+export { getCurrentWeek } from "./api/current-week";

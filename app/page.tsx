@@ -1,13 +1,8 @@
-import { toCycleWeek } from "bsuir-iis-api";
 import {
   getAnnouncementsByDepartment,
   getAnnouncementsByEmployee,
   getAuditories,
-  getCurrentCycleWeek,
   getCurrentWeek,
-  getCurrentSemesterWeek,
-  getCurrentCycleWeekBySchedule,
-  getCurrentSemesterWeekBySchedule,
   getDepartments,
   getEmployeeExams,
   getEmployees,
@@ -72,8 +67,6 @@ export default async function Page({ searchParams }: PageProps) {
     departmentsResult,
     specialitiesResult,
     auditoriesResult,
-    semesterWeekResult,
-    cycleWeekResult,
     departmentAnnouncementsResult,
   ] =
     await Promise.all([
@@ -155,12 +148,6 @@ export default async function Page({ searchParams }: PageProps) {
           items: [] as Awaited<ReturnType<typeof getAuditories>>,
           error: getBsuirErrorMessage(e),
         })),
-      getCurrentSemesterWeek()
-        .then((value) => ({ value, error: null as string | null }))
-        .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
-      getCurrentCycleWeek()
-        .then((value) => ({ value, error: null as string | null }))
-        .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
       departmentId
         ? getAnnouncementsByDepartment(departmentId)
             .then((items) => ({ items, error: null as string | null }))
@@ -189,12 +176,6 @@ export default async function Page({ searchParams }: PageProps) {
           getEmployeeScheduleBySubgroup(scheduleKey, 2)
             .then((items) => ({ items, error: null as string | null }))
             .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getEmployeeScheduleBySubgroup>>, error: getBsuirErrorMessage(e) })),
-          getCurrentSemesterWeekBySchedule()
-            .then((value) => ({ value, error: null as string | null }))
-            .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
-          getCurrentCycleWeekBySchedule()
-            .then((value) => ({ value, error: null as string | null }))
-            .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
           getAnnouncementsByEmployee(scheduleKey)
             .then((items) => ({ items, error: null as string | null }))
             .catch((e) => ({ items: [] as Announcement[], error: getBsuirErrorMessage(e) })),
@@ -216,12 +197,6 @@ export default async function Page({ searchParams }: PageProps) {
             getGroupScheduleBySubgroup(scheduleKey, 2)
               .then((items) => ({ items, error: null as string | null }))
               .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getGroupScheduleBySubgroup>>, error: getBsuirErrorMessage(e) })),
-            getCurrentSemesterWeekBySchedule()
-              .then((value) => ({ value, error: null as string | null }))
-              .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
-            getCurrentCycleWeekBySchedule()
-              .then((value) => ({ value, error: null as string | null }))
-              .catch((e) => ({ value: null as number | null, error: getBsuirErrorMessage(e) })),
             Promise.resolve({ items: [] as Announcement[], error: null as string | null }),
           ])
         : null;
@@ -233,8 +208,6 @@ export default async function Page({ searchParams }: PageProps) {
       filteredWeekRes,
       subgroup1Res,
       subgroup2Res,
-      semesterFromScheduleRes,
-      cycleFromScheduleRes,
       employeeAnnouncementsRes,
     ] = scheduleExtendedResult;
 
@@ -246,11 +219,7 @@ export default async function Page({ searchParams }: PageProps) {
         auditories: auditoriesResult.items.length,
       },
       weeks: {
-        semesterFromCurrentWeek: semesterWeekResult.value,
-        cycleFromCurrentWeek: cycleWeekResult.value,
-        semesterFromSchedule: semesterFromScheduleRes.value,
-        cycleFromSchedule: cycleFromScheduleRes.value,
-        cycleFromUtil: semesterWeekResult.value ? toCycleWeek(semesterWeekResult.value) : null,
+        currentWeek: currentWeekResult.currentWeek ?? null,
       },
       schedule: {
         examsCount: examsRes.items.length,
@@ -306,9 +275,7 @@ export default async function Page({ searchParams }: PageProps) {
     departmentsResult.error,
     specialitiesResult.error,
     auditoriesResult.error,
-    semesterWeekResult.error,
-    cycleWeekResult.error,
-    departmentAnnouncementsResult.error,
+    // Ошибку объявлений кафедры не показываем в тостах: при первом запросе иногда приходит 400, при повторном — 200 и данные
     ...(scheduleExtendedResult
       ? scheduleExtendedResult.map((item) => item.error)
       : []),
