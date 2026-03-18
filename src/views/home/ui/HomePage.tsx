@@ -1,9 +1,7 @@
 import { PageErrorToasts } from "@/features/notifications";
 import { Header } from "@/widgets/header";
 import { ScheduleView } from "./ScheduleView";
-import type { Employee } from "@/entities/employee";
-import type { StudentGroup } from "@/entities/student-group";
-import type { NormalizedScheduleResponse } from "@/entities/schedule";
+import type { Employee, StudentGroup, NormalizedScheduleResponse } from "@/entities";
 
 interface HomePageProps {
   groups: StudentGroup[];
@@ -15,6 +13,7 @@ interface HomePageProps {
   employeesError?: string | null;
   scheduleError?: string | null;
   currentWeekError?: string | null;
+  lastUpdateError?: string | null;
 }
 
 export function HomePage({
@@ -27,6 +26,7 @@ export function HomePage({
   employeesError,
   scheduleError,
   currentWeekError,
+  lastUpdateError,
 }: HomePageProps) {
   return (
     <main className="flex min-h-screen flex-col bg-muted/20">
@@ -35,6 +35,7 @@ export function HomePage({
         employeesError={employeesError}
         scheduleError={scheduleError}
         currentWeekError={currentWeekError}
+        lastUpdateError={lastUpdateError}
       />
       <Header groups={groups} employees={employees} />
       <ScheduleView

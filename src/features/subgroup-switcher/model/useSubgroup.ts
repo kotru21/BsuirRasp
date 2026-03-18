@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import type { SubgroupFilter } from "@/entities/schedule";
+import type { SubgroupFilter } from "@/entities";
 
 const VALID = new Set<string>(["", "1", "2"]);
 

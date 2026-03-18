@@ -8,7 +8,7 @@ import {
   type ScheduleDayKey,
   type ScheduleLesson,
   type SubgroupFilter,
-} from "@/entities/schedule";
+} from "@/entities";
 import { ClockIcon } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { LessonCard } from "./LessonCard";

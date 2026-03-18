@@ -3,8 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { Input, Skeleton } from "@/shared/ui";
-import type { Employee } from "@/entities/employee";
-import type { StudentGroup } from "@/entities/student-group";
+import type { Employee, StudentGroup } from "@/entities";
 import { SearchIcon } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 

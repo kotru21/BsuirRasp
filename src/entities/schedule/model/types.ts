@@ -1,5 +1,7 @@
 import type {
+  FlattenedScheduleItem,
   NormalizedScheduleResponse as BsuirNormalizedScheduleResponse,
+  ScheduleFilterOptions as BsuirScheduleFilterOptions,
   ScheduleItem,
   Weekday,
 } from "bsuir-iis-api";
@@ -16,7 +18,9 @@ export const SCHEDULE_DAY_KEYS: Weekday[] = [
 
 export type ScheduleDayKey = Weekday;
 export type ScheduleLesson = ScheduleItem;
+export type FlattenedScheduleLesson = FlattenedScheduleItem;
+export type ScheduleFilterOptions = BsuirScheduleFilterOptions;
 /** Нормализованный ответ: schedules всегда объект (не null). */
 export type NormalizedScheduleResponse = BsuirNormalizedScheduleResponse;
 
-export type { ScheduleItem, Weekday } from "bsuir-iis-api";
+export type { FlattenedScheduleItem, ScheduleItem, Weekday } from "bsuir-iis-api";

@@ -1,4 +1,4 @@
-import type { ScheduleLesson } from "@/entities/schedule";
+import type { ScheduleLesson } from "@/entities";
 
 export function formatLessonTime(lesson: ScheduleLesson): string {
   return `${lesson.startLessonTime} – ${lesson.endLessonTime}`;

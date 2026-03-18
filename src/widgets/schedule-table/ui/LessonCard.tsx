@@ -3,7 +3,7 @@ import {
   CardContent,
   Badge,
 } from "@/shared/ui";
-import type { ScheduleLesson } from "@/entities/schedule";
+import type { ScheduleLesson } from "@/entities";
 import { MapPinIcon, UserIcon, UsersIcon } from "lucide-react";
 import { EmployeePopover } from "./EmployeePopover";
 

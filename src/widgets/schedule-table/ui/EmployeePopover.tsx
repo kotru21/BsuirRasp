@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui";
-import type { ScheduleLesson } from "@/entities/schedule";
+import type { ScheduleLesson } from "@/entities";
 import { formatEmployeeShort } from "../lib/format-lesson";
 
 type Employee = NonNullable<ScheduleLesson["employees"]>[number];

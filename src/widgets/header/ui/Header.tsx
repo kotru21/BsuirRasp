@@ -2,8 +2,7 @@
 
 import { GroupSelect } from "@/features/group-select";
 import { ThemeToggle } from "@/features/theme-toggle";
-import type { Employee } from "@/entities/employee";
-import type { StudentGroup } from "@/entities/student-group";
+import type { Employee, StudentGroup } from "@/entities";
 
 interface HeaderProps {
   groups: StudentGroup[];

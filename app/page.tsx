@@ -19,7 +19,11 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const params = await searchParams;
-  const groupNumber = params?.group;
+  const rawGroupNumber = params?.group?.trim();
+  const groupNumber =
+    rawGroupNumber && /^\d+$/.test(rawGroupNumber) ? rawGroupNumber : undefined;
+  const invalidGroupError =
+    rawGroupNumber && !groupNumber ? "Неверный номер группы" : null;
   const employeeUrlId = params?.employee;
   const scheduleMode = employeeUrlId ? "employee" : groupNumber ? "group" : null;
   const scheduleKey = employeeUrlId ?? groupNumber ?? null;
@@ -74,13 +78,22 @@ export default async function Page({ searchParams }: PageProps) {
       scheduleMode === "employee" && scheduleKey
         ? getScheduleLastUpdateByEmployee(scheduleKey)
             .then((lastUpdateDate) => ({ lastUpdateDate, error: null }))
-            .catch(() => ({ lastUpdateDate: null as string | null, error: null }))
+            .catch((e) => ({
+              lastUpdateDate: null as string | null,
+              error: getBsuirErrorMessage(e),
+            }))
         : scheduleMode === "group" && scheduleKey
           ? getScheduleLastUpdate(scheduleKey)
               .then((lastUpdateDate) => ({ lastUpdateDate, error: null }))
-              .catch(() => ({ lastUpdateDate: null as string | null, error: null }))
+              .catch((e) => ({
+                lastUpdateDate: null as string | null,
+                error: getBsuirErrorMessage(e),
+              }))
           : Promise.resolve({ lastUpdateDate: null as string | null, error: null }),
     ]);
+
+  const scheduleError =
+    [invalidGroupError, scheduleResult.error].filter(Boolean).join(". ") || null;
 
   return (
     <HomePage
@@ -91,8 +104,9 @@ export default async function Page({ searchParams }: PageProps) {
       lastUpdateDate={lastUpdateResult.lastUpdateDate}
       groupsError={groupsResult.error}
       employeesError={employeesResult.error}
-      scheduleError={scheduleResult.error}
+      scheduleError={scheduleError}
       currentWeekError={currentWeekResult.error}
+      lastUpdateError={lastUpdateResult.error}
     />
   );
 }

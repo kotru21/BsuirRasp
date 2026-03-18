@@ -8,6 +8,7 @@ interface PageErrorToastsProps {
   employeesError?: string | null;
   scheduleError?: string | null;
   currentWeekError?: string | null;
+  lastUpdateError?: string | null;
 }
 
 export function PageErrorToasts({
@@ -15,10 +16,15 @@ export function PageErrorToasts({
   employeesError,
   scheduleError,
   currentWeekError,
+  lastUpdateError,
 }: PageErrorToastsProps) {
-  const messages = [groupsError, employeesError, scheduleError, currentWeekError].filter(
-    Boolean
-  ) as string[];
+  const messages = [
+    groupsError,
+    employeesError,
+    scheduleError,
+    currentWeekError,
+    lastUpdateError,
+  ].filter(Boolean) as string[];
   const messageText = messages.join(" ");
   const lastShownMessageRef = useRef<string | null>(null);
 

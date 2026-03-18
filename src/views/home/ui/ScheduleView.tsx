@@ -3,7 +3,7 @@
 import { WeekSwitcher, useWeekNumber } from "@/features/week-switcher";
 import { SubgroupSwitcher, useSubgroup } from "@/features/subgroup-switcher";
 import { ScheduleTable } from "@/widgets/schedule-table";
-import type { NormalizedScheduleResponse } from "@/entities/schedule";
+import type { NormalizedScheduleResponse } from "@/entities";
 
 interface ScheduleViewProps {
   schedule: NormalizedScheduleResponse | null;

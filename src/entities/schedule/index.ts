@@ -1,5 +1,7 @@
 export type {
+  FlattenedScheduleLesson,
   NormalizedScheduleResponse,
+  ScheduleFilterOptions,
   ScheduleLesson,
   ScheduleDayKey,
 } from "./model/types";
@@ -9,8 +11,21 @@ export {
   filterLessonsBySubgroup,
   type SubgroupFilter,
 } from "./model/filter-by-subgroup";
-export { getGroupSchedule, getEmployeeSchedule } from "./api/schedule";
+export {
+  getGroupSchedule,
+  getEmployeeSchedule,
+  getGroupScheduleFiltered,
+  getEmployeeScheduleFiltered,
+  getGroupExams,
+  getEmployeeExams,
+  getGroupScheduleBySubgroup,
+  getEmployeeScheduleBySubgroup,
+  getCurrentSemesterWeekBySchedule,
+  getCurrentCycleWeekBySchedule,
+} from "./api/schedule";
 export {
   getScheduleLastUpdate,
   getScheduleLastUpdateByEmployee,
+  getLastUpdateByGroup,
+  getLastUpdateByEmployee,
 } from "./api/last-update";

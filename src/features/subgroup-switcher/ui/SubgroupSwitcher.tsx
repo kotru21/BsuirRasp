@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
-import type { SubgroupFilter } from "@/entities/schedule";
+import type { SubgroupFilter } from "@/entities";
 
 interface SubgroupSwitcherProps {
   subgroupFilter: SubgroupFilter;
