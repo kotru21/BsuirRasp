@@ -12,6 +12,8 @@ interface PageErrorToastsProps {
   sdkInsightsError?: string | null;
   /** Ошибка запроса get*Filtered при активном расширенном фильтре */
   scheduleFilterError?: string | null;
+  /** Ошибки запросов для `compareGroup` (вторая колонка) */
+  compareGroupError?: string | null;
 }
 
 export function PageErrorToasts({
@@ -22,6 +24,7 @@ export function PageErrorToasts({
   lastUpdateError,
   sdkInsightsError,
   scheduleFilterError,
+  compareGroupError,
 }: PageErrorToastsProps) {
   const messages = [
     groupsError,
@@ -31,6 +34,7 @@ export function PageErrorToasts({
     lastUpdateError,
     sdkInsightsError,
     scheduleFilterError,
+    compareGroupError,
   ].filter(Boolean) as string[];
   const messageText = messages.join(" ");
   const lastShownMessageRef = useRef<string | null>(null);

@@ -34,6 +34,7 @@ import {
   parseEffectiveWeek,
   type ScheduleSearchFilterParams,
 } from "@/features/schedule-advanced-filter";
+import { parseExamLessonTypesParam } from "@/features/schedule-exams-filtered";
 import type { SdkInsightsData } from "@/features/sdk-insights";
 import { getBsuirErrorMessage } from "@/shared/api";
 import { HomePage } from "@/views/home";
@@ -54,6 +55,10 @@ interface PageProps {
     fAuditory?: string;
     fEmployee?: string;
     subgroup?: string;
+    /** Типы для get*Filtered с source: "exams" (через запятую), см. README SDK */
+    examTypes?: string;
+    /** Вторая группа для сравнения расписания (только цифры, как `group`) */
+    compareGroup?: string;
   }>;
 }
 
@@ -71,6 +76,13 @@ export default async function Page({ searchParams }: PageProps) {
     rawGroupNumber && /^\d+$/.test(rawGroupNumber) ? rawGroupNumber : undefined;
   const invalidGroupError =
     rawGroupNumber && !groupNumber ? "Неверный номер группы" : null;
+  const rawCompareGroup = params?.compareGroup?.trim();
+  const compareGroupNumber =
+    rawCompareGroup && /^\d+$/.test(rawCompareGroup) ? rawCompareGroup : undefined;
+  const invalidCompareGroupError =
+    rawCompareGroup && !compareGroupNumber
+      ? "Неверный compareGroup (ожидается номер группы)"
+      : null;
   const employeeUrlId = params?.employee;
   const departmentId = parsePositiveInt(params?.departmentId);
   const showDepartmentPassport = params?.announcements === "1";
@@ -344,6 +356,7 @@ export default async function Page({ searchParams }: PageProps) {
           departmentId,
           scheduleMode,
           scheduleKey,
+          compareGroup: rawCompareGroup ?? null,
         },
         pageData: {
           groups: groupsResult.groups,
@@ -384,18 +397,97 @@ export default async function Page({ searchParams }: PageProps) {
         },
         lastUpdateByNumericId,
         lastUpdateNamespaceNote:
-          "getScheduleLastUpdate / getScheduleLastUpdateByEmployee дергают те же эндпоинты, что client.lastUpdate.byGroup / byEmployee (см. entities/schedule/api/last-update.ts).",
+          "Last update: только client.schedule.getLastUpdateByGroup / getLastUpdateByEmployee (bsuir-iis-api ≥0.5; см. entities/schedule/api/last-update.ts).",
         currentWeekAliasNote:
-          "В showcase неделя берётся из client.currentWeek.get(); то же даёт client.schedule.getCurrentWeek().",
+          "Текущая неделя: в bsuir-iis-api ≥0.4 только client.schedule.getCurrentWeek() (см. entities/current-week).",
+        requestQueryRecipeNote:
+          "Произвольные query в ReadOptions: см. README showcase и пакет bsuir-iis-api.",
       },
     };
   })();
+
+  const examLessons = extendedExamsRes?.items ?? [];
+  const employeeAnnouncements =
+    scheduleMode === "employee"
+      ? (extendedEmployeeAnnouncementsRes?.items ?? [])
+      : [];
+
+  const examLessonTypes = parseExamLessonTypesParam(params?.examTypes);
+  let examFilteredLessons: FlattenedScheduleLesson[] = [];
+  let examFilteredError: string | null = null;
+  if (scheduleMode && scheduleKey) {
+    try {
+      examFilteredLessons =
+        scheduleMode === "employee"
+          ? await getEmployeeScheduleFiltered(scheduleKey, {
+              source: "exams",
+              lessonTypeAbbrev: examLessonTypes,
+            })
+          : await getGroupScheduleFiltered(scheduleKey, {
+              source: "exams",
+              lessonTypeAbbrev: examLessonTypes,
+            });
+    } catch (e) {
+      examFilteredError = getBsuirErrorMessage(e);
+    }
+  }
+
+  let compareSchedule: NormalizedScheduleResponse | null = null;
+  let compareScheduleError: string | null = null;
+  let compareExamLessons: FlattenedScheduleLesson[] = [];
+  let compareExamLessonsError: string | null = null;
+  let compareExamFilteredLessons: FlattenedScheduleLesson[] = [];
+  let compareExamFilteredError: string | null = null;
+  let compareAdvancedFilterLessons: FlattenedScheduleLesson[] | null = null;
+  let compareScheduleFilterError: string | null = null;
+
+  if (scheduleMode === "group" && groupNumber && compareGroupNumber) {
+    try {
+      compareSchedule = await getGroupSchedule(compareGroupNumber);
+    } catch (e) {
+      compareScheduleError = getBsuirErrorMessage(e);
+    }
+    try {
+      compareExamLessons = await getGroupExams(compareGroupNumber);
+    } catch (e) {
+      compareExamLessonsError = getBsuirErrorMessage(e);
+    }
+    try {
+      compareExamFilteredLessons = await getGroupScheduleFiltered(compareGroupNumber, {
+        source: "exams",
+        lessonTypeAbbrev: examLessonTypes,
+      });
+    } catch (e) {
+      compareExamFilteredError = getBsuirErrorMessage(e);
+    }
+    if (advancedFilterActive) {
+      try {
+        compareAdvancedFilterLessons = await getGroupScheduleFiltered(
+          compareGroupNumber,
+          filteredScheduleOptions
+        );
+      } catch (e) {
+        compareScheduleFilterError = getBsuirErrorMessage(e);
+      }
+    }
+  }
+
+  const compareGroupErrorMessage =
+    [
+      compareScheduleError,
+      compareExamLessonsError,
+      compareExamFilteredError,
+      compareScheduleFilterError,
+    ]
+      .filter(Boolean)
+      .join(" · ") || null;
 
   const sdkInsightsErrorMessages: Array<string | null> = [
     facultiesResult.error,
     departmentsResult.error,
     specialitiesResult.error,
     auditoriesResult.error,
+    examFilteredError,
     // Ошибку объявлений кафедры не показываем в тостах: при первом запросе иногда приходит 400, при повторном — 200 и данные
     ...(scheduleExtendedResult
       ? scheduleExtendedResult.map((item) => item.error)
@@ -405,13 +497,9 @@ export default async function Page({ searchParams }: PageProps) {
     sdkInsightsErrorMessages.filter(Boolean).join(". ") || null;
 
   const scheduleError =
-    [invalidGroupError, scheduleResult.error].filter(Boolean).join(". ") || null;
-
-  const examLessons = extendedExamsRes?.items ?? [];
-  const employeeAnnouncements =
-    scheduleMode === "employee"
-      ? (extendedEmployeeAnnouncementsRes?.items ?? [])
-      : [];
+    [invalidGroupError, invalidCompareGroupError, scheduleResult.error]
+      .filter(Boolean)
+      .join(". ") || null;
 
   return (
     <HomePage
@@ -431,9 +519,21 @@ export default async function Page({ searchParams }: PageProps) {
       lastUpdateError={lastUpdateResult.error}
       sdkInsightsError={sdkInsightsError}
       scheduleFilterError={scheduleFilterError}
+      compareGroupError={compareGroupErrorMessage}
       advancedFilterLessons={advancedFilterLessons}
       examLessons={examLessons}
+      examFilteredLessons={examFilteredLessons}
+      examLessonTypesLabel={examLessonTypes.join(", ")}
       employeeAnnouncements={employeeAnnouncements}
+      compareGroupNumber={
+        scheduleMode === "group" && groupNumber ? compareGroupNumber ?? null : null
+      }
+      compareSchedule={compareSchedule}
+      compareScheduleError={compareScheduleError}
+      compareExamLessons={compareExamLessons}
+      compareExamFilteredLessons={compareExamFilteredLessons}
+      compareAdvancedFilterLessons={compareAdvancedFilterLessons}
+      compareScheduleFilterError={compareScheduleFilterError}
       faculties={facultiesResult.items}
       specialities={specialitiesResult.items}
       auditories={auditoriesResult.items}

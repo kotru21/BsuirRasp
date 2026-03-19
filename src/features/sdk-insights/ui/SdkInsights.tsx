@@ -69,6 +69,7 @@ export function SdkInsights({ insights }: SdkInsightsProps) {
             <div className="mb-3 space-y-1 rounded-md border border-dashed p-2 text-xs text-muted-foreground">
               <p>{insights.advanced.lastUpdateNamespaceNote}</p>
               <p>{insights.advanced.currentWeekAliasNote}</p>
+              <p>{insights.advanced.requestQueryRecipeNote}</p>
             </div>
           )}
 

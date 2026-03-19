@@ -1,6 +1,6 @@
 import { bsuirClient } from "@/shared/api";
 
-/** Единственный источник истины: текущая неделя из SDK (currentWeek.get()). */
+/** Текущая неделя из SDK (`schedule.getCurrentWeek()`, bsuir-iis-api ≥0.4). */
 export async function getCurrentWeek(): Promise<number> {
-  return bsuirClient.currentWeek.get();
+  return bsuirClient.schedule.getCurrentWeek();
 }

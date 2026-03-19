@@ -41,6 +41,7 @@ export interface SdkInsightsData {
       departmentId: number | null;
       scheduleMode: "group" | "employee" | null;
       scheduleKey: string | null;
+      compareGroup: string | null;
     };
     pageData: {
       groups: StudentGroup[];
@@ -81,10 +82,12 @@ export interface SdkInsightsData {
       error: string | null;
       matchesStringKey: boolean | null;
     };
-    /** Подсказка: `schedule.getLastUpdate*` и `lastUpdate.*` — одни и те же эндпоинты. */
+    /** Подсказка про API last update (актуальный клиент SDK). */
     lastUpdateNamespaceNote: string;
-    /** Подсказка: `schedule.getCurrentWeek` и `currentWeek.get` — алиасы. */
+    /** Подсказка про текущую неделю (актуальный API клиента). */
     currentWeekAliasNote: string;
+    /** Статическая подсказка про опцию `query` в ReadOptions (см. README). */
+    requestQueryRecipeNote: string;
   };
 }
 

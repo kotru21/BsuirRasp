@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { GroupSelect } from "@/features/group-select";
 import { ThemeToggle } from "@/features/theme-toggle";
+import { showError, showSuccess } from "@/shared/lib/notifications";
 import { cn } from "@/shared/lib/utils";
 import type { Employee, StudentGroup } from "@/entities";
 
@@ -15,6 +16,15 @@ export function Header({ groups, employees }: HeaderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isAnnouncementsOpen = searchParams.get("announcements") === "1";
+
+  async function copyPageLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showSuccess("Ссылка скопирована в буфер обмена");
+    } catch {
+      showError("Не удалось скопировать ссылку");
+    }
+  }
 
   function toggleAnnouncements() {
     const next = new URLSearchParams(searchParams.toString());
@@ -36,9 +46,16 @@ export function Header({ groups, employees }: HeaderProps) {
           <div className="flex items-center justify-between gap-2 sm:contents">
             <button
               type="button"
+              onClick={copyPageLink}
+              className="inline-flex h-9 shrink-0 items-center rounded-md border px-2.5 text-xs font-medium hover:bg-muted sm:px-3 sm:text-sm"
+            >
+              Поделиться ссылкой
+            </button>
+            <button
+              type="button"
               onClick={toggleAnnouncements}
               className={cn(
-                "inline-flex h-9 shrink-0 items-center rounded-md border px-2.5 text-xs font-medium hover:bg-muted sm:order-1 sm:px-3 sm:text-sm",
+                "inline-flex h-9 shrink-0 items-center rounded-md border px-2.5 text-xs font-medium hover:bg-muted sm:px-3 sm:text-sm",
                 isAnnouncementsOpen && "bg-muted"
               )}
             >

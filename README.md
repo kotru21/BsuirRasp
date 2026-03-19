@@ -32,7 +32,35 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Демо отмены запроса с пробросом `signal` в SDK: [http://localhost:3000/abort-demo](http://localhost:3000/abort-demo) (Route Handler `app/api/demo/group-schedule`).
 - Демо `BsuirValidationError`: [http://localhost:3000/validation-demo](http://localhost:3000/validation-demo).
 - Логирование исходящих запросов к ИИС в консоль сервера: `BSUIR_DEBUG_FETCH=1` (см. [src/shared/api/bsuir-client.ts](src/shared/api/bsuir-client.ts)).
-- На главной с выбранным расписанием: вкладки **основное / экзамены** (`get*Exams`), панель **фильтра SDK** (`get*Filtered` + query `fDay`, `fSubject`, …), подсказки по датам семестра из normalized-ответа, блок **объявлений преподавателя** (режим `employee`), внизу страницы — **справочники** (факультет → специальности, кафедры, аудитории).
+- Глобально сырой ответ расписания по умолчанию: `BSUIR_DEFAULT_RAW=1` — в `createBsuirClient` передаётся `defaultRaw: true`. Основной UI шоукейса рассчитан на **normalized**; для отладки и рядом с `?rawSchedule=1` используйте осознанно.
+
+#### Произвольные query-параметры (`ReadOptions.query`)
+
+SDK принимает `query` в опциях чтения — удобно для недокументированных или будущих параметров ИИС:
+
+```ts
+await client.groups.listAll({
+  query: { someFlag: "1" },
+});
+```
+
+Имеет смысл проверять реальные ключи по ответу API; в showcase отдельный UI не вынесен — см. [npm](https://www.npmjs.com/package/bsuir-iis-api) и [репозиторий SDK](https://github.com/kotru21/bsuir-iis-api).
+- На главной с выбранным расписанием: вкладки **основное**, **экзамены** (`get*Exams`), **сессия filtered** (`get*Filtered` с `source: "exams"` и `lessonTypeAbbrev`, по умолчанию как в README SDK); query `examTypes=Консультация,Экзамен` (через запятую) или чекбоксы + поле «другое» на вкладке. Панель **фильтра SDK** для занятий: `fDay`, `fSubject`, …
+- Сравнение двух **групп**: `?group=…&compareGroup=…` (только цифры, как у `group`) — две колонки расписания; ошибки второй группы — тост, страница остаётся рабочей.
+- Демо **mock-клиента** без сети: [http://localhost:3000/mock-demo](http://localhost:3000/mock-demo) (`createBsuirClient({ fetch })` + [src/shared/fixtures/mock-bsuir-schedule-wire.ts](src/shared/fixtures/mock-bsuir-schedule-wire.ts)).
+- Подсказки по датам семестра из normalized-ответа, блок **объявлений преподавателя** (режим `employee`), внизу — **справочники** (факультет → специальности, кафедры, аудитории).
+
+#### Типы TypeScript для SDK
+
+Реэкспорт части публичных типов пакета: [src/shared/api/bsuir-types.ts](src/shared/api/bsuir-types.ts) и баррель [src/shared/api/index.ts](src/shared/api/index.ts) (`BsuirClient`, `BsuirClientOptions`, `EmployeeCatalogItem`, `StudentGroupCatalogItem`, `ReadOptions`, …).
+
+```ts
+import type { BsuirClient, EmployeeCatalogItem } from "@/shared/api";
+
+function countEmployees(c: BsuirClient, _sample: EmployeeCatalogItem[]) {
+  return c.employees.listAll();
+}
+```
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

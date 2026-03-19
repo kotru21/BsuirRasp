@@ -6,10 +6,7 @@ import { bsuirClient } from "@/shared/api";
 export async function getScheduleLastUpdate(
   groupNumber: string
 ): Promise<string> {
-  const { lastUpdateDate } = await bsuirClient.schedule.getLastUpdateByGroup({
-    groupNumber,
-  });
-  return lastUpdateDate;
+  return getLastUpdateByGroup({ groupNumber });
 }
 
 /**
@@ -18,28 +15,27 @@ export async function getScheduleLastUpdate(
 export async function getScheduleLastUpdateByEmployee(
   urlId: string
 ): Promise<string> {
-  const { lastUpdateDate } = await bsuirClient.schedule.getLastUpdateByEmployee({
-    urlId,
-  });
-  return lastUpdateDate;
+  return getLastUpdateByEmployee({ urlId });
 }
 
 /**
- * То же, что getScheduleLastUpdate(), но через namespace client.lastUpdate.byGroup.
+ * Last update по группе: `groupNumber` или numeric `id` (как в SDK).
  */
 export async function getLastUpdateByGroup(
   params: { groupNumber: string } | { id: number }
 ): Promise<string> {
-  const { lastUpdateDate } = await bsuirClient.lastUpdate.byGroup(params);
+  const { lastUpdateDate } =
+    await bsuirClient.schedule.getLastUpdateByGroup(params);
   return lastUpdateDate;
 }
 
 /**
- * То же, что getScheduleLastUpdateByEmployee(), но через namespace client.lastUpdate.byEmployee.
+ * Last update по преподавателю: `urlId` или numeric `id` (как в SDK).
  */
 export async function getLastUpdateByEmployee(
   params: { urlId: string } | { id: number }
 ): Promise<string> {
-  const { lastUpdateDate } = await bsuirClient.lastUpdate.byEmployee(params);
+  const { lastUpdateDate } =
+    await bsuirClient.schedule.getLastUpdateByEmployee(params);
   return lastUpdateDate;
 }

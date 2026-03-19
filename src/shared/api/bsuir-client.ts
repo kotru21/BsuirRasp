@@ -33,6 +33,9 @@ const debugFetch =
     ? wrapFetchForDebug(globalThis.fetch.bind(globalThis))
     : undefined;
 
+const defaultRaw =
+  process.env.BSUIR_DEFAULT_RAW === "1" ? ({ defaultRaw: true } as const) : {};
+
 export const bsuirClient = createBsuirClient({
   baseUrl: API_BASE_URL,
   timeoutMs: 10000,
@@ -42,4 +45,5 @@ export const bsuirClient = createBsuirClient({
   retryJitter: BSUIR_RETRY_JITTER,
   userAgent: BSUIR_USER_AGENT,
   ...(debugFetch ? { fetch: debugFetch } : {}),
+  ...defaultRaw,
 });
