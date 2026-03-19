@@ -14,6 +14,7 @@ export function buildJsonDumps(insights: SdkInsightsData | null) {
       references: stringify(null),
       schedule: stringify(null),
       announcements: stringify(null),
+      advanced: stringify(null),
     };
   }
 
@@ -39,5 +40,8 @@ export function buildJsonDumps(insights: SdkInsightsData | null) {
       employeeItems: insights.announcements.employeeItems,
       departmentItems: insights.announcements.departmentItems,
     }),
+    advanced: insights.advanced
+      ? stringify(insights.advanced)
+      : stringify(null),
   };
 }

@@ -1,5 +1,5 @@
 interface ValueProps {
-  value: number | null | boolean;
+  value: string | number | null | boolean;
 }
 
 export function Value({ value }: ValueProps) {

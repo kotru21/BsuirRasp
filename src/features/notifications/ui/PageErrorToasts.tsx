@@ -10,6 +10,8 @@ interface PageErrorToastsProps {
   currentWeekError?: string | null;
   lastUpdateError?: string | null;
   sdkInsightsError?: string | null;
+  /** Ошибка запроса get*Filtered при активном расширенном фильтре */
+  scheduleFilterError?: string | null;
 }
 
 export function PageErrorToasts({
@@ -19,6 +21,7 @@ export function PageErrorToasts({
   currentWeekError,
   lastUpdateError,
   sdkInsightsError,
+  scheduleFilterError,
 }: PageErrorToastsProps) {
   const messages = [
     groupsError,
@@ -27,6 +30,7 @@ export function PageErrorToasts({
     currentWeekError,
     lastUpdateError,
     sdkInsightsError,
+    scheduleFilterError,
   ].filter(Boolean) as string[];
   const messageText = messages.join(" ");
   const lastShownMessageRef = useRef<string | null>(null);

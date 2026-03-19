@@ -27,26 +27,33 @@ export function Header({ groups, employees }: HeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-lg font-semibold tracking-tight shrink-0">Расписание БГУИР</h1>
-        <div className="flex flex-1 items-center justify-end gap-2 min-w-0">
-          <button
-            type="button"
-            onClick={toggleAnnouncements}
-            className={cn(
-              "inline-flex h-9 items-center rounded-md border px-3 text-sm font-medium hover:bg-muted",
-              isAnnouncementsOpen && "bg-muted"
-            )}
-          >
-            Объявления
-          </button>
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-0 lg:px-8">
+        <h1 className="min-w-0 shrink-0 text-base font-semibold tracking-tight sm:text-lg">
+          Расписание БГУИР
+        </h1>
+        <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-1 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
+          <div className="flex items-center justify-between gap-2 sm:contents">
+            <button
+              type="button"
+              onClick={toggleAnnouncements}
+              className={cn(
+                "inline-flex h-9 shrink-0 items-center rounded-md border px-2.5 text-xs font-medium hover:bg-muted sm:order-1 sm:px-3 sm:text-sm",
+                isAnnouncementsOpen && "bg-muted"
+              )}
+            >
+              Объявления
+            </button>
+            <span className="shrink-0 sm:order-3">
+              <ThemeToggle />
+            </span>
+          </div>
           <GroupSelect
             groups={groups}
             employees={employees}
             placeholder="Поиск группы или преподавателя..."
+            className="w-full min-w-0 sm:order-2 sm:max-w-md sm:flex-1 lg:max-w-lg"
           />
-          <ThemeToggle />
         </div>
       </div>
     </header>

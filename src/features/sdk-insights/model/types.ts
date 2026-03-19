@@ -8,6 +8,7 @@ import type {
   FlattenedScheduleLesson,
   Speciality,
   StudentGroup,
+  ScheduleResponse,
 } from "@/entities";
 
 export interface SdkInsightsData {
@@ -66,11 +67,30 @@ export interface SdkInsightsData {
     subgroup2: FlattenedScheduleLesson[];
     lastUpdateDate: string | null;
   };
+  /** Расширенные сценарии SDK (raw, lastUpdate по id, справка по алиасам). */
+  advanced?: {
+    rawSchedule: {
+      requested: boolean;
+      payload: ScheduleResponse | null;
+      error: string | null;
+      normalizedTopLevelKeys: string[];
+      rawTopLevelKeys: string[];
+    };
+    lastUpdateByNumericId: {
+      date: string | null;
+      error: string | null;
+      matchesStringKey: boolean | null;
+    };
+    /** Подсказка: `schedule.getLastUpdate*` и `lastUpdate.*` — одни и те же эндпоинты. */
+    lastUpdateNamespaceNote: string;
+    /** Подсказка: `schedule.getCurrentWeek` и `currentWeek.get` — алиасы. */
+    currentWeekAliasNote: string;
+  };
 }
 
 export interface SummaryRow {
   label: string;
-  value: number | null | boolean;
+  value: string | number | null | boolean;
 }
 
 export interface SummarySection {

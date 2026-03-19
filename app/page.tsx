@@ -12,17 +12,28 @@ import {
   getFaculties,
   getGroupExams,
   getGroupSchedule,
+  getGroupScheduleRaw,
   getGroupScheduleBySubgroup,
   getGroupScheduleFiltered,
   getScheduleLastUpdate,
   getScheduleLastUpdateByEmployee,
+  getLastUpdateByGroup,
+  getLastUpdateByEmployee,
+  getEmployeeScheduleRaw,
   getSpecialities,
   getStudentGroups,
   type Announcement,
   type Employee,
+  type FlattenedScheduleLesson,
   type NormalizedScheduleResponse,
   type StudentGroup,
 } from "@/entities";
+import {
+  buildScheduleFilterOptions,
+  hasAdvancedScheduleFilterParams,
+  parseEffectiveWeek,
+  type ScheduleSearchFilterParams,
+} from "@/features/schedule-advanced-filter";
 import type { SdkInsightsData } from "@/features/sdk-insights";
 import { getBsuirErrorMessage } from "@/shared/api";
 import { HomePage } from "@/views/home";
@@ -34,6 +45,15 @@ interface PageProps {
     week?: string;
     departmentId?: string;
     announcements?: string;
+    /** `1` — дополнительный запрос расписания с `{ raw: true }` для SDK Insights */
+    rawSchedule?: string;
+    /** Фильтры SDK get*Filtered (см. ScheduleAdvancedFilterPanel) */
+    fDay?: string;
+    fSubject?: string;
+    fType?: string;
+    fAuditory?: string;
+    fEmployee?: string;
+    subgroup?: string;
   }>;
 }
 
@@ -54,6 +74,7 @@ export default async function Page({ searchParams }: PageProps) {
   const employeeUrlId = params?.employee;
   const departmentId = parsePositiveInt(params?.departmentId);
   const showDepartmentPassport = params?.announcements === "1";
+  const rawScheduleRequested = params?.rawSchedule === "1";
   const scheduleMode = employeeUrlId ? "employee" : groupNumber ? "group" : null;
   const scheduleKey = employeeUrlId ?? groupNumber ?? null;
 
@@ -158,16 +179,36 @@ export default async function Page({ searchParams }: PageProps) {
         : Promise.resolve({ items: [] as Announcement[], error: null as string | null }),
     ]);
 
+  const effectiveWeek = parseEffectiveWeek(
+    params?.week,
+    currentWeekResult.currentWeek
+  );
+
+  const filterSearchParams: ScheduleSearchFilterParams = {
+    week: params?.week,
+    subgroup: params?.subgroup,
+    fDay: params?.fDay,
+    fSubject: params?.fSubject,
+    fType: params?.fType,
+    fAuditory: params?.fAuditory,
+    fEmployee: params?.fEmployee,
+  };
+
+  const advancedFilterActive =
+    hasAdvancedScheduleFilterParams(filterSearchParams) &&
+    Boolean(scheduleMode && scheduleKey);
+
+  const filteredScheduleOptions = advancedFilterActive
+    ? buildScheduleFilterOptions(filterSearchParams, effectiveWeek)
+    : { source: "schedules" as const, weekNumber: effectiveWeek };
+
   const scheduleExtendedResult =
     scheduleMode === "employee" && scheduleKey
       ? await Promise.all([
           getEmployeeExams(scheduleKey)
             .then((items) => ({ items, error: null as string | null }))
             .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getEmployeeExams>>, error: getBsuirErrorMessage(e) })),
-          getEmployeeScheduleFiltered(scheduleKey, {
-            source: "schedules",
-            weekNumber: currentWeekResult.currentWeek,
-          })
+          getEmployeeScheduleFiltered(scheduleKey, filteredScheduleOptions)
             .then((items) => ({ items, error: null as string | null }))
             .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getEmployeeScheduleFiltered>>, error: getBsuirErrorMessage(e) })),
           getEmployeeScheduleBySubgroup(scheduleKey, 1)
@@ -185,10 +226,7 @@ export default async function Page({ searchParams }: PageProps) {
             getGroupExams(scheduleKey)
               .then((items) => ({ items, error: null as string | null }))
               .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getGroupExams>>, error: getBsuirErrorMessage(e) })),
-            getGroupScheduleFiltered(scheduleKey, {
-              source: "schedules",
-              weekNumber: currentWeekResult.currentWeek,
-            })
+            getGroupScheduleFiltered(scheduleKey, filteredScheduleOptions)
               .then((items) => ({ items, error: null as string | null }))
               .catch((e) => ({ items: [] as Awaited<ReturnType<typeof getGroupScheduleFiltered>>, error: getBsuirErrorMessage(e) })),
             getGroupScheduleBySubgroup(scheduleKey, 1)
@@ -201,15 +239,80 @@ export default async function Page({ searchParams }: PageProps) {
           ])
         : null;
 
+  const extendedExamsRes = scheduleExtendedResult?.[0];
+  const extendedFilteredWeekRes = scheduleExtendedResult?.[1];
+  const extendedSubgroup1Res = scheduleExtendedResult?.[2];
+  const extendedSubgroup2Res = scheduleExtendedResult?.[3];
+  const extendedEmployeeAnnouncementsRes = scheduleExtendedResult?.[4];
+
+  const advancedFilterLessons: FlattenedScheduleLesson[] | null =
+    advancedFilterActive && extendedFilteredWeekRes
+      ? extendedFilteredWeekRes.items
+      : null;
+  const scheduleFilterError: string | null =
+    advancedFilterActive && extendedFilteredWeekRes?.error
+      ? extendedFilteredWeekRes.error
+      : null;
+
+  let rawSchedulePayload: Awaited<ReturnType<typeof getGroupScheduleRaw>> | null =
+    null;
+  let rawScheduleError: string | null = null;
+  if (rawScheduleRequested && scheduleMode && scheduleKey) {
+    try {
+      rawSchedulePayload =
+        scheduleMode === "employee"
+          ? await getEmployeeScheduleRaw(scheduleKey)
+          : await getGroupScheduleRaw(scheduleKey);
+    } catch (e) {
+      rawScheduleError = getBsuirErrorMessage(e);
+    }
+  }
+
+  const lastUpdateByNumericId: {
+    date: string | null;
+    error: string | null;
+    matchesStringKey: boolean | null;
+  } = {
+    date: null,
+    error: null,
+    matchesStringKey: null,
+  };
+  const loadedSchedule = scheduleResult.schedule;
+  if (loadedSchedule && scheduleMode === "group" && loadedSchedule.studentGroupDto?.id != null) {
+    try {
+      const d = await getLastUpdateByGroup({
+        id: loadedSchedule.studentGroupDto.id,
+      });
+      lastUpdateByNumericId.date = d;
+      lastUpdateByNumericId.matchesStringKey =
+        lastUpdateResult.lastUpdateDate != null && d === lastUpdateResult.lastUpdateDate;
+    } catch (e) {
+      lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+    }
+  } else if (loadedSchedule && scheduleMode === "employee" && loadedSchedule.employeeDto?.id != null) {
+    try {
+      const d = await getLastUpdateByEmployee({
+        id: loadedSchedule.employeeDto.id,
+      });
+      lastUpdateByNumericId.date = d;
+      lastUpdateByNumericId.matchesStringKey =
+        lastUpdateResult.lastUpdateDate != null && d === lastUpdateResult.lastUpdateDate;
+    } catch (e) {
+      lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+    }
+  }
+
   const sdkInsights: SdkInsightsData | null = (() => {
-    if (!scheduleExtendedResult) return null;
-    const [
-      examsRes,
-      filteredWeekRes,
-      subgroup1Res,
-      subgroup2Res,
-      employeeAnnouncementsRes,
-    ] = scheduleExtendedResult;
+    if (
+      !scheduleExtendedResult ||
+      !extendedExamsRes ||
+      !extendedFilteredWeekRes ||
+      !extendedSubgroup1Res ||
+      !extendedSubgroup2Res ||
+      !extendedEmployeeAnnouncementsRes
+    ) {
+      return null;
+    }
 
     return {
       references: {
@@ -222,15 +325,15 @@ export default async function Page({ searchParams }: PageProps) {
         currentWeek: currentWeekResult.currentWeek ?? null,
       },
       schedule: {
-        examsCount: examsRes.items.length,
-        currentWeekLessons: filteredWeekRes.items.length,
-        subgroup1Lessons: subgroup1Res.items.length,
-        subgroup2Lessons: subgroup2Res.items.length,
+        examsCount: extendedExamsRes.items.length,
+        currentWeekLessons: extendedFilteredWeekRes.items.length,
+        subgroup1Lessons: extendedSubgroup1Res.items.length,
+        subgroup2Lessons: extendedSubgroup2Res.items.length,
       },
       announcements: {
-        employeeCount: employeeAnnouncementsRes.items.length,
+        employeeCount: extendedEmployeeAnnouncementsRes.items.length,
         departmentCount: departmentAnnouncementsResult.items.length,
-        employeeItems: employeeAnnouncementsRes.items,
+        employeeItems: extendedEmployeeAnnouncementsRes.items,
         departmentItems: departmentAnnouncementsResult.items,
       },
       raw: {
@@ -261,11 +364,29 @@ export default async function Page({ searchParams }: PageProps) {
         departments: departmentsResult.items,
         specialities: specialitiesResult.items,
         auditories: auditoriesResult.items,
-        exams: examsRes.items,
-        filteredCurrentWeek: filteredWeekRes.items,
-        subgroup1: subgroup1Res.items,
-        subgroup2: subgroup2Res.items,
+        exams: extendedExamsRes.items,
+        filteredCurrentWeek: extendedFilteredWeekRes.items,
+        subgroup1: extendedSubgroup1Res.items,
+        subgroup2: extendedSubgroup2Res.items,
         lastUpdateDate: lastUpdateResult.lastUpdateDate,
+      },
+      advanced: {
+        rawSchedule: {
+          requested: rawScheduleRequested,
+          payload: rawSchedulePayload,
+          error: rawScheduleError,
+          normalizedTopLevelKeys: loadedSchedule
+            ? Object.keys(loadedSchedule).sort()
+            : [],
+          rawTopLevelKeys: rawSchedulePayload
+            ? Object.keys(rawSchedulePayload).sort()
+            : [],
+        },
+        lastUpdateByNumericId,
+        lastUpdateNamespaceNote:
+          "getScheduleLastUpdate / getScheduleLastUpdateByEmployee дергают те же эндпоинты, что client.lastUpdate.byGroup / byEmployee (см. entities/schedule/api/last-update.ts).",
+        currentWeekAliasNote:
+          "В showcase неделя берётся из client.currentWeek.get(); то же даёт client.schedule.getCurrentWeek().",
       },
     };
   })();
@@ -286,6 +407,12 @@ export default async function Page({ searchParams }: PageProps) {
   const scheduleError =
     [invalidGroupError, scheduleResult.error].filter(Boolean).join(". ") || null;
 
+  const examLessons = extendedExamsRes?.items ?? [];
+  const employeeAnnouncements =
+    scheduleMode === "employee"
+      ? (extendedEmployeeAnnouncementsRes?.items ?? [])
+      : [];
+
   return (
     <HomePage
       groups={groupsResult.groups}
@@ -303,6 +430,13 @@ export default async function Page({ searchParams }: PageProps) {
       currentWeekError={currentWeekResult.error}
       lastUpdateError={lastUpdateResult.error}
       sdkInsightsError={sdkInsightsError}
+      scheduleFilterError={scheduleFilterError}
+      advancedFilterLessons={advancedFilterLessons}
+      examLessons={examLessons}
+      employeeAnnouncements={employeeAnnouncements}
+      faculties={facultiesResult.items}
+      specialities={specialitiesResult.items}
+      auditories={auditoriesResult.items}
       sdkInsights={sdkInsights}
     />
   );

@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import type { SdkInsightsData } from "../model/types";
 import { buildSummarySections } from "../model/lib/build-summary-sections";
 import { buildJsonDumps } from "../model/lib/json-dumps";
 import { SdkInsightsSummary } from "./SdkInsightsSummary";
 import { JsonDetails } from "./JsonDetails";
+import { SdkInsightsToolbar } from "./SdkInsightsToolbar";
 
 interface SdkInsightsProps {
   insights: SdkInsightsData | null;
@@ -21,23 +22,23 @@ export function SdkInsights({ insights }: SdkInsightsProps) {
   if (!insights) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex flex-col items-start p-4 sm:p-6">
+    <div className="pointer-events-none fixed bottom-0 left-0 z-50 flex flex-col items-start gap-2 p-4 sm:p-6">
       {!open && (
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="rounded-full border bg-background px-4 py-2 text-sm font-medium shadow-lg hover:bg-muted"
+          className="pointer-events-auto rounded-full border bg-background px-4 py-2 text-sm font-medium shadow-lg hover:bg-muted"
         >
           SDK Insights
         </button>
       )}
 
+      {open && (
       <section
         className={cn(
-          "w-[min(92vw,680px)] rounded-xl border bg-card text-sm shadow-2xl transition-all",
-          open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
+          "pointer-events-auto max-h-[85vh] w-[min(92vw,680px)] rounded-xl border bg-card text-sm shadow-2xl"
         )}
-        aria-hidden={!open}
+        aria-hidden={false}
       >
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div>
@@ -60,6 +61,17 @@ export function SdkInsights({ insights }: SdkInsightsProps) {
             Ниже отображаются все данные, полученные на текущей странице через SDK.
           </p>
 
+          <Suspense fallback={null}>
+            <SdkInsightsToolbar />
+          </Suspense>
+
+          {insights.advanced && (
+            <div className="mb-3 space-y-1 rounded-md border border-dashed p-2 text-xs text-muted-foreground">
+              <p>{insights.advanced.lastUpdateNamespaceNote}</p>
+              <p>{insights.advanced.currentWeekAliasNote}</p>
+            </div>
+          )}
+
           {summarySections.length > 0 && (
             <SdkInsightsSummary sections={summarySections} />
           )}
@@ -79,6 +91,12 @@ export function SdkInsights({ insights }: SdkInsightsProps) {
           <JsonDetails summary="Расширенные данные расписания SDK">
             {dumps.schedule}
           </JsonDetails>
+          <JsonDetails
+            summary="Advanced: raw vs normalized, lastUpdate(by id), заметки (JSON)"
+            maxHeight="36vh"
+          >
+            {dumps.advanced}
+          </JsonDetails>
           <JsonDetails summary="Объявления SDK (employee / department)">
             {dumps.announcements}
           </JsonDetails>
@@ -87,6 +105,7 @@ export function SdkInsights({ insights }: SdkInsightsProps) {
           </JsonDetails>
         </div>
       </section>
+      )}
     </div>
   );
 }

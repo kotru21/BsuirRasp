@@ -1,14 +1,19 @@
+import { CatalogShowcase } from "@/features/catalog-showcase";
+import { DepartmentPassport } from "@/features/department-passport";
 import { PageErrorToasts } from "@/features/notifications";
 import { SdkInsights, type SdkInsightsData } from "@/features/sdk-insights";
-import { DepartmentPassport } from "@/features/department-passport";
 import { Header } from "@/widgets/header";
 import { ScheduleView } from "./ScheduleView";
 import type {
   Announcement,
+  Auditory,
   Department,
   Employee,
-  StudentGroup,
+  Faculty,
+  FlattenedScheduleLesson,
   NormalizedScheduleResponse,
+  Speciality,
+  StudentGroup,
 } from "@/entities";
 
 interface HomePageProps {
@@ -27,6 +32,14 @@ interface HomePageProps {
   currentWeekError?: string | null;
   lastUpdateError?: string | null;
   sdkInsightsError?: string | null;
+  scheduleFilterError?: string | null;
+  advancedFilterLessons?: FlattenedScheduleLesson[] | null;
+  /** Плоский список из getGroupExams / getEmployeeExams */
+  examLessons?: FlattenedScheduleLesson[];
+  employeeAnnouncements: Announcement[];
+  faculties: Faculty[];
+  specialities: Speciality[];
+  auditories: Auditory[];
   sdkInsights?: SdkInsightsData | null;
 }
 
@@ -46,6 +59,13 @@ export function HomePage({
   currentWeekError,
   lastUpdateError,
   sdkInsightsError,
+  scheduleFilterError,
+  advancedFilterLessons,
+  examLessons = [],
+  employeeAnnouncements,
+  faculties,
+  specialities,
+  auditories,
   sdkInsights,
 }: HomePageProps) {
   return (
@@ -57,6 +77,7 @@ export function HomePage({
         currentWeekError={currentWeekError}
         lastUpdateError={lastUpdateError}
         sdkInsightsError={sdkInsightsError}
+        scheduleFilterError={scheduleFilterError}
       />
       <Header groups={groups} employees={employees} />
       {showDepartmentPassport && (
@@ -72,6 +93,16 @@ export function HomePage({
         schedule={schedule}
         currentWeek={currentWeek}
         lastUpdateDate={lastUpdateDate}
+        advancedFilterLessons={advancedFilterLessons ?? null}
+        examLessons={examLessons}
+        employeeAnnouncements={employeeAnnouncements}
+        showEmployeeUrlFilter={Boolean(schedule?.studentGroupDto)}
+      />
+      <CatalogShowcase
+        faculties={faculties}
+        departments={departments}
+        specialities={specialities}
+        auditories={auditories}
       />
     </main>
   );

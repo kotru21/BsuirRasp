@@ -1,3 +1,4 @@
+import type { ScheduleResponse } from "bsuir-iis-api";
 import { bsuirClient } from "@/shared/api";
 import type {
   NormalizedScheduleResponse,
@@ -55,4 +56,17 @@ export async function getEmployeeScheduleBySubgroup(
   subgroup: number
 ): Promise<FlattenedScheduleLesson[]> {
   return bsuirClient.schedule.getEmployeeBySubgroup(urlId, subgroup);
+}
+
+/** Сырой ответ API ИИС (`schedules` может быть `null`, см. README SDK). */
+export async function getGroupScheduleRaw(
+  groupNumber: string
+): Promise<ScheduleResponse> {
+  return bsuirClient.schedule.getGroup(groupNumber, { raw: true });
+}
+
+export async function getEmployeeScheduleRaw(
+  urlId: string
+): Promise<ScheduleResponse> {
+  return bsuirClient.schedule.getEmployee(urlId, { raw: true });
 }

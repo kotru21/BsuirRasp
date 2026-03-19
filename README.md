@@ -26,6 +26,14 @@ bun run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Showcase `bsuir-iis-api`
+
+- В **SDK Insights** (кнопка внизу слева на странице с выбранной группой/преподавателем) можно включить сырой ответ расписания: ссылка **«Включить rawSchedule=1»** или query `?rawSchedule=1` вместе с `group` / `employee`.
+- Демо отмены запроса с пробросом `signal` в SDK: [http://localhost:3000/abort-demo](http://localhost:3000/abort-demo) (Route Handler `app/api/demo/group-schedule`).
+- Демо `BsuirValidationError`: [http://localhost:3000/validation-demo](http://localhost:3000/validation-demo).
+- Логирование исходящих запросов к ИИС в консоль сервера: `BSUIR_DEBUG_FETCH=1` (см. [src/shared/api/bsuir-client.ts](src/shared/api/bsuir-client.ts)).
+- На главной с выбранным расписанием: вкладки **основное / экзамены** (`get*Exams`), панель **фильтра SDK** (`get*Filtered` + query `fDay`, `fSubject`, …), подсказки по датам семестра из normalized-ответа, блок **объявлений преподавателя** (режим `employee`), внизу страницы — **справочники** (факультет → специальности, кафедры, аудитории).
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

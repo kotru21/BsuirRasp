@@ -112,7 +112,8 @@ export function DepartmentPassport({
                 <div className="mt-1 text-sm leading-snug">{a.content}</div>
                 {a.studentGroups.length > 0 && (
                   <div className="mt-1 text-xs text-muted-foreground">
-                    Группы: {a.studentGroups.map((g) => g.name).join(", ")}
+                    Группы:{" "}
+                    {a.studentGroups.map((g) => `${g.name} (id ${g.id})`).join(", ")}
                   </div>
                 )}
               </li>

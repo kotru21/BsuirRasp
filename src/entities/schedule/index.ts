@@ -14,6 +14,8 @@ export {
 export {
   getGroupSchedule,
   getEmployeeSchedule,
+  getGroupScheduleRaw,
+  getEmployeeScheduleRaw,
   getGroupScheduleFiltered,
   getEmployeeScheduleFiltered,
   getGroupExams,
@@ -21,6 +23,7 @@ export {
   getGroupScheduleBySubgroup,
   getEmployeeScheduleBySubgroup,
 } from "./api/schedule";
+export type { ScheduleResponse } from "bsuir-iis-api";
 export {
   getScheduleLastUpdate,
   getScheduleLastUpdateByEmployee,

@@ -4,6 +4,7 @@ import {
   SCHEDULE_DAY_KEYS,
   filterLessonsByWeek,
   filterLessonsBySubgroup,
+  type FlattenedScheduleLesson,
   type NormalizedScheduleResponse,
   type ScheduleDayKey,
   type ScheduleLesson,
@@ -19,6 +20,11 @@ interface ScheduleTableProps {
   subgroupFilter?: SubgroupFilter;
   showStudentGroups?: boolean;
   className?: string;
+  /**
+   * Результат getGroupFiltered / getEmployeeFiltered (плоский список).
+   * Если задан — таблица строится по нему, а не по schedule.schedules.
+   */
+  flattenedLessons?: FlattenedScheduleLesson[] | null;
 }
 
 type TimeSlot = string;
@@ -52,6 +58,22 @@ function getLessonsAt(
   return bySubgroup.filter((l) => l.startLessonTime === timeSlot);
 }
 
+function getTimeSlotsFromFlattened(lessons: FlattenedScheduleLesson[]): TimeSlot[] {
+  const times = new Set<string>();
+  for (const l of lessons) {
+    times.add(l.startLessonTime);
+  }
+  return Array.from(times).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+function getFlattenedAt(
+  lessons: FlattenedScheduleLesson[],
+  day: ScheduleDayKey,
+  timeSlot: TimeSlot
+): FlattenedScheduleLesson[] {
+  return lessons.filter((l) => l.day === day && l.startLessonTime === timeSlot);
+}
+
 function EmptyCell() {
   return (
     <div className="flex min-h-[80px] items-center justify-center rounded-xl border border-dashed border-transparent p-3 text-muted-foreground/30">
@@ -66,7 +88,9 @@ export function ScheduleTable({
   subgroupFilter = "all",
   showStudentGroups = false,
   className,
+  flattenedLessons = null,
 }: ScheduleTableProps) {
+  const flatLessons = flattenedLessons;
   if (!schedule) {
     return (
       <div
@@ -88,7 +112,10 @@ export function ScheduleTable({
     );
   }
 
-  const timeSlots = getTimeSlots(schedule, weekNumber, subgroupFilter);
+  const useFlat = flatLessons != null;
+  const timeSlots = useFlat
+    ? getTimeSlotsFromFlattened(flatLessons)
+    : getTimeSlots(schedule, weekNumber, subgroupFilter);
 
   if (timeSlots.length === 0) {
     return (
@@ -104,7 +131,9 @@ export function ScheduleTable({
           </div>
           <h2 className="mt-6 text-xl font-semibold">Нет занятий</h2>
           <p className="mt-2 text-center text-sm font-normal leading-6 text-muted-foreground">
-            На {weekNumber}-й неделе у этой группы нет пар. Можно отдыхать!
+            {useFlat
+              ? "По выбранному фильтру SDK занятий нет. Смягчите условия или сбросьте фильтр."
+              : `На ${weekNumber}-й неделе у этой группы нет пар. Можно отдыхать!`}
           </p>
         </div>
       </div>
@@ -143,7 +172,9 @@ export function ScheduleTable({
                   </div>
                 </td>
                 {SCHEDULE_DAY_KEYS.map((day) => {
-                  const lessons = getLessonsAt(schedule, day, timeSlot, weekNumber, subgroupFilter);
+                  const lessons = useFlat
+                    ? getFlattenedAt(flatLessons, day, timeSlot)
+                    : getLessonsAt(schedule, day, timeSlot, weekNumber, subgroupFilter);
                   return (
                     <td key={day} className="p-2 align-top">
                       {lessons.length > 0 ? (
