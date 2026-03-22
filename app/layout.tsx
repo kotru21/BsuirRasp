@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
+import { getMetadataBase } from "@/shared/config";
 import { Providers } from "@/root";
 import "./globals.css";
 
@@ -14,6 +15,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: {
     default: "bsuir-iis-api — showcase",
     template: "%s · bsuir-iis-api showcase",
@@ -25,6 +27,12 @@ export const metadata: Metadata = {
     description:
       "Демо SDK для API ИИС БГУИР: расписание групп и преподавателей, справочники, фильтры.",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bsuir-iis-api — showcase",
+    description:
+      "Демо SDK для API ИИС БГУИР: расписание групп и преподавателей, справочники, фильтры.",
   },
 };
 

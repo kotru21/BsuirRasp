@@ -24,3 +24,5 @@ export {
   BSUIR_IIS_API_REPO_URL,
   BSUIR_IIS_API_VERSION,
 } from "./bsuir-sdk-meta";
+
+export { getMetadataBase } from "./site-url";
