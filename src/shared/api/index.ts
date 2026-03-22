@@ -1,8 +1,5 @@
 export { bsuirClient } from "./bsuir-client";
-export {
-  getBsuirErrorMessage,
-  isScheduleLastUpdateUnavailable,
-} from "./bsuir-error";
+export { getBsuirErrorMessage } from "./bsuir-error";
 export type {
   ApiDateResponse,
   BsuirClient,

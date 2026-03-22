@@ -1,9 +1,18 @@
 "use client";
 
-import type { Auditory, Department, Faculty, Speciality } from "@/entities";
+import type {
+  Auditory,
+  Department,
+  Employee,
+  Faculty,
+  Speciality,
+  StudentGroup,
+} from "@/entities";
 import { useMemo, useState } from "react";
 
 interface CatalogShowcaseProps {
+  groups: StudentGroup[];
+  employees: Employee[];
   faculties: Faculty[];
   departments: Department[];
   specialities: Speciality[];
@@ -15,14 +24,41 @@ function norm(s: string): string {
 }
 
 export function CatalogShowcase({
+  groups,
+  employees,
   faculties,
   departments,
   specialities,
   auditories,
 }: CatalogShowcaseProps) {
   const [facultyId, setFacultyId] = useState<string>("");
+  const [groupQuery, setGroupQuery] = useState("");
+  const [empQuery, setEmpQuery] = useState("");
   const [deptQuery, setDeptQuery] = useState("");
   const [audQuery, setAudQuery] = useState("");
+
+  const groupsFiltered = useMemo(() => {
+    const q = norm(groupQuery);
+    if (!q) return groups;
+    return groups.filter(
+      (g) =>
+        norm(g.name).includes(q) ||
+        norm(g.specialityName).includes(q) ||
+        norm(g.facultyName).includes(q) ||
+        String(g.id).includes(q)
+    );
+  }, [groups, groupQuery]);
+
+  const employeesFiltered = useMemo(() => {
+    const q = norm(empQuery);
+    if (!q) return employees;
+    return employees.filter(
+      (e) =>
+        norm(e.fio).includes(q) ||
+        norm(e.urlId).includes(q) ||
+        String(e.id).includes(q)
+    );
+  }, [employees, empQuery]);
 
   const fid = facultyId ? Number.parseInt(facultyId, 10) : NaN;
   const specsOnFaculty = useMemo(() => {
@@ -61,12 +97,70 @@ export function CatalogShowcase({
       <div>
         <h2 className="text-lg font-semibold tracking-tight">Справочники SDK</h2>
         <p className="mt-1 text-xs text-muted-foreground">
-          Данные с <code className="rounded bg-muted px-1">faculties.listAll</code>,{" "}
+          Данные с <code className="rounded bg-muted px-1">groups.listAll</code>,{" "}
+          <code className="rounded bg-muted px-1">employees.listAll</code>,{" "}
+          <code className="rounded bg-muted px-1">faculties.listAll</code>,{" "}
           <code className="rounded bg-muted px-1">departments.listAll</code>,{" "}
           <code className="rounded bg-muted px-1">specialities.listAll</code>,{" "}
           <code className="rounded bg-muted px-1">auditories.listAll</code>. Фильтрация на
           клиенте.
         </p>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="space-y-3 rounded-xl border bg-card p-4">
+          <h3 className="text-sm font-medium">Группы</h3>
+          <p className="text-xs text-muted-foreground">
+            <code className="rounded bg-muted px-1">client.groups.listAll</code> · в шапке тот же
+            список для выбора расписания.
+          </p>
+          <input
+            type="search"
+            placeholder="Номер группы, специальность, факультет…"
+            className="h-9 w-full rounded-md border bg-background px-2 text-sm"
+            value={groupQuery}
+            onChange={(e) => setGroupQuery(e.target.value)}
+          />
+          <p className="text-xs text-muted-foreground">Всего в данных: {groups.length}</p>
+          <ul className="max-h-48 overflow-auto text-xs">
+            {groupsFiltered.slice(0, 120).map((g) => (
+              <li key={g.id} className="border-b border-border/60 py-1.5">
+                <span className="font-medium">{g.name}</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  · {g.specialityName} · курс {g.course} · id {g.id}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="space-y-3 rounded-xl border bg-card p-4">
+          <h3 className="text-sm font-medium">Преподаватели</h3>
+          <p className="text-xs text-muted-foreground">
+            <code className="rounded bg-muted px-1">client.employees.listAll</code> · в шапке тот же
+            каталог.
+          </p>
+          <input
+            type="search"
+            placeholder="ФИО, url-id…"
+            className="h-9 w-full rounded-md border bg-background px-2 text-sm"
+            value={empQuery}
+            onChange={(e) => setEmpQuery(e.target.value)}
+          />
+          <p className="text-xs text-muted-foreground">Всего в данных: {employees.length}</p>
+          <ul className="max-h-48 overflow-auto text-xs">
+            {employeesFiltered.slice(0, 120).map((e) => (
+              <li key={e.id} className="border-b border-border/60 py-1.5">
+                <span className="font-medium">{e.fio}</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  · <code className="rounded bg-muted px-0.5">{e.urlId}</code>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">

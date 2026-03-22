@@ -17,6 +17,12 @@ import type {
   StudentGroup,
 } from "@/entities";
 
+function employeeScheduleLabel(schedule: NormalizedScheduleResponse | null): string | null {
+  const e = schedule?.employeeDto;
+  if (!e) return null;
+  return [e.lastName, e.firstName, e.middleName].filter(Boolean).join(" ");
+}
+
 interface HomePageProps {
   groups: StudentGroup[];
   employees: Employee[];
@@ -26,7 +32,6 @@ interface HomePageProps {
   selectedDepartmentId: number | null;
   departmentAnnouncements: Announcement[];
   showDepartmentPassport: boolean;
-  lastUpdateDate?: string | null;
   groupsError?: string | null;
   employeesError?: string | null;
   scheduleError?: string | null;
@@ -64,7 +69,6 @@ export function HomePage({
   selectedDepartmentId,
   departmentAnnouncements,
   showDepartmentPassport,
-  lastUpdateDate,
   groupsError,
   employeesError,
   scheduleError,
@@ -106,6 +110,8 @@ export function HomePage({
           departments={departments}
           selectedDepartmentId={selectedDepartmentId}
           announcements={departmentAnnouncements}
+          employeeAnnouncements={employeeAnnouncements}
+          employeeLabel={employeeScheduleLabel(schedule)}
           className="fixed right-4 bottom-4 z-40 w-[min(92vw,640px)] sm:right-6 sm:bottom-6"
         />
       )}
@@ -113,7 +119,6 @@ export function HomePage({
       <ScheduleView
         schedule={schedule}
         currentWeek={currentWeek}
-        lastUpdateDate={lastUpdateDate}
         advancedFilterLessons={advancedFilterLessons ?? null}
         examLessons={examLessons}
         examFilteredLessons={examFilteredLessons}
@@ -129,6 +134,8 @@ export function HomePage({
         compareScheduleFilterError={compareScheduleFilterError}
       />
       <CatalogShowcase
+        groups={groups}
+        employees={employees}
         faculties={faculties}
         departments={departments}
         specialities={specialities}

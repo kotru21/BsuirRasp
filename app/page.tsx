@@ -19,6 +19,7 @@ import {
   getScheduleLastUpdateByEmployee,
   getLastUpdateByGroup,
   getLastUpdateByEmployee,
+  isScheduleLastUpdateUnavailable,
   getEmployeeScheduleRaw,
   getSpecialities,
   getStudentGroups,
@@ -36,10 +37,7 @@ import {
 } from "@/features/schedule-advanced-filter";
 import { parseExamLessonTypesParam } from "@/features/schedule-exams-filtered";
 import type { SdkInsightsData } from "@/features/sdk-insights";
-import {
-  getBsuirErrorMessage,
-  isScheduleLastUpdateUnavailable,
-} from "@/shared/api";
+import { getBsuirErrorMessage } from "@/shared/api";
 import { HomePage } from "@/views/home";
 
 interface PageProps {
@@ -519,7 +517,6 @@ export default async function Page({ searchParams }: PageProps) {
       selectedDepartmentId={departmentId}
       departmentAnnouncements={departmentAnnouncementsResult.items}
       showDepartmentPassport={showDepartmentPassport}
-      lastUpdateDate={lastUpdateResult.lastUpdateDate}
       groupsError={groupsResult.error}
       employeesError={employeesResult.error}
       scheduleError={scheduleError}

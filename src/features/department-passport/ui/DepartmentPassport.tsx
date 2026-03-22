@@ -9,6 +9,10 @@ interface DepartmentPassportProps {
   departments: Department[];
   selectedDepartmentId: number | null;
   announcements: Announcement[];
+  /** Из `announcements.byEmployee` при открытом `?employee=` */
+  employeeAnnouncements: Announcement[];
+  /** Подпись к блоку преподавателя (ФИО из расписания или null) */
+  employeeLabel?: string | null;
   className?: string;
 }
 
@@ -18,10 +22,29 @@ function formatDate(dateStr: string): string {
   return date.toLocaleDateString("ru-RU");
 }
 
+function AnnouncementCard({ a }: { a: Announcement }) {
+  return (
+    <li className="rounded-md border bg-muted/20 p-2">
+      <div className="text-xs text-muted-foreground">
+        {formatDate(a.date)} · {a.employee}
+      </div>
+      <div className="mt-1 text-sm leading-snug">{a.content}</div>
+      {a.studentGroups.length > 0 && (
+        <div className="mt-1 text-xs text-muted-foreground">
+          Группы:{" "}
+          {a.studentGroups.map((g) => `${g.name} (id ${g.id})`).join(", ")}
+        </div>
+      )}
+    </li>
+  );
+}
+
 export function DepartmentPassport({
   departments,
   selectedDepartmentId,
   announcements,
+  employeeAnnouncements,
+  employeeLabel,
   className,
 }: DepartmentPassportProps) {
   const router = useRouter();
@@ -41,7 +64,8 @@ export function DepartmentPassport({
         <div>
           <h3 className="text-base font-semibold">Паспорт кафедры</h3>
           <p className="text-xs text-muted-foreground">
-            Объявления кафедры через методы `announcements.byDepartment`
+            Кафедра: <code className="rounded bg-muted px-1">byDepartment</code> · преподаватель:{" "}
+            <code className="rounded bg-muted px-1">byEmployee</code>
           </p>
         </div>
         <button
@@ -96,30 +120,47 @@ export function DepartmentPassport({
         </div>
       )}
 
-      <div className="mt-3 rounded-lg border p-3">
-        <h4 className="text-xs font-medium text-muted-foreground">
-          Объявления ({announcements.length})
-        </h4>
-        {announcements.length === 0 ? (
-          <div className="mt-2 text-sm text-muted-foreground">Нет объявлений</div>
-        ) : (
-          <ul className="mt-2 space-y-2">
-            {announcements.map((a) => (
-              <li key={a.id} className="rounded-md border bg-muted/20 p-2">
-                <div className="text-xs text-muted-foreground">
-                  {formatDate(a.date)} · {a.employee}
-                </div>
-                <div className="mt-1 text-sm leading-snug">{a.content}</div>
-                {a.studentGroups.length > 0 && (
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    Группы:{" "}
-                    {a.studentGroups.map((g) => `${g.name} (id ${g.id})`).join(", ")}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="mt-3 space-y-3">
+        <div className="rounded-lg border p-3">
+          <h4 className="text-xs font-medium text-muted-foreground">
+            Объявления кафедры ({announcements.length})
+          </h4>
+          {announcements.length === 0 ? (
+            <div className="mt-2 text-sm text-muted-foreground">
+              Нет объявлений или кафедра не выбрана.
+            </div>
+          ) : (
+            <ul className="mt-2 space-y-2">
+              {announcements.map((a) => (
+                <AnnouncementCard key={a.id} a={a} />
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="rounded-lg border p-3">
+          <h4 className="text-xs font-medium text-muted-foreground">
+            Объявления преподавателя ({employeeAnnouncements.length})
+          </h4>
+          {employeeLabel ? (
+            <p className="mt-1 text-xs text-muted-foreground">{employeeLabel}</p>
+          ) : (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Выберите преподавателя в шапке (<code className="rounded bg-muted px-1">?employee=</code>
+              ), чтобы загрузить объявления.
+            </p>
+          )}
+          {employeeLabel && employeeAnnouncements.length === 0 ? (
+            <div className="mt-2 text-sm text-muted-foreground">Нет объявлений</div>
+          ) : null}
+          {employeeAnnouncements.length > 0 ? (
+            <ul className="mt-2 space-y-2">
+              {employeeAnnouncements.map((a) => (
+                <AnnouncementCard key={a.id} a={a} />
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </div>
     </section>
   );

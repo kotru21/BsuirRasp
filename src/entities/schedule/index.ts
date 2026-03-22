@@ -29,4 +29,5 @@ export {
   getScheduleLastUpdateByEmployee,
   getLastUpdateByGroup,
   getLastUpdateByEmployee,
+  isScheduleLastUpdateUnavailable,
 } from "./api/last-update";

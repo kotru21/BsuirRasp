@@ -10,11 +10,42 @@ export function buildSummarySections(insights: SdkInsightsData | null): SummaryS
 
   const sections: SummarySection[] = [];
 
+  sections.push({
+    title: "Справочники (listAll)",
+    rows: [
+      { label: "Группы (pageData, groups.listAll)", value: insights.raw.pageData.groups.length },
+      {
+        label: "Преподаватели (pageData, employees.listAll)",
+        value: insights.raw.pageData.employees.length,
+      },
+      { label: "Факультеты (references)", value: insights.references.faculties },
+      { label: "Кафедры (references)", value: insights.references.departments },
+      { label: "Специальности (references)", value: insights.references.specialities },
+      { label: "Аудитории (references)", value: insights.references.auditories },
+    ],
+  });
+
   if (isSchedulePage) {
     sections.push({
       title: "Неделя",
       rows: [
-        { label: "Текущая неделя (SDK)", value: insights.weeks.currentWeek },
+        { label: "Текущая неделя (schedule.getCurrentWeek)", value: insights.weeks.currentWeek },
+        {
+          label: "Текущая неделя в pageData",
+          value: insights.raw.pageData.currentWeek,
+        },
+      ],
+    });
+
+    sections.push({
+      title: "Last update (легаси ИИС)",
+      rows: [
+        {
+          label: "Строка для UI (getScheduleLastUpdate*)",
+          value:
+            insights.raw.pageData.lastUpdateDate ??
+            "нет данных (эндпоинт не отвечает / легаси)",
+        },
       ],
     });
 

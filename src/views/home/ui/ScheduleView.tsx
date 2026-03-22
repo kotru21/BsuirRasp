@@ -17,7 +17,6 @@ import { Suspense, useState } from "react";
 interface ScheduleViewProps {
   schedule: NormalizedScheduleResponse | null;
   currentWeek: number;
-  lastUpdateDate?: string | null;
   advancedFilterLessons?: FlattenedScheduleLesson[] | null;
   /** Элементы из getGroupExams / getEmployeeExams */
   examLessons?: FlattenedScheduleLesson[];
@@ -35,11 +34,6 @@ interface ScheduleViewProps {
   /** Параллельный getGroupFiltered для колонки B при активном расширенном фильтре */
   compareAdvancedFilterLessons?: FlattenedScheduleLesson[] | null;
   compareScheduleFilterError?: string | null;
-}
-
-function formatLastUpdate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return Number.isNaN(date.getTime()) ? dateStr : date.toLocaleDateString("ru-RU");
 }
 
 function schedulePeriodCaption(s: NormalizedScheduleResponse): string | null {
@@ -68,7 +62,6 @@ function groupBLabel(
 export function ScheduleView({
   schedule,
   currentWeek,
-  lastUpdateDate,
   advancedFilterLessons = null,
   examLessons = [],
   examFilteredLessons = [],
@@ -210,15 +203,6 @@ export function ScheduleView({
                 </>
               ) : (
                 <h2 className="text-2xl font-bold tracking-tight">Расписание</h2>
-              )}
-              {lastUpdateDate && (
-                <p
-                  className="mt-0.5 text-xs text-muted-foreground"
-                  title="Легаси-эндпоинт ИИС last-update; дата может быть неточной или отсутствовать для части групп и преподавателей."
-                >
-                  Обновлено (легаси ИИС, может быть неверно):{" "}
-                  {formatLastUpdate(lastUpdateDate)}
-                </p>
               )}
               {periodCaption && (
                 <p

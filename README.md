@@ -28,6 +28,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Showcase `bsuir-iis-api`
 
+#### Покрытие методов SDK (главная страница)
+
+| Возможность | Метод SDK (через entities) | Где в UI | Query / условие |
+|-------------|----------------------------|----------|-----------------|
+| Расписание группы | `schedule.getGroup` | Таблица после выбора группы в шапке | `?group=<цифры>` |
+| Расписание преподавателя | `schedule.getEmployee` | Таблица | `?employee=<url-id>` |
+| Список групп | `groups.listAll` | Шапка (поиск) и блок **Справочники SDK** внизу | — |
+| Список преподавателей | `employees.listAll` | Шапка и **Справочники SDK** | — |
+| Факультеты | `faculties.listAll` | **Справочники SDK** | — |
+| Кафедры | `departments.listAll` | **Справочники SDK** | — |
+| Специальности | `specialities.listAll` | **Справочники SDK** (по выбранному факультету) | — |
+| Объявления преподавателя | `announcements.byEmployee` | Под таблицей; в паспорте кафедры при `announcements=1` | режим `employee` |
+| Объявления кафедры | `announcements.byDepartment` | Паспорт кафедры | `announcements=1` и `departmentId` |
+| Аудитории | `auditories.listAll` | **Справочники SDK** | — |
+| Последнее обновление (легаси) | `schedule.getLastUpdateByGroup` / `getLastUpdateByEmployee` | Только **SDK Insights** (сводка и JSON; в шапке расписания не показывается) | есть выбранное расписание |
+| Текущая неделя | `schedule.getCurrentWeek` | Переключатель недели; SDK Insights | есть выбранное расписание |
+
+Сводка **SDK Insights** (включая счётчики `listAll` и last update) доступна только при открытом расписании группы или преподавателя.
+
 - В **SDK Insights** (кнопка внизу слева на странице с выбранной группой/преподавателем) можно включить сырой ответ расписания: ссылка **«Включить rawSchedule=1»** или query `?rawSchedule=1` вместе с `group` / `employee`.
 - Демо отмены запроса с пробросом `signal` в SDK: [http://localhost:3000/abort-demo](http://localhost:3000/abort-demo) (Route Handler `app/api/demo/group-schedule`).
 - Демо `BsuirValidationError`: [http://localhost:3000/validation-demo](http://localhost:3000/validation-demo).
@@ -48,7 +67,7 @@ await client.groups.listAll({
 - На главной с выбранным расписанием: вкладки **основное**, **экзамены** (`get*Exams`), **сессия filtered** (`get*Filtered` с `source: "exams"` и `lessonTypeAbbrev`, по умолчанию как в README SDK); query `examTypes=Консультация,Экзамен` (через запятую) или чекбоксы + поле «другое» на вкладке. Панель **фильтра SDK** для занятий: `fDay`, `fSubject`, …
 - Сравнение двух **групп**: `?group=…&compareGroup=…` (только цифры, как у `group`) — две колонки расписания; ошибки второй группы — тост, страница остаётся рабочей.
 - Демо **mock-клиента** без сети: [http://localhost:3000/mock-demo](http://localhost:3000/mock-demo) (`createBsuirClient({ fetch })` + [src/shared/fixtures/mock-bsuir-schedule-wire.ts](src/shared/fixtures/mock-bsuir-schedule-wire.ts)).
-- Подсказки по датам семестра из normalized-ответа, блок **объявлений преподавателя** (режим `employee`), внизу — **справочники** (факультет → специальности, кафедры, аудитории).
+- Подсказки по датам семестра из normalized-ответа, блок **объявлений преподавателя** (режим `employee`), внизу — **справочники SDK** (группы, преподаватели, факультет → специальности, кафедры, аудитории).
 
 #### Типы TypeScript для SDK
 

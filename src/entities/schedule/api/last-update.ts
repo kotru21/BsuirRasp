@@ -1,4 +1,16 @@
+import { BsuirApiError } from "bsuir-iis-api";
 import { bsuirClient } from "@/shared/api";
+
+const LAST_UPDATE_PATH = "/last-update-date";
+
+/** 404 на легаси `last-update-date/*` — не считаем ошибкой для UI/SDK Insights. */
+export function isScheduleLastUpdateUnavailable(error: unknown): boolean {
+  return (
+    error instanceof BsuirApiError &&
+    error.status === 404 &&
+    error.endpoint.includes(LAST_UPDATE_PATH)
+  );
+}
 
 /**
  * Легаси-эндпоинт ИИС; для части групп ответа нет (404). Дата при успехе может
