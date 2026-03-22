@@ -10,7 +10,7 @@ import { cn } from "@/shared/lib";
 import type { Employee, StudentGroup } from "@/entities";
 
 const headerActionClass =
-  "inline-flex min-h-10 min-w-10 shrink-0 items-center justify-center gap-1.5 rounded-md border px-2 text-xs font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-9 sm:min-h-0 sm:min-w-0 sm:px-3 sm:text-sm";
+  "inline-flex min-h-10 min-w-10 shrink-0 items-center justify-center gap-1.5 rounded-md border px-2 text-xs font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-9 md:min-h-0 md:min-w-0 md:px-3 md:text-sm";
 
 interface HeaderProps {
   groups: StudentGroup[];
@@ -43,23 +43,23 @@ export function Header({ groups, employees }: HeaderProps) {
       <div
         className={cn(
           "mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] px-4 py-1.5 [grid-template-areas:'hdr-title_hdr-actions'_'hdr-search_hdr-search']",
-          "max-sm:items-center max-sm:gap-x-2 max-sm:gap-y-1.5 sm:gap-4 sm:py-2",
-          "sm:min-h-16 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:grid-rows-1 sm:items-center sm:[grid-template-areas:'hdr-title_hdr-search_hdr-actions']",
+          "max-md:items-center max-md:gap-x-2 max-md:gap-y-1.5 md:gap-4 md:py-2",
+          "md:min-h-16 md:grid-cols-[auto_minmax(0,1fr)_auto] md:grid-rows-1 md:items-center md:[grid-template-areas:'hdr-title_hdr-search_hdr-actions']",
           "lg:px-8"
         )}
       >
         <Link
           href="/"
-          className="group block min-w-0 [grid-area:hdr-title] hover:opacity-80 sm:w-auto"
+          className="group block min-w-0 [grid-area:hdr-title] hover:opacity-80 md:w-auto"
         >
-          <span className="block font-mono text-base font-semibold tracking-tight text-foreground sm:text-lg">
+          <span className="block font-mono text-base font-semibold tracking-tight text-foreground md:text-lg">
             bsuir-iis-api
           </span>
-          <span className="block text-[0.65rem] font-medium uppercase tracking-[0.12em] text-muted-foreground sm:text-[0.7rem]">
+          <span className="block text-[0.65rem] font-medium uppercase tracking-[0.12em] text-muted-foreground md:text-[0.7rem]">
             showcase
           </span>
         </Link>
-        <div className="flex shrink-0 items-center justify-end gap-1 [grid-area:hdr-actions] sm:gap-2">
+        <div className="flex shrink-0 items-center justify-end gap-1 [grid-area:hdr-actions] md:gap-2">
           <button
             type="button"
             onClick={copyPageLink}
@@ -67,7 +67,7 @@ export function Header({ groups, employees }: HeaderProps) {
             aria-label="Поделиться ссылкой"
           >
             <Link2Icon className="size-4 shrink-0" aria-hidden />
-            <span className="hidden sm:inline">Поделиться ссылкой</span>
+            <span className="hidden md:inline">Поделиться ссылкой</span>
           </button>
           <button
             type="button"
@@ -76,7 +76,7 @@ export function Header({ groups, employees }: HeaderProps) {
             aria-label="Объявления"
           >
             <BellIcon className="size-4 shrink-0" aria-hidden />
-            <span className="hidden sm:inline">Объявления</span>
+            <span className="hidden md:inline">Объявления</span>
           </button>
           <ThemeToggle />
         </div>
@@ -84,7 +84,7 @@ export function Header({ groups, employees }: HeaderProps) {
           groups={groups}
           employees={employees}
           placeholder="Поиск группы или преподавателя..."
-          className="min-w-0 w-full [grid-area:hdr-search] sm:max-w-md lg:max-w-lg"
+          className="min-w-0 w-full [grid-area:hdr-search] md:max-w-md lg:max-w-lg"
         />
       </div>
     </header>

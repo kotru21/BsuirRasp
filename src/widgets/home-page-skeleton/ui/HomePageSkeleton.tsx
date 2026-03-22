@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib";
 import { Skeleton } from "@/shared/ui";
 
 function CatalogCardSkeleton() {
@@ -25,66 +26,78 @@ export function HomePageSkeleton({ scheduleTableSection }: HomePageSkeletonProps
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur supports-backdrop-filter:bg-background/60">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:min-h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-2 lg:px-8">
-          <div className="flex shrink-0 flex-col gap-1">
-            <Skeleton className="h-5 w-36 sm:h-6 sm:w-40" />
+        <div
+          className={cn(
+            "mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] px-4 py-1.5 [grid-template-areas:'hdr-title_hdr-actions'_'hdr-search_hdr-search']",
+            "max-md:items-center max-md:gap-x-2 max-md:gap-y-1.5 md:gap-4 md:py-2",
+            "md:min-h-16 md:grid-cols-[auto_minmax(0,1fr)_auto] md:grid-rows-1 md:items-center md:[grid-template-areas:'hdr-title_hdr-search_hdr-actions']",
+            "lg:px-8"
+          )}
+        >
+          <div className="flex min-w-0 flex-col gap-1 [grid-area:hdr-title]">
+            <Skeleton className="h-5 w-36 md:h-6 md:w-40" />
             <Skeleton className="h-3 w-20" />
           </div>
-          <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-1 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
-            <div className="flex items-center justify-between gap-2 sm:contents">
-              <Skeleton className="h-11 w-34 shrink-0 sm:h-9" />
-              <Skeleton className="h-11 w-28 shrink-0 sm:h-9" />
-              <Skeleton className="size-11 shrink-0 rounded-md sm:size-9 sm:order-3" />
+          <div className="flex shrink-0 items-center justify-end gap-1 [grid-area:hdr-actions] md:gap-2">
+            <div className="flex items-center gap-1 md:hidden">
+              <Skeleton className="h-10 w-10 shrink-0 rounded-md" />
+              <Skeleton className="h-10 w-10 shrink-0 rounded-md" />
+              <Skeleton className="size-10 shrink-0 rounded-md" />
             </div>
-            <Skeleton className="h-11 w-full min-w-0 sm:order-2 sm:max-w-md sm:flex-1 lg:max-w-lg" />
+            <div className="hidden items-center gap-2 md:flex">
+              <Skeleton className="h-9 w-[8.5rem] shrink-0 rounded-md" />
+              <Skeleton className="h-9 w-28 shrink-0 rounded-md" />
+              <Skeleton className="size-9 shrink-0 rounded-md" />
+            </div>
           </div>
+          <Skeleton className="h-10 w-full min-w-0 [grid-area:hdr-search] md:h-9 md:max-w-md lg:max-w-lg" />
         </div>
       </header>
 
-      <div className="relative overflow-hidden border-b border-white/10 bg-zinc-950 text-zinc-50">
+      <div className="relative overflow-hidden border-b border-border bg-background text-foreground dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-50">
         <div className="relative">
           <section className="px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
             <div className="mx-auto max-w-7xl space-y-8">
-              <Skeleton onDark className="h-3 w-28" />
+              <Skeleton className="h-3 w-28 dark:bg-white/10" />
               <div className="space-y-4">
-                <Skeleton onDark className="h-12 w-full max-w-2xl sm:h-14" />
-                <Skeleton onDark className="h-10 w-full max-w-xl sm:h-12" />
-                <Skeleton onDark className="h-5 w-full max-w-lg" />
+                <Skeleton className="h-12 w-full max-w-2xl sm:h-14 dark:bg-white/10" />
+                <Skeleton className="h-10 w-full max-w-xl sm:h-12 dark:bg-white/10" />
+                <Skeleton className="h-5 w-full max-w-lg dark:bg-white/10" />
               </div>
               <div className="flex flex-wrap gap-3">
-                <Skeleton onDark className="h-11 w-44 rounded-full" />
-                <Skeleton onDark className="h-11 w-36 rounded-full" />
-                <Skeleton onDark className="h-11 w-24 rounded-full" />
-                <Skeleton onDark className="h-11 w-28 rounded-full" />
+                <Skeleton className="h-11 w-44 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-11 w-36 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-11 w-24 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-11 w-28 rounded-full dark:bg-white/10" />
               </div>
               <div className="flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
-                <Skeleton onDark className="h-12 min-h-12 flex-1 rounded-xl" />
-                <Skeleton onDark className="h-4 w-16 sm:shrink-0" />
+                <Skeleton className="h-12 min-h-12 flex-1 rounded-xl dark:bg-white/10" />
+                <Skeleton className="h-4 w-16 sm:shrink-0 dark:bg-white/10" />
               </div>
-              <div className="flex flex-wrap gap-2 border-t border-white/10 pt-8">
-                <Skeleton onDark className="h-9 w-24 rounded-full" />
-                <Skeleton onDark className="h-9 w-36 rounded-full" />
-                <Skeleton onDark className="h-9 w-32 rounded-full" />
-                <Skeleton onDark className="h-9 w-28 rounded-full" />
+              <div className="flex flex-wrap gap-2 border-t border-border pt-8 dark:border-white/10">
+                <Skeleton className="h-9 w-24 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-9 w-36 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-9 w-32 rounded-full dark:bg-white/10" />
+                <Skeleton className="h-9 w-28 rounded-full dark:bg-white/10" />
               </div>
             </div>
           </section>
 
-          <section className="border-t border-white/10 px-4 py-12 sm:px-6 lg:px-8">
+          <section className="border-t border-border px-4 py-12 sm:px-6 lg:px-8 dark:border-white/10">
             <div className="mx-auto max-w-7xl space-y-6">
-              <Skeleton onDark className="h-3 w-24" />
-              <Skeleton onDark className="h-8 w-48 sm:h-9 sm:w-56" />
-              <Skeleton onDark className="h-4 w-full max-w-xl" />
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-                <div className="flex border-b border-white/10 px-4 py-3 sm:px-5">
-                  <Skeleton onDark className="h-4 w-32" />
+              <Skeleton className="h-3 w-24 dark:bg-white/10" />
+              <Skeleton className="h-8 w-48 sm:h-9 sm:w-56 dark:bg-white/10" />
+              <Skeleton className="h-4 w-full max-w-xl dark:bg-white/10" />
+              <div className="overflow-hidden rounded-2xl border border-border bg-muted/50 dark:border-white/10 dark:bg-black/40">
+                <div className="flex border-b border-border px-4 py-3 sm:px-5 dark:border-white/10">
+                  <Skeleton className="h-4 w-32 dark:bg-white/10" />
                   <div className="ml-auto">
-                    <Skeleton onDark className="h-9 w-36 rounded-full" />
+                    <Skeleton className="h-9 w-36 rounded-full dark:bg-white/10" />
                   </div>
                 </div>
                 <div className="space-y-3 p-5 sm:p-6">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton key={i} onDark className="h-4 w-full max-w-2xl" />
+                    <Skeleton key={i} className="h-4 w-full max-w-2xl dark:bg-white/10" />
                   ))}
                 </div>
               </div>

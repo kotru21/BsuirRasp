@@ -13,10 +13,10 @@ import { ArrowRightIcon } from "lucide-react";
 const INSTALL_CMD = "npm i bsuir-iis-api";
 
 const linkPill =
-  "inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium text-zinc-100 transition-colors hover:border-white/25 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 min-h-11 sm:min-h-0";
+  "inline-flex items-center justify-center rounded-full border border-border bg-muted/70 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-h-11 sm:min-h-0 dark:border-white/15 dark:bg-white/5 dark:text-zinc-100 dark:hover:border-white/25 dark:hover:bg-white/10 dark:focus-visible:ring-white/40";
 
 const jumpPill =
-  "inline-flex items-center rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 min-h-11 sm:min-h-0 sm:text-sm";
+  "inline-flex items-center rounded-full border border-border bg-muted/50 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-border hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-h-11 sm:min-h-0 sm:text-sm dark:border-white/10 dark:bg-black/20 dark:text-zinc-300 dark:hover:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-white/30";
 
 interface SdkShowcaseHeroProps {
   className?: string;
@@ -36,7 +36,7 @@ export function SdkShowcaseHero({ className, showJumpLinks = false }: SdkShowcas
       aria-labelledby="sdk-showcase-heading"
     >
       <div className="mx-auto max-w-7xl">
-        <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-zinc-500">
+        <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           npm package
         </p>
 
@@ -44,16 +44,16 @@ export function SdkShowcaseHero({ className, showJumpLinks = false }: SdkShowcas
           id="sdk-showcase-heading"
           className="max-w-4xl text-balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl sm:leading-[1.05] lg:text-6xl"
         >
-          <span className="bg-linear-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+          <span className="bg-linear-to-b from-foreground via-foreground/85 to-muted-foreground bg-clip-text text-transparent dark:from-white dark:via-zinc-100 dark:to-zinc-400">
             Типобезопасный клиент
           </span>
           <br />
-          <span className="font-mono text-[0.85em] font-semibold text-zinc-200 sm:text-[0.9em]">
+          <span className="font-mono text-[0.85em] font-semibold text-foreground sm:text-[0.9em] dark:text-zinc-200">
             bsuir-iis-api
           </span>
         </h1>
 
-        <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-zinc-400 sm:text-lg">
+        <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
           Один пакет для API ИИС БГУИР: расписание, справочники, объявления. Ниже — живой showcase;
           здесь — установка, документация и первый код.
         </p>
@@ -61,7 +61,7 @@ export function SdkShowcaseHero({ className, showJumpLinks = false }: SdkShowcas
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <a
             href="#schedule-demo"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:focus-visible:ring-white/50 dark:focus-visible:ring-offset-zinc-950"
           >
             Попробовать showcase
             <ArrowRightIcon className="size-4 shrink-0" aria-hidden />
@@ -78,27 +78,29 @@ export function SdkShowcaseHero({ className, showJumpLinks = false }: SdkShowcas
         </div>
 
         <div className="mt-10 flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-stretch">
-          <div className="flex min-h-12 min-w-0 flex-1 items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-4 py-3 font-mono text-sm text-zinc-200 backdrop-blur-sm">
+          <div className="flex min-h-12 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-muted/60 px-4 py-3 font-mono text-sm text-foreground backdrop-blur-sm dark:border-white/10 dark:bg-black/40 dark:text-zinc-200">
             <span className="min-w-0 flex-1 truncate">{INSTALL_CMD}</span>
             <button
               type="button"
               onClick={copyInstall}
-              className="shrink-0 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 min-h-11 sm:min-h-0"
+              className="shrink-0 rounded-lg border border-input bg-background px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-h-11 sm:min-h-0 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 dark:focus-visible:ring-white/40"
             >
               Копировать
             </button>
           </div>
-          <p className="flex items-center text-xs text-zinc-500 sm:shrink-0 sm:self-center sm:px-2">
+          <p className="flex items-center text-xs text-muted-foreground sm:shrink-0 sm:self-center sm:px-2 dark:text-zinc-500">
             v{BSUIR_IIS_API_VERSION}
           </p>
         </div>
 
         {showJumpLinks && (
           <nav
-            className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-10 sm:flex-row sm:flex-wrap sm:items-center"
+            className="mt-12 flex flex-col gap-3 border-t border-border pt-10 sm:flex-row sm:flex-wrap sm:items-center dark:border-white/10"
             aria-label="Разделы страницы"
           >
-            <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">На странице</span>
+            <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground dark:text-zinc-500">
+              На странице
+            </span>
             <div className="flex flex-wrap gap-2">
               <a href="#quick-start" className={jumpPill}>
                 Quick start
