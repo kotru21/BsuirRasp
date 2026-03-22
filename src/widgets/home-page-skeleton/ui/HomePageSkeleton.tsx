@@ -45,7 +45,7 @@ export function HomePageSkeleton({ scheduleTableSection }: HomePageSkeletonProps
               <Skeleton className="size-10 shrink-0 rounded-md" />
             </div>
             <div className="hidden items-center gap-2 md:flex">
-              <Skeleton className="h-9 w-[8.5rem] shrink-0 rounded-md" />
+              <Skeleton className="h-9 w-34 shrink-0 rounded-md" />
               <Skeleton className="h-9 w-28 shrink-0 rounded-md" />
               <Skeleton className="size-9 shrink-0 rounded-md" />
             </div>
