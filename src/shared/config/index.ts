@@ -26,3 +26,10 @@ export {
 } from "./bsuir-sdk-meta";
 
 export { getMetadataBase } from "./site-url";
+
+export {
+  getDefaultOpenGraphImageAbsoluteUrl,
+  OPEN_GRAPH_DEFAULT_IMAGE_ALT,
+  OPEN_GRAPH_DEFAULT_IMAGE_PATH,
+  OPEN_GRAPH_DEFAULT_IMAGE_SIZE,
+} from "./open-graph-defaults";
