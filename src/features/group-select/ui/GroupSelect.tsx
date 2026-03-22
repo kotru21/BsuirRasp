@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from
 import { Input, Skeleton } from "@/shared/ui";
 import type { Employee, StudentGroup } from "@/entities";
 import { SearchIcon } from "lucide-react";
-import { cn, getUrlSearchParamsForNavigation } from "@/shared/lib";
+import { cn, getResolvedSearchParams, getUrlSearchParamsForNavigation } from "@/shared/lib";
 
 const MAX_SUGGESTIONS = 10;
 
@@ -60,8 +60,9 @@ export function GroupSelect({
 }: GroupSelectProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const groupFromUrl = searchParams.get("group") ?? "";
-  const employeeFromUrl = searchParams.get("employee") ?? "";
+  const resolved = getResolvedSearchParams(searchParams);
+  const groupFromUrl = resolved.get("group") ?? "";
+  const employeeFromUrl = resolved.get("employee") ?? "";
 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");

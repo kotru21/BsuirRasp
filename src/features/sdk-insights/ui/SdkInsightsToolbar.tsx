@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { getResolvedSearchParams } from "@/shared/lib";
 
 interface SdkInsightsToolbarProps {
   /** Есть выбранное расписание (группа или преподаватель) — для подсказки про rawSchedule. */
@@ -13,8 +14,9 @@ export function SdkInsightsToolbar({
 }: SdkInsightsToolbarProps) {
   const pathname = usePathname();
   const sp = useSearchParams();
-  const next = new URLSearchParams(sp.toString());
-  const isRaw = next.get("rawSchedule") === "1";
+  const resolved = getResolvedSearchParams(sp);
+  const isRaw = resolved.get("rawSchedule") === "1";
+  const next = new URLSearchParams(resolved.toString());
   if (isRaw) next.delete("rawSchedule");
   else next.set("rawSchedule", "1");
   const q = next.toString();

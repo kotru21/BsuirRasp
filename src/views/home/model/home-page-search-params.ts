@@ -95,7 +95,10 @@ export function parseHomeRouteContext(
   };
 }
 
-/** Все query-параметры, кроме `announcements`, чтобы смена только панели объявлений не сбрасывала клиентский UI. */
+/**
+ * Query-параметры для ключа `AnnouncementsUiProvider`, кроме `announcements` и `departmentId`:
+ * переключение панели и выбор кафедры не должны вызывать полный remount клиентского дерева.
+ */
 export function buildAnnouncementsUiRouteKey(
   params: HomePageSearchParams | undefined
 ): string {
@@ -104,7 +107,6 @@ export function buildAnnouncementsUiRouteKey(
     params.group ?? "",
     params.employee ?? "",
     params.week ?? "",
-    params.departmentId ?? "",
     params.rawSchedule ?? "",
     params.fDay ?? "",
     params.fSubject ?? "",

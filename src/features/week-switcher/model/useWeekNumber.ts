@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { getUrlSearchParamsForNavigation } from "@/shared/lib";
+import { getResolvedSearchParams, getUrlSearchParamsForNavigation } from "@/shared/lib";
 
 const DEFAULT_WEEK = 1;
 const MIN_WEEK = 1;
@@ -19,7 +19,7 @@ export function useWeekNumber(options: UseWeekNumberOptions = {}) {
   const searchParams = useSearchParams();
   const { defaultWeek = DEFAULT_WEEK, minWeek = MIN_WEEK, maxWeek = MAX_WEEK } = options;
 
-  const param = searchParams.get("week");
+  const param = getResolvedSearchParams(searchParams).get("week");
   const weekNumber = param
     ? Math.max(minWeek, Math.min(maxWeek, parseInt(param, 10)))
     : defaultWeek;

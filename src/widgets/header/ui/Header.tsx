@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { BellIcon, Link2Icon } from "lucide-react";
 import { useAnnouncementsUi } from "@/features/department-passport";
 import { GroupSelect } from "@/features/group-select";
@@ -19,7 +18,6 @@ interface HeaderProps {
 }
 
 export function Header({ groups, employees }: HeaderProps) {
-  const searchParams = useSearchParams();
   const { isAnnouncementsOpen, toggleAnnouncements } = useAnnouncementsUi();
 
   async function copyPageLink() {

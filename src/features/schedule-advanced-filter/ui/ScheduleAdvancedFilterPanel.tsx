@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { getUrlSearchParamsForNavigation } from "@/shared/lib";
+import { getResolvedSearchParams, getUrlSearchParamsForNavigation } from "@/shared/lib";
 import { useCallback, useMemo } from "react";
 import { DAY_CODE } from "../model/build-schedule-filter";
 
@@ -24,11 +24,13 @@ export function ScheduleAdvancedFilterPanel({
 }: ScheduleAdvancedFilterPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const resolved = getResolvedSearchParams(searchParams);
+  const resolvedQs = resolved.toString();
 
-  const hasUrlFilters = useMemo(
-    () => FILTER_KEYS.some((k) => Boolean(searchParams.get(k)?.trim())),
-    [searchParams]
-  );
+  const hasUrlFilters = useMemo(() => {
+    const sp = new URLSearchParams(resolvedQs);
+    return FILTER_KEYS.some((k) => Boolean(sp.get(k)?.trim()));
+  }, [resolvedQs]);
 
   const applyFromForm = useCallback(
     (form: HTMLFormElement) => {
@@ -56,7 +58,7 @@ export function ScheduleAdvancedFilterPanel({
   }, [router]);
 
   /** Сброс полей формы при навигации (без setState в useEffect). */
-  const formKey = searchParams.toString();
+  const formKey = resolvedQs;
 
   return (
     <div
@@ -94,7 +96,7 @@ export function ScheduleAdvancedFilterPanel({
             <select
               name="fDay"
               className="rounded-md border border-input bg-background px-2 py-1.5"
-              defaultValue={searchParams.get("fDay") ?? ""}
+              defaultValue={resolved.get("fDay") ?? ""}
             >
               <option value="">Любой</option>
               {DAY_OPTIONS.map(({ code, label }) => (
@@ -109,7 +111,7 @@ export function ScheduleAdvancedFilterPanel({
             <input
               name="fSubject"
               className="rounded-md border border-input bg-background px-2 py-1.5"
-              defaultValue={searchParams.get("fSubject") ?? ""}
+              defaultValue={resolved.get("fSubject") ?? ""}
               placeholder="Напр. физика"
             />
           </label>
@@ -118,7 +120,7 @@ export function ScheduleAdvancedFilterPanel({
             <input
               name="fType"
               className="rounded-md border border-input bg-background px-2 py-1.5"
-              defaultValue={searchParams.get("fType") ?? ""}
+              defaultValue={resolved.get("fType") ?? ""}
               placeholder="Напр. ЛК"
             />
           </label>
@@ -127,7 +129,7 @@ export function ScheduleAdvancedFilterPanel({
             <input
               name="fAuditory"
               className="rounded-md border border-input bg-background px-2 py-1.5"
-              defaultValue={searchParams.get("fAuditory") ?? ""}
+              defaultValue={resolved.get("fAuditory") ?? ""}
               placeholder="Напр. 101"
             />
           </label>
@@ -139,7 +141,7 @@ export function ScheduleAdvancedFilterPanel({
               <input
                 name="fEmployee"
                 className="rounded-md border border-input bg-background px-2 py-1.5"
-                defaultValue={searchParams.get("fEmployee") ?? ""}
+                defaultValue={resolved.get("fEmployee") ?? ""}
                 placeholder="s-nesterenkov"
               />
             </label>

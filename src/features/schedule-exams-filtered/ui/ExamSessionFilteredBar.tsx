@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { getUrlSearchParamsForNavigation } from "@/shared/lib";
+import { getResolvedSearchParams, getUrlSearchParamsForNavigation } from "@/shared/lib";
 import { useCallback, useMemo } from "react";
 import {
   DEFAULT_EXAM_LESSON_TYPES,
@@ -32,7 +32,8 @@ function splitPresetsFromParam(param: string | undefined): {
 export function ExamSessionFilteredBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const examTypesParam = searchParams.get("examTypes") ?? undefined;
+  const examTypesParam =
+    getResolvedSearchParams(searchParams).get("examTypes") ?? undefined;
   const formKey = `examTypes-${examTypesParam ?? "default"}`;
 
   const initial = useMemo(() => splitPresetsFromParam(examTypesParam), [examTypesParam]);

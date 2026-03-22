@@ -84,9 +84,6 @@ export function DepartmentPassport({
           className="h-9 rounded-md border bg-background px-2 text-sm"
           value={selectedDepartmentId ?? ""}
           onChange={(e) => {
-            // Брать query из адресной строки: после replaceState у панели объявлений
-            // Next useSearchParams() может не содержать `announcements=1`, и router.push
-            // сбрасывал бы флаг — панель закрывалась при смене кафедры.
             const next = getUrlSearchParamsForNavigation();
             const value = e.target.value;
             if (!value) {
