@@ -13,7 +13,7 @@ import {
 import { THEME_LABELS } from "@/shared/config";
 import type { ThemeValue } from "@/shared/config";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 const THEME_OPTIONS: ThemeValue[] = ["light", "dark", "system"];
 

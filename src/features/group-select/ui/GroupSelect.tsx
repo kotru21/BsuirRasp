@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from
 import { Input, Skeleton } from "@/shared/ui";
 import type { Employee, StudentGroup } from "@/entities";
 import { SearchIcon } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 const MAX_SUGGESTIONS = 10;
 

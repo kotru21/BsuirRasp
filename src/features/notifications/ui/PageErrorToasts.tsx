@@ -1,6 +1,6 @@
 "use client";
 
-import { showError } from "@/shared/lib/notifications";
+import { showError } from "@/shared/lib";
 import { useEffect, useRef } from "react";
 
 interface PageErrorToastsProps {

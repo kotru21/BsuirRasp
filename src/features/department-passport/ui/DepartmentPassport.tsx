@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import type { Announcement, Department } from "@/entities";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 interface DepartmentPassportProps {
   departments: Department[];

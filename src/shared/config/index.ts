@@ -17,3 +17,10 @@ export const API_TIME_FORMAT = "HH:mm";
 
 export type { ThemeValue } from "./theme";
 export { THEME_LABELS } from "./theme";
+
+export {
+  BSUIR_IIS_API_NPM_URL,
+  BSUIR_IIS_API_README_URL,
+  BSUIR_IIS_API_REPO_URL,
+  BSUIR_IIS_API_VERSION,
+} from "./bsuir-sdk-meta";

@@ -1,19 +1,19 @@
-# Расписание БГУИР
+# bsuir-iis-api showcase
 
-Сайт-расписание на [Next.js](https://nextjs.org) (App Router) + [shadcn/ui](https://ui.shadcn.com) с архитектурой [Feature-Sliced Design](https://feature-sliced.design).
+Showcase npm-пакета [bsuir-iis-api](https://www.npmjs.com/package/bsuir-iis-api) на [Next.js](https://nextjs.org) (App Router) + [shadcn/ui](https://ui.shadcn.com) с архитектурой [Feature-Sliced Design](https://feature-sliced.design).
 
 ## Структура (FSD)
 
-- `app/` — маршруты Next.js (layout, page, loading, error, not-found).
-- `src/` — бизнес-код по слоям:
-  - `root` — провайдеры приложения;
-  - `shared` — ui (shadcn), lib, config, api;
+- `app/` — слой **app** в терминах Next.js App Router: маршруты (`layout`, `page`, `loading`, `error`, `not-found`), без тяжёлой бизнес-логики; данные для главной собираются в `src/views/home/model/load-home-page.ts`, страница импортирует `@/views/home`.
+- `src/` — код по слоям FSD:
+  - `root` — то же назначение, что **app**-слой FSD (провайдеры, тема): код вынесен из `app/`, чтобы не смешивать с файлами маршрутизации Next.js;
+  - `shared` — ui (shadcn), lib, config, api; внешние импорты только через публичные `index.ts` сегментов (`@/shared/lib`, `@/shared/config`, `@/shared/ui`, `@/shared/api`);
   - `entities` — доменные сущности;
-  - `features` — сценарии;
-  - `widgets` — составные блоки;
-  - `views` — страницы (композиция виджетов). Импорт в `app/page.tsx` из `@/views/...`.
+  - `features` — пользовательские сценарии;
+  - `widgets` — композиция entities + features;
+  - `views` — эквивалент слоя **pages** в каноничном FSD: композиция виджетов и фич в экраны (сейчас `views/home`).
 
-Алиас `@/*` → `src/*`. Линтинг: ESLint + Prettier (интеграция в IDE через `.vscode/`).
+Алиас `@/*` → `src/*`. Для файлов в `src/**` и `app/**` включено правило `eslint-plugin-boundaries` (зависимости только «сверху вниз» по слоям). Линтинг: ESLint + Prettier (интеграция в IDE через `.vscode/`).
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 #### Покрытие методов SDK (главная страница)
 
 | Возможность | Метод SDK (через entities) | Где в UI | Query / условие |
-|-------------|----------------------------|----------|-----------------|
+| --- | --- | --- | --- |
 | Расписание группы | `schedule.getGroup` | Таблица после выбора группы в шапке | `?group=<цифры>` |
 | Расписание преподавателя | `schedule.getEmployee` | Таблица | `?employee=<url-id>` |
 | Список групп | `groups.listAll` | Шапка (поиск) и блок **Справочники SDK** внизу | — |
@@ -64,6 +64,7 @@ await client.groups.listAll({
 ```
 
 Имеет смысл проверять реальные ключи по ответу API; в showcase отдельный UI не вынесен — см. [npm](https://www.npmjs.com/package/bsuir-iis-api) и [репозиторий SDK](https://github.com/kotru21/bsuir-iis-api).
+
 - На главной с выбранным расписанием: вкладки **основное**, **экзамены** (`get*Exams`), **сессия filtered** (`get*Filtered` с `source: "exams"` и `lessonTypeAbbrev`, по умолчанию как в README SDK); query `examTypes=Консультация,Экзамен` (через запятую) или чекбоксы + поле «другое» на вкладке. Панель **фильтра SDK** для занятий: `fDay`, `fSubject`, …
 - Сравнение двух **групп**: `?group=…&compareGroup=…` (только цифры, как у `group`) — две колонки расписания; ошибки второй группы — тост, страница остаётся рабочей.
 - Демо **mock-клиента** без сети: [http://localhost:3000/mock-demo](http://localhost:3000/mock-demo) (`createBsuirClient({ fetch })` + [src/shared/fixtures/mock-bsuir-schedule-wire.ts](src/shared/fixtures/mock-bsuir-schedule-wire.ts)).
@@ -80,8 +81,6 @@ function countEmployees(c: BsuirClient, _sample: EmployeeCatalogItem[]) {
   return c.employees.listAll();
 }
 ```
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

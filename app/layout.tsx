@@ -14,8 +14,18 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Расписание БГУИР",
-  description: "Сайт-расписание БГУИР",
+  title: {
+    default: "bsuir-iis-api — showcase",
+    template: "%s · bsuir-iis-api showcase",
+  },
+  description:
+    "Живая демонстрация npm-пакета bsuir-iis-api: типобезопасный клиент к API ИИС БГУИР, расписание и справочники.",
+  openGraph: {
+    title: "bsuir-iis-api — showcase",
+    description:
+      "Демо SDK для API ИИС БГУИР: расписание групп и преподавателей, справочники, фильтры.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,6 +35,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://iis.bsuir.by" crossOrigin="anonymous" />
+      </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
       </body>

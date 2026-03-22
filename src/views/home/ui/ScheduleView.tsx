@@ -5,7 +5,7 @@ import { ExamSessionFilteredBar } from "@/features/schedule-exams-filtered";
 import { ScheduleAdvancedFilterPanel } from "@/features/schedule-advanced-filter";
 import { SubgroupSwitcher, useSubgroup } from "@/features/subgroup-switcher";
 import { WeekSwitcher, useWeekNumber } from "@/features/week-switcher";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 import { ScheduleTable } from "@/widgets/schedule-table";
 import type {
   Announcement,
@@ -167,7 +167,10 @@ export function ScheduleView({
   );
 
   return (
-    <div className="mx-auto w-full max-w-7xl flex-1 space-y-6 p-4 sm:p-6 lg:p-8">
+    <div
+      id="schedule-demo"
+      className="mx-auto w-full max-w-7xl flex-1 scroll-mt-24 space-y-6 p-4 sm:p-6 lg:p-8"
+    >
       {schedule && (
         <div className="flex flex-col gap-4">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">

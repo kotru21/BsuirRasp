@@ -1,9 +1,13 @@
 import { CatalogShowcase } from "@/features/catalog-showcase";
 import { DepartmentPassport } from "@/features/department-passport";
 import { PageErrorToasts } from "@/features/notifications";
+import { SdkProductLanding } from "@/features/sdk-product-landing";
+import { SdkQuickStartSection } from "@/features/sdk-quick-start";
+import { SdkShowcaseHero } from "@/features/sdk-showcase-hero";
 import { SdkInsights, type SdkInsightsData } from "@/features/sdk-insights";
 import { Header } from "@/widgets/header";
 import { SiteFooter } from "@/widgets/site-footer";
+import { ApiShowcaseIntro } from "./ApiShowcaseIntro";
 import { ScheduleView } from "./ScheduleView";
 import type {
   Announcement,
@@ -23,7 +27,7 @@ function employeeScheduleLabel(schedule: NormalizedScheduleResponse | null): str
   return [e.lastName, e.firstName, e.middleName].filter(Boolean).join(" ");
 }
 
-interface HomePageProps {
+export interface HomePageProps {
   groups: StudentGroup[];
   employees: Employee[];
   schedule: NormalizedScheduleResponse | null;
@@ -94,7 +98,7 @@ export function HomePage({
   compareScheduleFilterError = null,
 }: HomePageProps) {
   return (
-    <main className="flex min-h-screen flex-col bg-muted/20">
+    <main className="flex min-h-screen flex-col bg-background">
       <PageErrorToasts
         groupsError={groupsError}
         employeesError={employeesError}
@@ -105,6 +109,10 @@ export function HomePage({
         compareGroupError={compareGroupError}
       />
       <Header groups={groups} employees={employees} />
+      <SdkProductLanding>
+        <SdkShowcaseHero showJumpLinks />
+        <SdkQuickStartSection />
+      </SdkProductLanding>
       {showDepartmentPassport && (
         <DepartmentPassport
           departments={departments}
@@ -116,6 +124,7 @@ export function HomePage({
         />
       )}
       <SdkInsights insights={sdkInsights ?? null} />
+      <ApiShowcaseIntro />
       <ScheduleView
         schedule={schedule}
         currentWeek={currentWeek}

@@ -93,7 +93,10 @@ export function CatalogShowcase({
   }, [auditories, audQuery]);
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-8 border-t border-border px-4 py-8 sm:px-6 lg:px-8">
+    <section
+      id="catalog"
+      className="mx-auto w-full max-w-7xl scroll-mt-24 space-y-8 border-t border-border px-4 py-8 sm:px-6 lg:px-8"
+    >
       <div>
         <h2 className="text-lg font-semibold tracking-tight">Справочники SDK</h2>
         <p className="mt-1 text-xs text-muted-foreground">

@@ -1,4 +1,7 @@
+import { SCHEDULE_DAY_KEYS } from "@/entities";
 import { Skeleton } from "@/shared/ui";
+
+const dayColumnCount = SCHEDULE_DAY_KEYS.length;
 
 export function ScheduleTableSkeleton() {
   return (
@@ -10,7 +13,7 @@ export function ScheduleTableSkeleton() {
               <th className="w-24 px-4 py-3 text-left">
                 <Skeleton className="h-4 w-14" />
               </th>
-              {Array.from({ length: 6 }).map((_, index) => (
+              {Array.from({ length: dayColumnCount }).map((_, index) => (
                 <th key={index} className="min-w-[240px] px-4 py-3 text-center">
                   <Skeleton className="mx-auto h-4 w-20" />
                 </th>
@@ -26,7 +29,7 @@ export function ScheduleTableSkeleton() {
                     <Skeleton className="h-4 w-12" />
                   </div>
                 </td>
-                {Array.from({ length: 6 }).map((_, colIndex) => (
+                {Array.from({ length: dayColumnCount }).map((_, colIndex) => (
                   <td key={colIndex} className="p-2 align-top">
                     <div className="rounded-xl border border-border/50 bg-background/50 p-3">
                       <div className="flex flex-col gap-2.5">
