@@ -1,5 +1,8 @@
 import { CatalogShowcase } from "@/features/catalog-showcase";
-import { DepartmentPassport } from "@/features/department-passport";
+import {
+  AnnouncementsUiProvider,
+  DepartmentPassportGate,
+} from "@/features/department-passport";
 import { PageErrorToasts } from "@/features/notifications";
 import { SdkProductLanding } from "@/features/sdk-product-landing";
 import { SdkQuickStartSection } from "@/features/sdk-quick-start";
@@ -28,6 +31,7 @@ function employeeScheduleLabel(schedule: NormalizedScheduleResponse | null): str
 }
 
 export interface HomePageProps {
+  announcementsUiRouteKey: string;
   groups: StudentGroup[];
   employees: Employee[];
   schedule: NormalizedScheduleResponse | null;
@@ -65,6 +69,7 @@ export interface HomePageProps {
 }
 
 export function HomePage({
+  announcementsUiRouteKey,
   groups,
   employees,
   schedule,
@@ -108,13 +113,16 @@ export function HomePage({
         scheduleFilterError={scheduleFilterError}
         compareGroupError={compareGroupError}
       />
-      <Header groups={groups} employees={employees} />
-      <SdkProductLanding>
-        <SdkShowcaseHero showJumpLinks />
-        <SdkQuickStartSection />
-      </SdkProductLanding>
-      {showDepartmentPassport && (
-        <DepartmentPassport
+      <AnnouncementsUiProvider
+        key={announcementsUiRouteKey}
+        initialOpen={showDepartmentPassport}
+      >
+        <Header groups={groups} employees={employees} />
+        <SdkProductLanding>
+          <SdkShowcaseHero showJumpLinks />
+          <SdkQuickStartSection />
+        </SdkProductLanding>
+        <DepartmentPassportGate
           departments={departments}
           selectedDepartmentId={selectedDepartmentId}
           announcements={departmentAnnouncements}
@@ -122,35 +130,35 @@ export function HomePage({
           employeeLabel={employeeScheduleLabel(schedule)}
           className="fixed right-4 bottom-4 z-40 w-[min(92vw,640px)] sm:right-6 sm:bottom-6"
         />
-      )}
-      <SdkInsights insights={sdkInsights ?? null} />
-      <ApiShowcaseIntro />
-      <ScheduleView
-        schedule={schedule}
-        currentWeek={currentWeek}
-        advancedFilterLessons={advancedFilterLessons ?? null}
-        examLessons={examLessons}
-        examFilteredLessons={examFilteredLessons}
-        examLessonTypesLabel={examLessonTypesLabel}
-        employeeAnnouncements={employeeAnnouncements}
-        showEmployeeUrlFilter={Boolean(schedule?.studentGroupDto)}
-        compareGroupNumber={compareGroupNumber}
-        compareSchedule={compareSchedule}
-        compareScheduleError={compareScheduleError}
-        compareExamLessons={compareExamLessons}
-        compareExamFilteredLessons={compareExamFilteredLessons}
-        compareAdvancedFilterLessons={compareAdvancedFilterLessons}
-        compareScheduleFilterError={compareScheduleFilterError}
-      />
-      <CatalogShowcase
-        groups={groups}
-        employees={employees}
-        faculties={faculties}
-        departments={departments}
-        specialities={specialities}
-        auditories={auditories}
-      />
-      <SiteFooter />
+        <SdkInsights insights={sdkInsights ?? null} />
+        <ApiShowcaseIntro />
+        <ScheduleView
+          schedule={schedule}
+          currentWeek={currentWeek}
+          advancedFilterLessons={advancedFilterLessons ?? null}
+          examLessons={examLessons}
+          examFilteredLessons={examFilteredLessons}
+          examLessonTypesLabel={examLessonTypesLabel}
+          employeeAnnouncements={employeeAnnouncements}
+          showEmployeeUrlFilter={Boolean(schedule?.studentGroupDto)}
+          compareGroupNumber={compareGroupNumber}
+          compareSchedule={compareSchedule}
+          compareScheduleError={compareScheduleError}
+          compareExamLessons={compareExamLessons}
+          compareExamFilteredLessons={compareExamFilteredLessons}
+          compareAdvancedFilterLessons={compareAdvancedFilterLessons}
+          compareScheduleFilterError={compareScheduleFilterError}
+        />
+        <CatalogShowcase
+          groups={groups}
+          employees={employees}
+          faculties={faculties}
+          departments={departments}
+          specialities={specialities}
+          auditories={auditories}
+        />
+        <SiteFooter />
+      </AnnouncementsUiProvider>
     </main>
   );
 }

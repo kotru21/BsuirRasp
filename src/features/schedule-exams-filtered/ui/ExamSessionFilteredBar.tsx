@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { getUrlSearchParamsForNavigation } from "@/shared/lib";
 import { useCallback, useMemo } from "react";
 import {
   DEFAULT_EXAM_LESSON_TYPES,
@@ -50,12 +51,12 @@ export function ExamSessionFilteredBar() {
           if (t && !parts.includes(t)) parts.push(t);
         }
       }
-      const next = new URLSearchParams(searchParams.toString());
+      const next = getUrlSearchParamsForNavigation();
       if (parts.length === 0) next.delete("examTypes");
       else next.set("examTypes", parts.join(","));
       router.push(`?${next.toString()}`, { scroll: false });
     },
-    [router, searchParams]
+    [router]
   );
 
   const defaultDisplay = PRESET.join(", ");

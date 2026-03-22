@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from
 import { Input, Skeleton } from "@/shared/ui";
 import type { Employee, StudentGroup } from "@/entities";
 import { SearchIcon } from "lucide-react";
-import { cn } from "@/shared/lib";
+import { cn, getUrlSearchParamsForNavigation } from "@/shared/lib";
 
 const MAX_SUGGESTIONS = 10;
 
@@ -111,7 +111,7 @@ export function GroupSelect({
   const selectGroup = useCallback(
     (group: StudentGroup) => {
       if (isPending) return;
-      const next = new URLSearchParams(searchParams.toString());
+      const next = getUrlSearchParamsForNavigation();
       next.set("group", group.name);
       next.delete("employee");
       startTransition(() => {
@@ -122,13 +122,13 @@ export function GroupSelect({
       setOpen(false);
       setHighlightedIndex(0);
     },
-    [isPending, router, searchParams, startTransition]
+    [isPending, router, startTransition]
   );
 
   const selectEmployee = useCallback(
     (employee: Employee) => {
       if (isPending) return;
-      const next = new URLSearchParams(searchParams.toString());
+      const next = getUrlSearchParamsForNavigation();
       next.set("employee", employee.urlId);
       next.delete("group");
       startTransition(() => {
@@ -139,7 +139,7 @@ export function GroupSelect({
       setOpen(false);
       setHighlightedIndex(0);
     },
-    [isPending, router, searchParams, startTransition]
+    [isPending, router, startTransition]
   );
 
   const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

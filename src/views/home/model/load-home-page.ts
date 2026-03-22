@@ -15,6 +15,7 @@ import {
 } from "./fetch-home-page-side-effects";
 import { fetchScheduleExtended } from "./fetch-schedule-extended";
 import {
+  buildAnnouncementsUiRouteKey,
   type HomePageSearchParams,
   parseHomeRouteContext,
 } from "./home-page-search-params";
@@ -160,6 +161,7 @@ export async function loadHomePageProps(
       .join(". ") || null;
 
   return {
+    announcementsUiRouteKey: buildAnnouncementsUiRouteKey(params),
     groups: groupsResult.groups,
     employees: employeesResult.employees,
     schedule: scheduleResult.schedule,

@@ -94,3 +94,25 @@ export function parseHomeRouteContext(
     filterSearchParams,
   };
 }
+
+/** Все query-параметры, кроме `announcements`, чтобы смена только панели объявлений не сбрасывала клиентский UI. */
+export function buildAnnouncementsUiRouteKey(
+  params: HomePageSearchParams | undefined
+): string {
+  if (!params) return "";
+  return [
+    params.group ?? "",
+    params.employee ?? "",
+    params.week ?? "",
+    params.departmentId ?? "",
+    params.rawSchedule ?? "",
+    params.fDay ?? "",
+    params.fSubject ?? "",
+    params.fType ?? "",
+    params.fAuditory ?? "",
+    params.fEmployee ?? "",
+    params.subgroup ?? "",
+    params.examTypes ?? "",
+    params.compareGroup ?? "",
+  ].join("\x1e");
+}

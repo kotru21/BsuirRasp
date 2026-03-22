@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { getUrlSearchParamsForNavigation } from "@/shared/lib";
 import { useCallback, useMemo } from "react";
 import { DAY_CODE } from "../model/build-schedule-filter";
 
@@ -32,7 +33,7 @@ export function ScheduleAdvancedFilterPanel({
   const applyFromForm = useCallback(
     (form: HTMLFormElement) => {
       const fd = new FormData(form);
-      const next = new URLSearchParams(searchParams.toString());
+      const next = getUrlSearchParamsForNavigation();
       const setOrDelete = (key: string, v: FormDataEntryValue | null) => {
         const t = typeof v === "string" ? v.trim() : "";
         if (t) next.set(key, t);
@@ -45,14 +46,14 @@ export function ScheduleAdvancedFilterPanel({
       setOrDelete("fEmployee", fd.get("fEmployee"));
       router.push(`?${next.toString()}`, { scroll: false });
     },
-    [router, searchParams]
+    [router]
   );
 
   const clear = useCallback(() => {
-    const next = new URLSearchParams(searchParams.toString());
+    const next = getUrlSearchParamsForNavigation();
     for (const k of FILTER_KEYS) next.delete(k);
     router.push(`?${next.toString()}`, { scroll: false });
-  }, [router, searchParams]);
+  }, [router]);
 
   /** Сброс полей формы при навигации (без setState в useEffect). */
   const formKey = searchParams.toString();

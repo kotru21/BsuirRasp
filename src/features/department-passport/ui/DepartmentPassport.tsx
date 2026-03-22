@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import type { Announcement, Department } from "@/entities";
-import { cn } from "@/shared/lib";
+import { cn, getUrlSearchParamsForNavigation } from "@/shared/lib";
 
 interface DepartmentPassportProps {
   departments: Department[];
@@ -14,6 +14,7 @@ interface DepartmentPassportProps {
   /** Подпись к блоку преподавателя (ФИО из расписания или null) */
   employeeLabel?: string | null;
   className?: string;
+  onRequestClose?: () => void;
 }
 
 function formatDate(dateStr: string): string {
@@ -46,9 +47,9 @@ export function DepartmentPassport({
   employeeAnnouncements,
   employeeLabel,
   className,
+  onRequestClose,
 }: DepartmentPassportProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const selected = useMemo(
     () => departments.find((d) => d.id === selectedDepartmentId) ?? null,
@@ -70,11 +71,7 @@ export function DepartmentPassport({
         </div>
         <button
           type="button"
-          onClick={() => {
-            const next = new URLSearchParams(searchParams.toString());
-            next.delete("announcements");
-            router.push(`?${next.toString()}`, { scroll: false });
-          }}
+          onClick={onRequestClose}
           className="rounded-md border px-2 py-1 text-xs hover:bg-muted"
         >
           Скрыть
@@ -87,7 +84,10 @@ export function DepartmentPassport({
           className="h-9 rounded-md border bg-background px-2 text-sm"
           value={selectedDepartmentId ?? ""}
           onChange={(e) => {
-            const next = new URLSearchParams(searchParams.toString());
+            // Брать query из адресной строки: после replaceState у панели объявлений
+            // Next useSearchParams() может не содержать `announcements=1`, и router.push
+            // сбрасывал бы флаг — панель закрывалась при смене кафедры.
+            const next = getUrlSearchParamsForNavigation();
             const value = e.target.value;
             if (!value) {
               next.delete("departmentId");

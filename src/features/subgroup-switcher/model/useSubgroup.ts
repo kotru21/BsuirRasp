@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { getUrlSearchParamsForNavigation } from "@/shared/lib";
 import type { SubgroupFilter } from "@/entities";
 
 const VALID = new Set<string>(["", "1", "2"]);
@@ -18,7 +19,7 @@ export function useSubgroup(): {
     : "all";
 
   function setSubgroupFilter(value: SubgroupFilter) {
-    const next = new URLSearchParams(searchParams.toString());
+    const next = getUrlSearchParamsForNavigation();
     if (value === "all") {
       next.delete("subgroup");
     } else {

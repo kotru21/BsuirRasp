@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { BellIcon, Link2Icon } from "lucide-react";
+import { useAnnouncementsUi } from "@/features/department-passport";
 import { GroupSelect } from "@/features/group-select";
 import { ThemeToggle } from "@/features/theme-toggle";
 import { copyTextToClipboard, showError, showSuccess } from "@/shared/lib";
@@ -18,24 +19,13 @@ interface HeaderProps {
 }
 
 export function Header({ groups, employees }: HeaderProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const isAnnouncementsOpen = searchParams.get("announcements") === "1";
+  const { isAnnouncementsOpen, toggleAnnouncements } = useAnnouncementsUi();
 
   async function copyPageLink() {
     const ok = await copyTextToClipboard(window.location.href);
     if (ok) showSuccess("Ссылка скопирована в буфер обмена");
     else showError("Не удалось скопировать ссылку");
-  }
-
-  function toggleAnnouncements() {
-    const next = new URLSearchParams(searchParams.toString());
-    if (isAnnouncementsOpen) {
-      next.delete("announcements");
-    } else {
-      next.set("announcements", "1");
-    }
-    router.push(`?${next.toString()}`, { scroll: false });
   }
 
   return (
