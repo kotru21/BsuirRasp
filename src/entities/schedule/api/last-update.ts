@@ -1,7 +1,8 @@
 import { bsuirClient } from "@/shared/api";
 
 /**
- * Дата последнего обновления расписания группы (строка от API, например ISO).
+ * Легаси-эндпоинт ИИС; для части групп ответа нет (404). Дата при успехе может
+ * не соответствовать реальности — см. JSDoc `bsuir-iis-api` на `getLastUpdateByGroup`.
  */
 export async function getScheduleLastUpdate(
   groupNumber: string
@@ -10,7 +11,7 @@ export async function getScheduleLastUpdate(
 }
 
 /**
- * Дата последнего обновления расписания преподавателя.
+ * Легаси-эндпоинт ИИС; см. `getLastUpdateByEmployee` в `bsuir-iis-api`.
  */
 export async function getScheduleLastUpdateByEmployee(
   urlId: string
@@ -18,9 +19,7 @@ export async function getScheduleLastUpdateByEmployee(
   return getLastUpdateByEmployee({ urlId });
 }
 
-/**
- * Last update по группе: `groupNumber` или numeric `id` (как в SDK).
- */
+/** Легаси last-update ИИС по группе (`groupNumber` или numeric `id` в SDK). */
 export async function getLastUpdateByGroup(
   params: { groupNumber: string } | { id: number }
 ): Promise<string> {
@@ -29,9 +28,7 @@ export async function getLastUpdateByGroup(
   return lastUpdateDate;
 }
 
-/**
- * Last update по преподавателю: `urlId` или numeric `id` (как в SDK).
- */
+/** Легаси last-update ИИС по преподавателю (`urlId` или numeric `id` в SDK). */
 export async function getLastUpdateByEmployee(
   params: { urlId: string } | { id: number }
 ): Promise<string> {

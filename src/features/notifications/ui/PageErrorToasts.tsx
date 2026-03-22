@@ -8,7 +8,6 @@ interface PageErrorToastsProps {
   employeesError?: string | null;
   scheduleError?: string | null;
   currentWeekError?: string | null;
-  lastUpdateError?: string | null;
   sdkInsightsError?: string | null;
   /** Ошибка запроса get*Filtered при активном расширенном фильтре */
   scheduleFilterError?: string | null;
@@ -21,7 +20,6 @@ export function PageErrorToasts({
   employeesError,
   scheduleError,
   currentWeekError,
-  lastUpdateError,
   sdkInsightsError,
   scheduleFilterError,
   compareGroupError,
@@ -31,7 +29,6 @@ export function PageErrorToasts({
     employeesError,
     scheduleError,
     currentWeekError,
-    lastUpdateError,
     sdkInsightsError,
     scheduleFilterError,
     compareGroupError,

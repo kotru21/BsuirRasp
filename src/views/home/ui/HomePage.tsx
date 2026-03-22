@@ -31,7 +31,6 @@ interface HomePageProps {
   employeesError?: string | null;
   scheduleError?: string | null;
   currentWeekError?: string | null;
-  lastUpdateError?: string | null;
   sdkInsightsError?: string | null;
   scheduleFilterError?: string | null;
   /** Ошибки запросов второй группы (`compareGroup`) — тост, страница жива */
@@ -70,7 +69,6 @@ export function HomePage({
   employeesError,
   scheduleError,
   currentWeekError,
-  lastUpdateError,
   sdkInsightsError,
   scheduleFilterError,
   compareGroupError,
@@ -98,7 +96,6 @@ export function HomePage({
         employeesError={employeesError}
         scheduleError={scheduleError}
         currentWeekError={currentWeekError}
-        lastUpdateError={lastUpdateError}
         sdkInsightsError={sdkInsightsError}
         scheduleFilterError={scheduleFilterError}
         compareGroupError={compareGroupError}

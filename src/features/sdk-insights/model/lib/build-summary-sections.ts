@@ -75,7 +75,14 @@ export function buildSummarySections(insights: SdkInsightsData | null): SummaryS
       const nu = adv.lastUpdateByNumericId;
       const nuRows: SummaryRow[] = nu.error
         ? [{ label: "Ошибка (by id)", value: nu.error }]
-        : [{ label: "Дата (by id)", value: nu.date }];
+        : [
+            {
+              label: "Дата (by id)",
+              value:
+                nu.date ??
+                "нет ответа (легаси last-update ИИС, часто 404)",
+            },
+          ];
       nuRows.push({
         label: "Совпадает с запросом по строковому ключу",
         value: nu.matchesStringKey,

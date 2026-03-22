@@ -36,7 +36,10 @@ import {
 } from "@/features/schedule-advanced-filter";
 import { parseExamLessonTypesParam } from "@/features/schedule-exams-filtered";
 import type { SdkInsightsData } from "@/features/sdk-insights";
-import { getBsuirErrorMessage } from "@/shared/api";
+import {
+  getBsuirErrorMessage,
+  isScheduleLastUpdateUnavailable,
+} from "@/shared/api";
 import { HomePage } from "@/views/home";
 
 interface PageProps {
@@ -145,16 +148,16 @@ export default async function Page({ searchParams }: PageProps) {
       scheduleMode === "employee" && scheduleKey
         ? getScheduleLastUpdateByEmployee(scheduleKey)
             .then((lastUpdateDate) => ({ lastUpdateDate, error: null }))
-            .catch((e) => ({
+            .catch(() => ({
               lastUpdateDate: null as string | null,
-              error: getBsuirErrorMessage(e),
+              error: null as string | null,
             }))
         : scheduleMode === "group" && scheduleKey
           ? getScheduleLastUpdate(scheduleKey)
               .then((lastUpdateDate) => ({ lastUpdateDate, error: null }))
-              .catch((e) => ({
+              .catch(() => ({
                 lastUpdateDate: null as string | null,
-                error: getBsuirErrorMessage(e),
+                error: null as string | null,
               }))
           : Promise.resolve({ lastUpdateDate: null as string | null, error: null }),
       getFaculties()
@@ -299,7 +302,9 @@ export default async function Page({ searchParams }: PageProps) {
       lastUpdateByNumericId.matchesStringKey =
         lastUpdateResult.lastUpdateDate != null && d === lastUpdateResult.lastUpdateDate;
     } catch (e) {
-      lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+      if (!isScheduleLastUpdateUnavailable(e)) {
+        lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+      }
     }
   } else if (loadedSchedule && scheduleMode === "employee" && loadedSchedule.employeeDto?.id != null) {
     try {
@@ -310,7 +315,9 @@ export default async function Page({ searchParams }: PageProps) {
       lastUpdateByNumericId.matchesStringKey =
         lastUpdateResult.lastUpdateDate != null && d === lastUpdateResult.lastUpdateDate;
     } catch (e) {
-      lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+      if (!isScheduleLastUpdateUnavailable(e)) {
+        lastUpdateByNumericId.error = getBsuirErrorMessage(e);
+      }
     }
   }
 
@@ -370,7 +377,8 @@ export default async function Page({ searchParams }: PageProps) {
           employeesError: employeesResult.error,
           scheduleError: scheduleResult.error,
           currentWeekError: currentWeekResult.error,
-          lastUpdateError: lastUpdateResult.error,
+          departmentAnnouncementsError: departmentAnnouncementsResult.error,
+          employeeAnnouncementsError: extendedEmployeeAnnouncementsRes.error,
           sdkInsightsError: null,
         },
         faculties: facultiesResult.items,
@@ -397,7 +405,7 @@ export default async function Page({ searchParams }: PageProps) {
         },
         lastUpdateByNumericId,
         lastUpdateNamespaceNote:
-          "Last update: только client.schedule.getLastUpdateByGroup / getLastUpdateByEmployee (bsuir-iis-api ≥0.5; см. entities/schedule/api/last-update.ts).",
+          "Last update: легаси-эндпоинты ИИС (client.schedule.getLastUpdateByGroup / getLastUpdateByEmployee). Для части сущностей ответа нет (404); при успехе дата может быть неточной. См. JSDoc в bsuir-iis-api и entities/schedule/api/last-update.ts.",
         currentWeekAliasNote:
           "Текущая неделя: в bsuir-iis-api ≥0.4 только client.schedule.getCurrentWeek() (см. entities/current-week).",
         requestQueryRecipeNote:
@@ -488,7 +496,7 @@ export default async function Page({ searchParams }: PageProps) {
     specialitiesResult.error,
     auditoriesResult.error,
     examFilteredError,
-    // Ошибку объявлений кафедры не показываем в тостах: при первом запросе иногда приходит 400, при повторном — 200 и данные
+    departmentAnnouncementsResult.error,
     ...(scheduleExtendedResult
       ? scheduleExtendedResult.map((item) => item.error)
       : []),
@@ -516,7 +524,6 @@ export default async function Page({ searchParams }: PageProps) {
       employeesError={employeesResult.error}
       scheduleError={scheduleError}
       currentWeekError={currentWeekResult.error}
-      lastUpdateError={lastUpdateResult.error}
       sdkInsightsError={sdkInsightsError}
       scheduleFilterError={scheduleFilterError}
       compareGroupError={compareGroupErrorMessage}

@@ -214,9 +214,10 @@ export function ScheduleView({
               {lastUpdateDate && (
                 <p
                   className="mt-0.5 text-xs text-muted-foreground"
-                  title="ИИС может выдавать странные значения"
+                  title="Легаси-эндпоинт ИИС last-update; дата может быть неточной или отсутствовать для части групп и преподавателей."
                 >
-                  Обновлено: {formatLastUpdate(lastUpdateDate)} (ИИС может выдавать странные значения)
+                  Обновлено (легаси ИИС, может быть неверно):{" "}
+                  {formatLastUpdate(lastUpdateDate)}
                 </p>
               )}
               {periodCaption && (

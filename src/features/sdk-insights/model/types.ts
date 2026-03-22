@@ -55,7 +55,10 @@ export interface SdkInsightsData {
       employeesError: string | null;
       scheduleError: string | null;
       currentWeekError: string | null;
-      lastUpdateError: string | null;
+      /** `getAnnouncementsByDepartment` при открытом паспорте кафедры (`announcements=1`) */
+      departmentAnnouncementsError: string | null;
+      /** `getAnnouncementsByEmployee` в цепочке extended (режим преподавателя) */
+      employeeAnnouncementsError: string | null;
       sdkInsightsError: string | null;
     };
     faculties: Faculty[];
