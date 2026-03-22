@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import {
-  getDefaultOpenGraphImageAbsoluteUrl,
   getMetadataBase,
   OPEN_GRAPH_DEFAULT_IMAGE_ALT,
+  OPEN_GRAPH_DEFAULT_IMAGE_PATH,
   OPEN_GRAPH_DEFAULT_IMAGE_SIZE,
 } from "@/shared/config";
 import { Providers } from "@/root";
@@ -32,9 +32,10 @@ export const metadata: Metadata = {
     description:
       "Демо SDK для API ИИС БГУИР: расписание групп и преподавателей, справочники, фильтры.",
     type: "website",
+    url: "/",
     images: [
       {
-        url: getDefaultOpenGraphImageAbsoluteUrl(),
+        url: OPEN_GRAPH_DEFAULT_IMAGE_PATH,
         ...OPEN_GRAPH_DEFAULT_IMAGE_SIZE,
         alt: OPEN_GRAPH_DEFAULT_IMAGE_ALT,
       },
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     title: "bsuir-iis-api — showcase",
     description:
       "Демо SDK для API ИИС БГУИР: расписание групп и преподавателей, справочники, фильтры.",
-    images: [getDefaultOpenGraphImageAbsoluteUrl()],
+    images: [OPEN_GRAPH_DEFAULT_IMAGE_PATH],
   },
 };
 

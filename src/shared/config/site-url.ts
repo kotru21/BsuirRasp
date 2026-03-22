@@ -1,24 +1,13 @@
 /**
- * Базовый URL сайта для абсолютных ссылок в metadata / OG (в т.ч. `opengraph-image`).
+ * `metadataBase` для относительных путей в metadata (Next.js:
+ * https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase ).
  *
- * Порядок: `NEXT_PUBLIC_SITE_URL` → `VERCEL_URL` (задаётся на [Vercel](https://vercel.com/docs/projects/environment-variables/system-environment-variables)) → localhost.
- * Без этого на проде без явного env OG ссылался бы на localhost и превью не подтягивались.
+ * Задаётся одна переменная — полный URL сайта **с протоколом**, без завершающего `/`:
+ * `NEXT_PUBLIC_SITE_URL` (например `https://bsuir-rasp.vercel.app`).
+ * На проде без неё будет `http://localhost:3000` — задайте в Vercel → Environment Variables.
  */
 export function getMetadataBase(): URL {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const vercelHost = process.env.VERCEL_URL?.trim();
-
-  let raw: string;
-  if (explicit) {
-    raw = explicit;
-  } else if (vercelHost) {
-    raw = vercelHost.startsWith("http://") || vercelHost.startsWith("https://")
-      ? vercelHost
-      : `https://${vercelHost}`;
-  } else {
-    raw = "http://localhost:3000";
-  }
-
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
   const normalized = raw.replace(/\/$/, "");
   try {
     return new URL(normalized);
