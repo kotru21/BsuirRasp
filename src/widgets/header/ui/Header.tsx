@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { BellIcon, Link2Icon } from "lucide-react";
 import { GroupSelect } from "@/features/group-select";
 import { ThemeToggle } from "@/features/theme-toggle";
 import { copyTextToClipboard, showError, showSuccess } from "@/shared/lib";
@@ -9,7 +10,7 @@ import { cn } from "@/shared/lib";
 import type { Employee, StudentGroup } from "@/entities";
 
 const headerActionClass =
-  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-md border px-2.5 text-xs font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-9 sm:min-h-0 sm:px-3 sm:text-sm";
+  "inline-flex min-h-10 min-w-10 shrink-0 items-center justify-center gap-1.5 rounded-md border px-2 text-xs font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-9 sm:min-h-0 sm:min-w-0 sm:px-3 sm:text-sm";
 
 interface HeaderProps {
   groups: StudentGroup[];
@@ -39,8 +40,18 @@ export function Header({ groups, employees }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:min-h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-2 lg:px-8">
-        <Link href="/" className="group min-w-0 shrink-0 hover:opacity-80">
+      <div
+        className={cn(
+          "mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] px-4 py-1.5 [grid-template-areas:'hdr-title_hdr-actions'_'hdr-search_hdr-search']",
+          "max-sm:items-center max-sm:gap-x-2 max-sm:gap-y-1.5 sm:gap-4 sm:py-2",
+          "sm:min-h-16 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:grid-rows-1 sm:items-center sm:[grid-template-areas:'hdr-title_hdr-search_hdr-actions']",
+          "lg:px-8"
+        )}
+      >
+        <Link
+          href="/"
+          className="group block min-w-0 [grid-area:hdr-title] hover:opacity-80 sm:w-auto"
+        >
           <span className="block font-mono text-base font-semibold tracking-tight text-foreground sm:text-lg">
             bsuir-iis-api
           </span>
@@ -48,29 +59,33 @@ export function Header({ groups, employees }: HeaderProps) {
             showcase
           </span>
         </Link>
-        <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-1 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
-          <div className="flex items-center justify-between gap-2 sm:contents">
-            <button type="button" onClick={copyPageLink} className={headerActionClass}>
-              Поделиться ссылкой
-            </button>
-            <button
-              type="button"
-              onClick={toggleAnnouncements}
-              className={cn(headerActionClass, isAnnouncementsOpen && "bg-muted")}
-            >
-              Объявления
-            </button>
-            <span className="shrink-0 sm:order-3">
-              <ThemeToggle />
-            </span>
-          </div>
-          <GroupSelect
-            groups={groups}
-            employees={employees}
-            placeholder="Поиск группы или преподавателя..."
-            className="w-full min-w-0 sm:order-2 sm:max-w-md sm:flex-1 lg:max-w-lg"
-          />
+        <div className="flex shrink-0 items-center justify-end gap-1 [grid-area:hdr-actions] sm:gap-2">
+          <button
+            type="button"
+            onClick={copyPageLink}
+            className={headerActionClass}
+            aria-label="Поделиться ссылкой"
+          >
+            <Link2Icon className="size-4 shrink-0" aria-hidden />
+            <span className="hidden sm:inline">Поделиться ссылкой</span>
+          </button>
+          <button
+            type="button"
+            onClick={toggleAnnouncements}
+            className={cn(headerActionClass, isAnnouncementsOpen && "bg-muted")}
+            aria-label="Объявления"
+          >
+            <BellIcon className="size-4 shrink-0" aria-hidden />
+            <span className="hidden sm:inline">Объявления</span>
+          </button>
+          <ThemeToggle />
         </div>
+        <GroupSelect
+          groups={groups}
+          employees={employees}
+          placeholder="Поиск группы или преподавателя..."
+          className="min-w-0 w-full [grid-area:hdr-search] sm:max-w-md lg:max-w-lg"
+        />
       </div>
     </header>
   );
