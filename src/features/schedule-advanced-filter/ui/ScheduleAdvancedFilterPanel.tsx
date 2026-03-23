@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { getResolvedSearchParams, getUrlSearchParamsForNavigation } from "@/shared/lib";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { DAY_CODE } from "../model/build-schedule-filter";
 
 const DAY_OPTIONS = Object.entries(DAY_CODE).map(([code, label]) => ({
@@ -26,11 +26,7 @@ export function ScheduleAdvancedFilterPanel({
   const searchParams = useSearchParams();
   const resolved = getResolvedSearchParams(searchParams);
   const resolvedQs = resolved.toString();
-
-  const hasUrlFilters = useMemo(() => {
-    const sp = new URLSearchParams(resolvedQs);
-    return FILTER_KEYS.some((k) => Boolean(sp.get(k)?.trim()));
-  }, [resolvedQs]);
+  const hasUrlFilters = FILTER_KEYS.some((k) => Boolean(resolved.get(k)?.trim()));
 
   const applyFromForm = useCallback(
     (form: HTMLFormElement) => {
