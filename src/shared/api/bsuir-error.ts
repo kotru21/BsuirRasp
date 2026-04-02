@@ -35,7 +35,7 @@ export function getBsuirErrorMessage(error: unknown): string {
   if (error instanceof BsuirNetworkError) {
     const chain = error.causeError ?? error.cause;
     if (isTlsTrustFailure(error) || isTlsTrustFailure(chain)) {
-      return "Сервер не доверяет HTTPS-сертификату (часто прокси/антивирус). На Node задайте NODE_OPTIONS=--use-system-ca или NODE_EXTRA_CA_CERTS.";
+      return "Проверка TLS к API не прошла. Локально за прокси: bun run dev:system-ca. На Vercel не задавайте NODE_OPTIONS=--use-system-ca (запрещено); при необходимости NODE_EXTRA_CA_CERTS.";
     }
     return "Сеть недоступна";
   }
