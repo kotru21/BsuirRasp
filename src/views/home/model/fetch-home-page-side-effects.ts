@@ -1,11 +1,11 @@
+import type { NormalizedScheduleResponse } from "@/entities";
 import {
   getEmployeeScheduleRaw,
   getGroupScheduleRaw,
   getLastUpdateByEmployee,
   getLastUpdateByGroup,
   isScheduleLastUpdateUnavailable,
-  type NormalizedScheduleResponse,
-} from "@/entities";
+} from "@/entities/server";
 import { getBsuirErrorMessage } from "@/shared/api";
 
 export interface LastUpdateByNumericIdState {

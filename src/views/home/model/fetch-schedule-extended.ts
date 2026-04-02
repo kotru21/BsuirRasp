@@ -1,16 +1,14 @@
+import type { Announcement } from "@/entities/announcement";
+import type { ScheduleFilterOptions } from "@/entities/schedule";
 import {
   getAnnouncementsByEmployee,
-  type Announcement,
-} from "@/entities/announcement";
-import {
   getEmployeeExams,
   getEmployeeScheduleBySubgroup,
   getEmployeeScheduleFiltered,
   getGroupExams,
   getGroupScheduleBySubgroup,
   getGroupScheduleFiltered,
-  type ScheduleFilterOptions,
-} from "@/entities/schedule";
+} from "@/entities/server";
 import { getBsuirErrorMessage } from "@/shared/api";
 
 export type ScheduleExtendedItemResult<T> = {

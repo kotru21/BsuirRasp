@@ -1,10 +1,9 @@
+import type { FlattenedScheduleLesson, NormalizedScheduleResponse } from "@/entities";
 import {
   getGroupExams,
   getGroupSchedule,
   getGroupScheduleFiltered,
-  type FlattenedScheduleLesson,
-  type NormalizedScheduleResponse,
-} from "@/entities";
+} from "@/entities/server";
 import type { ScheduleFilterOptions } from "@/entities/schedule";
 import { getBsuirErrorMessage } from "@/shared/api";
 

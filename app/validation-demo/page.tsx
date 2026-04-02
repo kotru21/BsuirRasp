@@ -1,4 +1,4 @@
-import { getGroupSchedule } from "@/entities";
+import { getGroupSchedule } from "@/entities/server";
 import { BsuirValidationError } from "@/shared/api";
 import Link from "next/link";
 

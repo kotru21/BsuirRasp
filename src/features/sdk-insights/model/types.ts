@@ -1,14 +1,14 @@
+import type { ScheduleResponse } from "bsuir-iis-api";
 import type {
   Announcement,
   Auditory,
   Department,
   Employee,
-  NormalizedScheduleResponse,
   Faculty,
   FlattenedScheduleLesson,
+  NormalizedScheduleResponse,
   Speciality,
   StudentGroup,
-  ScheduleResponse,
 } from "@/entities";
 
 export interface SdkInsightsData {

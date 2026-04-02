@@ -1,8 +1,6 @@
 import type { SdkInsightsData } from "@/features/sdk-insights";
-import {
-  getGroupScheduleRaw,
-  type NormalizedScheduleResponse,
-} from "@/entities";
+import type { NormalizedScheduleResponse } from "@/entities";
+import { getGroupScheduleRaw } from "@/entities/server";
 import type { HomePageCoreData } from "./fetch-home-page-core";
 import type { ScheduleExtendedResult } from "./fetch-schedule-extended";
 import type { HomeRouteContext } from "./home-page-search-params";

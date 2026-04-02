@@ -35,7 +35,7 @@ export function getBsuirErrorMessage(error: unknown): string {
   if (error instanceof BsuirNetworkError) {
     const chain = error.causeError ?? error.cause;
     if (isTlsTrustFailure(error) || isTlsTrustFailure(chain)) {
-      return "Проверка TLS к API не прошла. Локально за прокси: bun run dev:system-ca. На Vercel не задавайте NODE_OPTIONS=--use-system-ca (запрещено); при необходимости NODE_EXTRA_CA_CERTS.";
+      return "Проверка TLS к API не прошла. За корпоративным прокси: bun run dev:system-ca. Иначе убедитесь, что в деплое есть файл certs/globalsign-gcc-r6-alphassl-ca-2023.pem (промежуточный CA для iis.bsuir.by).";
     }
     return "Сеть недоступна";
   }

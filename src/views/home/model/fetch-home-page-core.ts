@@ -1,21 +1,23 @@
+import type {
+  Announcement,
+  Employee,
+  NormalizedScheduleResponse,
+  StudentGroup,
+} from "@/entities";
 import {
   getAnnouncementsByDepartment,
-  getEmployees,
-  getEmployeeSchedule,
   getAuditories,
   getCurrentWeek,
   getDepartments,
+  getEmployeeSchedule,
+  getEmployees,
   getFaculties,
   getGroupSchedule,
   getScheduleLastUpdate,
   getScheduleLastUpdateByEmployee,
   getSpecialities,
   getStudentGroups,
-  type Announcement,
-  type Employee,
-  type NormalizedScheduleResponse,
-  type StudentGroup,
-} from "@/entities";
+} from "@/entities/server";
 import { getBsuirErrorMessage } from "@/shared/api";
 import type { HomeRouteContext } from "./home-page-search-params";
 
