@@ -5,6 +5,23 @@ import {
   BsuirValidationError,
 } from "bsuir-iis-api";
 
+function isTlsTrustFailure(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+  const rec = error as { code?: string; message?: string; cause?: unknown };
+  if (
+    rec.code === "UNABLE_TO_VERIFY_LEAF_SIGNATURE" ||
+    rec.code === "CERT_HAS_EXPIRED" ||
+    rec.code === "SELF_SIGNED_CERT_IN_CHAIN"
+  ) {
+    return true;
+  }
+  if (typeof rec.message === "string" && /unable to verify the first certificate/i.test(rec.message)) {
+    return true;
+  }
+  if (rec.cause !== undefined) return isTlsTrustFailure(rec.cause);
+  return false;
+}
+
 /**
  * Сообщение для пользователя по типу ошибки bsuir-iis-api.
  */
@@ -15,6 +32,12 @@ export function getBsuirErrorMessage(error: unknown): string {
   }
   if (error instanceof BsuirValidationError) return "Неверный запрос";
   if (error instanceof BsuirTimeoutError) return "Превышено время ожидания";
-  if (error instanceof BsuirNetworkError) return "Сеть недоступна";
+  if (error instanceof BsuirNetworkError) {
+    const chain = error.causeError ?? error.cause;
+    if (isTlsTrustFailure(error) || isTlsTrustFailure(chain)) {
+      return "Сервер не доверяет HTTPS-сертификату (часто прокси/антивирус). На Node задайте NODE_OPTIONS=--use-system-ca или NODE_EXTRA_CA_CERTS.";
+    }
+    return "Сеть недоступна";
+  }
   return "Не удалось загрузить данные";
 }
