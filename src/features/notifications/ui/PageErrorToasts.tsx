@@ -1,6 +1,6 @@
 "use client";
 
-import { showError } from "@/shared/lib";
+import { showError, uniqueStringsInOrder } from "@/shared/lib";
 import { useEffect, useRef } from "react";
 
 interface PageErrorToastsProps {
@@ -24,15 +24,17 @@ export function PageErrorToasts({
   scheduleFilterError,
   compareGroupError,
 }: PageErrorToastsProps) {
-  const messages = [
-    groupsError,
-    employeesError,
-    scheduleError,
-    currentWeekError,
-    sdkInsightsError,
-    scheduleFilterError,
-    compareGroupError,
-  ].filter(Boolean) as string[];
+  const messages = uniqueStringsInOrder(
+    [
+      groupsError,
+      employeesError,
+      scheduleError,
+      currentWeekError,
+      sdkInsightsError,
+      scheduleFilterError,
+      compareGroupError,
+    ].filter(Boolean) as string[]
+  );
   const messageText = messages.join(" ");
   const lastShownMessageRef = useRef<string | null>(null);
 

@@ -3,6 +3,7 @@ import {
   hasAdvancedScheduleFilterParams,
   parseEffectiveWeek,
 } from "@/features/schedule-advanced-filter";
+import { uniqueStringsInOrder } from "@/shared/lib";
 import { parseExamLessonTypesParam } from "@/features/schedule-exams-filtered";
 import type { HomePageProps } from "../ui/HomePage";
 import { buildSdkInsightsData } from "./build-sdk-insights-data";
@@ -153,12 +154,16 @@ export async function loadHomePageProps(
       : []),
   ];
   const sdkInsightsError =
-    sdkInsightsErrorMessages.filter(Boolean).join(". ") || null;
+    uniqueStringsInOrder(
+      sdkInsightsErrorMessages.filter(Boolean) as string[]
+    ).join(". ") || null;
 
   const scheduleError =
-    [invalidGroupError, invalidCompareGroupError, scheduleResult.error]
-      .filter(Boolean)
-      .join(". ") || null;
+    uniqueStringsInOrder(
+      [invalidGroupError, invalidCompareGroupError, scheduleResult.error].filter(
+        Boolean
+      ) as string[]
+    ).join(". ") || null;
 
   return {
     announcementsUiRouteKey: buildAnnouncementsUiRouteKey(params),
