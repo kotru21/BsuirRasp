@@ -10,6 +10,7 @@ import {
   BSUIR_RETRY_MAX_DELAY_MS,
   BSUIR_USER_AGENT,
 } from "@/shared/config";
+import { GLOBALSIGN_GCC_R6_ALPHASSL_CA_2023_PEM } from "./bsuir-intermediate-ca-pem";
 
 /** Имя файла: промежуточный GlobalSign GCC R6 AlphaSSL CA 2023 (ИИС БГУИР не отдаёт его в TLS-цепочке). */
 const BSUIR_INTERMEDIATE_PEM = path.join(
@@ -30,7 +31,8 @@ function getFetchForBsuir(): typeof fetch {
   try {
     extraCa = fs.readFileSync(BSUIR_INTERMEDIATE_PEM, "utf8");
   } catch {
-    return globalThis.fetch.bind(globalThis);
+    /* На Vercel файл из certs/ часто отсутствует: в .gitignore был *.pem. Вшитый PEM обязателен. */
+    extraCa = GLOBALSIGN_GCC_R6_ALPHASSL_CA_2023_PEM;
   }
   const ca = [...tls.rootCertificates, extraCa];
   const agent = new Agent({ connect: { ca } });
