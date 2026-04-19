@@ -9,4 +9,10 @@ export type {
   RequestOptions,
   StudentGroupCatalogItem,
 } from "./bsuir-types";
-export { BsuirApiError, BsuirNetworkError, BsuirTimeoutError, BsuirValidationError } from "bsuir-iis-api";
+export {
+  BsuirApiError,
+  BsuirConfigurationError,
+  BsuirNetworkError,
+  BsuirTimeoutError,
+  BsuirValidationError,
+} from "bsuir-iis-api";

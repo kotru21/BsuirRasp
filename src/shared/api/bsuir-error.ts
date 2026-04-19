@@ -1,5 +1,6 @@
 import {
   BsuirApiError,
+  BsuirConfigurationError,
   BsuirNetworkError,
   BsuirTimeoutError,
   BsuirValidationError,
@@ -15,7 +16,10 @@ function isTlsTrustFailure(error: unknown): boolean {
   ) {
     return true;
   }
-  if (typeof rec.message === "string" && /unable to verify the first certificate/i.test(rec.message)) {
+  if (
+    typeof rec.message === "string" &&
+    /unable to verify the first certificate/i.test(rec.message)
+  ) {
     return true;
   }
   if (rec.cause !== undefined) return isTlsTrustFailure(rec.cause);
@@ -29,6 +33,9 @@ export function getBsuirErrorMessage(error: unknown): string {
   if (error instanceof BsuirApiError) {
     if (error.status === 404) return "Данные не найдены";
     return `Ошибка сервера (${error.status})`;
+  }
+  if (error instanceof BsuirConfigurationError) {
+    return "Клиент API не настроен: в среде нет fetch — передайте fetch в createBsuirClient.";
   }
   if (error instanceof BsuirValidationError) return "Неверный запрос";
   if (error instanceof BsuirTimeoutError) return "Превышено время ожидания";
