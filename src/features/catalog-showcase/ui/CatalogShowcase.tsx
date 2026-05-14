@@ -1,13 +1,6 @@
 "use client";
 
-import type {
-  Auditory,
-  Department,
-  Employee,
-  Faculty,
-  Speciality,
-  StudentGroup,
-} from "@/entities";
+import type { Auditory, Department, Employee, Faculty, Speciality, StudentGroup } from "@/entities";
 import { useMemo, useState } from "react";
 
 interface CatalogShowcaseProps {
@@ -53,10 +46,7 @@ export function CatalogShowcase({
     const q = norm(empQuery);
     if (!q) return employees;
     return employees.filter(
-      (e) =>
-        norm(e.fio).includes(q) ||
-        norm(e.urlId).includes(q) ||
-        String(e.id).includes(q)
+      (e) => norm(e.fio).includes(q) || norm(e.urlId).includes(q) || String(e.id).includes(q)
     );
   }, [employees, empQuery]);
 
@@ -70,10 +60,7 @@ export function CatalogShowcase({
     const q = norm(deptQuery);
     if (!q) return departments;
     return departments.filter(
-      (d) =>
-        norm(d.name).includes(q) ||
-        norm(d.abbrev).includes(q) ||
-        String(d.id).includes(q)
+      (d) => norm(d.name).includes(q) || norm(d.abbrev).includes(q) || String(d.id).includes(q)
     );
   }, [departments, deptQuery]);
 
@@ -105,8 +92,7 @@ export function CatalogShowcase({
           <code className="rounded bg-muted px-1">faculties.listAll</code>,{" "}
           <code className="rounded bg-muted px-1">departments.listAll</code>,{" "}
           <code className="rounded bg-muted px-1">specialities.listAll</code>,{" "}
-          <code className="rounded bg-muted px-1">auditories.listAll</code>. Фильтрация на
-          клиенте.
+          <code className="rounded bg-muted px-1">auditories.listAll</code>. Фильтрация на клиенте.
         </p>
       </div>
 
@@ -171,8 +157,8 @@ export function CatalogShowcase({
           <h3 className="text-sm font-medium">Факультет → специальности</h3>
           <p className="text-xs text-muted-foreground">
             У <code className="rounded bg-muted px-1">Speciality</code> есть{" "}
-            <code className="rounded bg-muted px-1">facultyId</code>; кафедры в API без
-            привязки к факультету — отдельный список ниже.
+            <code className="rounded bg-muted px-1">facultyId</code>; кафедры в API без привязки к
+            факультету — отдельный список ниже.
           </p>
           <select
             className="h-9 w-full max-w-md rounded-md border bg-background px-2 text-sm"

@@ -40,8 +40,6 @@ export function buildJsonDumps(insights: SdkInsightsData | null) {
       employeeItems: insights.announcements.employeeItems,
       departmentItems: insights.announcements.departmentItems,
     }),
-    advanced: insights.advanced
-      ? stringify(insights.advanced)
-      : stringify(null),
+    advanced: insights.advanced ? stringify(insights.advanced) : stringify(null),
   };
 }

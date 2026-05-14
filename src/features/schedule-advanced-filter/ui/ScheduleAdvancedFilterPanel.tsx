@@ -74,8 +74,7 @@ export function ScheduleAdvancedFilterPanel({
             , <code className="rounded bg-muted px-1">employeeUrlId</code>
           </>
         )}
-        ). Неделя и подгруппа берутся из URL (
-        <code className="rounded bg-muted px-1">week</code>,{" "}
+        ). Неделя и подгруппа берутся из URL (<code className="rounded bg-muted px-1">week</code>,{" "}
         <code className="rounded bg-muted px-1">subgroup</code>).
       </p>
       <form

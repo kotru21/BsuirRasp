@@ -29,6 +29,52 @@ interface ScheduleTableProps {
 
 type TimeSlot = string;
 
+const WEEKDAY_BY_JS_DAY: Array<ScheduleDayKey | null> = [
+  null,
+  "Понедельник",
+  "Вторник",
+  "Среда",
+  "Четверг",
+  "Пятница",
+  "Суббота",
+];
+
+function resolveDayFromDate(value: string | null | undefined): ScheduleDayKey | null {
+  if (!value) return null;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  let date: Date | null = null;
+
+  const ddMmYyyy = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
+  const ddMmYyyyMatch = ddMmYyyy.exec(trimmed);
+  if (ddMmYyyyMatch) {
+    const day = Number.parseInt(ddMmYyyyMatch[1], 10);
+    const month = Number.parseInt(ddMmYyyyMatch[2], 10);
+    const year = Number.parseInt(ddMmYyyyMatch[3], 10);
+    date = new Date(Date.UTC(year, month - 1, day));
+  } else {
+    const parsed = new Date(trimmed);
+    if (!Number.isNaN(parsed.getTime())) {
+      date = parsed;
+    }
+  }
+
+  if (!date) return null;
+
+  return WEEKDAY_BY_JS_DAY[date.getUTCDay()] ?? null;
+}
+
+function resolveFlattenedLessonDay(lesson: FlattenedScheduleLesson): ScheduleDayKey | null {
+  return (
+    lesson.day ??
+    resolveDayFromDate(lesson.dateLesson) ??
+    resolveDayFromDate(lesson.startLessonDate) ??
+    resolveDayFromDate(lesson.endLessonDate)
+  );
+}
+
 function getTimeSlots(
   schedule: NormalizedScheduleResponse,
   weekNumber: number,
@@ -71,7 +117,9 @@ function getFlattenedAt(
   day: ScheduleDayKey,
   timeSlot: TimeSlot
 ): FlattenedScheduleLesson[] {
-  return lessons.filter((l) => l.day === day && l.startLessonTime === timeSlot);
+  return lessons.filter(
+    (l) => resolveFlattenedLessonDay(l) === day && l.startLessonTime === timeSlot
+  );
 }
 
 function EmptyCell() {

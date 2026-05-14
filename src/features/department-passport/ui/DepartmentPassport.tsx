@@ -32,8 +32,7 @@ function AnnouncementCard({ a }: { a: Announcement }) {
       <div className="mt-1 text-sm leading-snug">{a.content}</div>
       {a.studentGroups.length > 0 && (
         <div className="mt-1 text-xs text-muted-foreground">
-          Группы:{" "}
-          {a.studentGroups.map((g) => `${g.name} (id ${g.id})`).join(", ")}
+          Группы: {a.studentGroups.map((g) => `${g.name} (id ${g.id})`).join(", ")}
         </div>
       )}
     </li>
@@ -143,7 +142,8 @@ export function DepartmentPassport({
             <p className="mt-1 text-xs text-muted-foreground">{employeeLabel}</p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              Выберите преподавателя в шапке (<code className="rounded bg-muted px-1">?employee=</code>
+              Выберите преподавателя в шапке (
+              <code className="rounded bg-muted px-1">?employee=</code>
               ), чтобы загрузить объявления.
             </p>
           )}
@@ -162,4 +162,3 @@ export function DepartmentPassport({
     </section>
   );
 }
-

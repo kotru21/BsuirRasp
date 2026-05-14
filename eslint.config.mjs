@@ -29,15 +29,7 @@ const fsdBoundaries = {
             from: { type: "app" },
             allow: {
               to: {
-                type: [
-                  "app",
-                  "shared",
-                  "entities",
-                  "features",
-                  "widgets",
-                  "views",
-                  "root",
-                ],
+                type: ["app", "shared", "entities", "features", "widgets", "views", "root"],
               },
             },
           },

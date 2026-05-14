@@ -103,4 +103,3 @@ export interface SummarySection {
   title: string;
   rows: SummaryRow[];
 }
-

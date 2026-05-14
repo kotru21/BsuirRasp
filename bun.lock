@@ -7,7 +7,7 @@
       "dependencies": {
         "@base-ui/react": "^1.4.0",
         "@fontsource/inter": "^5.2.8",
-        "bsuir-iis-api": "^0.7.0",
+        "bsuir-iis-api": "^0.10.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-react": "^1.8.0",
@@ -450,7 +450,7 @@
 
     "browserslist": ["browserslist@4.28.1", "", { "dependencies": { "baseline-browser-mapping": "^2.9.0", "caniuse-lite": "^1.0.30001759", "electron-to-chromium": "^1.5.263", "node-releases": "^2.0.27", "update-browserslist-db": "^1.2.0" }, "bin": { "browserslist": "cli.js" } }, "sha512-ZC5Bd0LgJXgwGqUknZY/vkUQ04r8NXnJZ3yYi4vDmSiZmC/pdSN0NbNRPxZpbtO4uAfDUAFffO8IZoM3Gj8IkA=="],
 
-    "bsuir-iis-api": ["bsuir-iis-api@0.7.0", "", {}, "sha512-I7QopU+uhhzWYa+Ei4DEg3auCiBQSaX5dg3FtGrc/FDsjCXiqcbNIlP3ucC6jbkn8O3ADLRIRm504iOFZa5Qow=="],
+    "bsuir-iis-api": ["bsuir-iis-api@0.10.1", "", {}, "sha512-ILGPMGc2cVw1d27ofKKCLW9VcgFEvUi5IDQ1uzVXKe5hNx42rNrlaPfqrKlTkE5bB/vQZ6PZH0caFUep28YgFQ=="],
 
     "bundle-name": ["bundle-name@4.1.0", "", { "dependencies": { "run-applescript": "^7.0.0" } }, "sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q=="],
 

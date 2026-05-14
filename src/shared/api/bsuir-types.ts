@@ -1,14 +1,38 @@
-/**
- * Реэкспорт типов из `bsuir-iis-api` для типизации слоя приложения.
- * Полный список — в `node_modules/bsuir-iis-api/dist/index.d.ts`.
- */
+/** Re-exports public types from bsuir-iis-api v0.10.0 for use in app layers. */
 
 export type {
+  Announcement,
   ApiDateResponse,
+  Auditory,
+  AuditoryDepartment,
+  AuditoryType,
   BsuirClient,
   BsuirClientOptions,
+  BuildingNumber,
+  CacheOptions,
+  ClientHooks,
+  Department,
+  EducationForm,
+  Employee,
   EmployeeCatalogItem,
+  ErrorHookContext,
+  Faculty,
+  FlattenedLessonsByDay,
+  FlattenedScheduleItem,
+  LessonStudentGroup,
+  Maybe,
+  NormalizedScheduleResponse,
   ReadOptions,
+  RequestHookContext,
   RequestOptions,
+  ResponseHookContext,
+  RetryHookContext,
+  ScheduleFilterOptions,
+  ScheduleItem,
+  ScheduleResponse,
+  Speciality,
   StudentGroupCatalogItem,
+  StudentGroupShort,
+  Weekday,
+  WeekScheduleMap,
 } from "bsuir-iis-api";

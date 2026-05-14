@@ -15,9 +15,7 @@ export function getUrlSearchParamsForNavigation(): URLSearchParams {
  * Для рендера: на клиенте — фактический query из `location` (в т.ч. после `replaceState`),
  * на сервере — из снимка RSC (`useSearchParams()`).
  */
-export function getResolvedSearchParams(
-  routerSearchParams: SearchParamsSnapshot
-): URLSearchParams {
+export function getResolvedSearchParams(routerSearchParams: SearchParamsSnapshot): URLSearchParams {
   if (typeof window !== "undefined") {
     return getUrlSearchParamsForNavigation();
   }

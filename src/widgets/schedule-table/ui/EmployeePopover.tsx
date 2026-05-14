@@ -16,8 +16,7 @@ export function EmployeePopover({ employee, isLast }: EmployeePopoverProps) {
     .join(" ");
 
   const academicDepartment =
-    (employee as unknown as { academicDepartment?: string[] | null })
-      .academicDepartment ?? [];
+    (employee as unknown as { academicDepartment?: string[] | null }).academicDepartment ?? [];
 
   const rankAndDegree = [employee.rank, employee.degree].filter(Boolean).join(", ");
 
@@ -53,4 +52,3 @@ export function EmployeePopover({ employee, isLast }: EmployeePopoverProps) {
     </Popover>
   );
 }
-

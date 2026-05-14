@@ -6,4 +6,3 @@ export * from "./department";
 export * from "./speciality";
 export * from "./announcement";
 export * from "./auditory";
-

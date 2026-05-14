@@ -5,6 +5,10 @@
   "engines": {
     "node": ">=24"
   },
+  "volta": {
+    "node": "24.0.0"
+  },
+  "packageManager": "bun@latest",
   "scripts": {
     "dev": "next dev",
     "dev:system-ca": "cross-env NODE_OPTIONS=--use-system-ca next dev",
@@ -18,7 +22,7 @@
   "dependencies": {
     "@base-ui/react": "^1.4.0",
     "@fontsource/inter": "^5.2.8",
-    "bsuir-iis-api": "^0.7.0",
+    "bsuir-iis-api": "^0.10.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.8.0",

@@ -15,7 +15,9 @@ export function useSubgroup(): {
 
   const param = getResolvedSearchParams(searchParams).get("subgroup") ?? "";
   const subgroupFilter: SubgroupFilter = VALID.has(param)
-    ? (param === "" ? "all" : (Number(param) as 1 | 2))
+    ? param === ""
+      ? "all"
+      : (Number(param) as 1 | 2)
     : "all";
 
   function setSubgroupFilter(value: SubgroupFilter) {

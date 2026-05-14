@@ -43,8 +43,7 @@ export function buildSummarySections(insights: SdkInsightsData | null): SummaryS
         {
           label: "Строка для UI (getScheduleLastUpdate*)",
           value:
-            insights.raw.pageData.lastUpdateDate ??
-            "нет данных (эндпоинт не отвечает / легаси)",
+            insights.raw.pageData.lastUpdateDate ?? "нет данных (эндпоинт не отвечает / легаси)",
         },
       ],
     });
@@ -109,9 +108,7 @@ export function buildSummarySections(insights: SdkInsightsData | null): SummaryS
         : [
             {
               label: "Дата (by id)",
-              value:
-                nu.date ??
-                "нет ответа (легаси last-update ИИС, часто 404)",
+              value: nu.date ?? "нет ответа (легаси last-update ИИС, часто 404)",
             },
           ];
       nuRows.push({

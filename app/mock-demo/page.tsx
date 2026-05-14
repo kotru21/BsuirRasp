@@ -15,6 +15,8 @@ export default async function MockDemoPage() {
 
   const client = createBsuirClient({
     baseUrl: "http://mock.local",
+    allowInsecureHttp: true,
+    allowedBaseUrlHosts: ["mock.local"],
     fetch: mockFetch,
     timeoutMs: 5000,
   });
@@ -31,8 +33,10 @@ export default async function MockDemoPage() {
       <h1 className="text-xl font-semibold">Mock `createBsuirClient`</h1>
       <p className="text-muted-foreground">
         Локальный <code className="rounded bg-muted px-1">fetch</code> возвращает фикстуру из{" "}
-        <code className="rounded bg-muted px-1">src/shared/fixtures/mock-bsuir-schedule-wire.ts</code> — без
-        запросов к ИИС.
+        <code className="rounded bg-muted px-1">
+          src/shared/fixtures/mock-bsuir-schedule-wire.ts
+        </code>{" "}
+        — без запросов к ИИС.
       </p>
       <pre className="max-h-[60vh] overflow-auto rounded-lg border bg-muted/40 p-4 text-xs">
         {JSON.stringify(schedule, null, 2)}

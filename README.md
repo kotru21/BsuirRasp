@@ -2,6 +2,11 @@
 
 Showcase npm-пакета [bsuir-iis-api](https://www.npmjs.com/package/bsuir-iis-api) на [Next.js](https://nextjs.org) (App Router) + [shadcn/ui](https://ui.shadcn.com) с архитектурой [Feature-Sliced Design](https://feature-sliced.design).
 
+## Requirements
+
+- Node.js >= 24 (or Bun >= 1.x)
+- `bsuir-iis-api` >= 0.10.0
+
 ## Структура (FSD)
 
 - `app/` — слой **app** в терминах Next.js App Router: маршруты (`layout`, `page`, `loading`, `error`, `not-found`), без тяжёлой бизнес-логики; данные для главной собираются в `src/views/home/model/load-home-page.ts`, страница импортирует `@/views/home`.
@@ -30,20 +35,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 #### Покрытие методов SDK (главная страница)
 
-| Возможность | Метод SDK (через entities) | Где в UI | Query / условие |
-| --- | --- | --- | --- |
-| Расписание группы | `schedule.getGroup` | Таблица после выбора группы в шапке | `?group=<цифры>` |
-| Расписание преподавателя | `schedule.getEmployee` | Таблица | `?employee=<url-id>` |
-| Список групп | `groups.listAll` | Шапка (поиск) и блок **Справочники SDK** внизу | — |
-| Список преподавателей | `employees.listAll` | Шапка и **Справочники SDK** | — |
-| Факультеты | `faculties.listAll` | **Справочники SDK** | — |
-| Кафедры | `departments.listAll` | **Справочники SDK** | — |
-| Специальности | `specialities.listAll` | **Справочники SDK** (по выбранному факультету) | — |
-| Объявления преподавателя | `announcements.byEmployee` | Под таблицей; в паспорте кафедры при `announcements=1` | режим `employee` |
-| Объявления кафедры | `announcements.byDepartment` | Паспорт кафедры | `announcements=1` и `departmentId` |
-| Аудитории | `auditories.listAll` | **Справочники SDK** | — |
-| Последнее обновление (легаси) | `schedule.getLastUpdateByGroup` / `getLastUpdateByEmployee` | Только **SDK Insights** (сводка и JSON; в шапке расписания не показывается) | есть выбранное расписание |
-| Текущая неделя | `schedule.getCurrentWeek` | Переключатель недели; SDK Insights | есть выбранное расписание |
+| Возможность                   | Метод SDK (через entities)                                  | Где в UI                                                                    | Query / условие                    |
+| ----------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------- |
+| Расписание группы             | `schedule.getGroup`                                         | Таблица после выбора группы в шапке                                         | `?group=<цифры>`                   |
+| Расписание преподавателя      | `schedule.getEmployee`                                      | Таблица                                                                     | `?employee=<url-id>`               |
+| Список групп                  | `groups.listAll`                                            | Шапка (поиск) и блок **Справочники SDK** внизу                              | —                                  |
+| Список преподавателей         | `employees.listAll`                                         | Шапка и **Справочники SDK**                                                 | —                                  |
+| Факультеты                    | `faculties.listAll`                                         | **Справочники SDK**                                                         | —                                  |
+| Кафедры                       | `departments.listAll`                                       | **Справочники SDK**                                                         | —                                  |
+| Специальности                 | `specialities.listAll`                                      | **Справочники SDK** (по выбранному факультету)                              | —                                  |
+| Объявления преподавателя      | `announcements.byEmployee`                                  | Под таблицей; в паспорте кафедры при `announcements=1`                      | режим `employee`                   |
+| Объявления кафедры            | `announcements.byDepartment`                                | Паспорт кафедры                                                             | `announcements=1` и `departmentId` |
+| Аудитории                     | `auditories.listAll`                                        | **Справочники SDK**                                                         | —                                  |
+| Последнее обновление (легаси) | `schedule.getLastUpdateByGroup` / `getLastUpdateByEmployee` | Только **SDK Insights** (сводка и JSON; в шапке расписания не показывается) | есть выбранное расписание          |
+| Текущая неделя                | `schedule.getCurrentWeek`                                   | Переключатель недели; SDK Insights                                          | есть выбранное расписание          |
 
 Сводка **SDK Insights** (включая счётчики `listAll` и last update) доступна только при открытом расписании группы или преподавателя.
 
@@ -51,7 +56,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Демо отмены запроса с пробросом `signal` в SDK: [http://localhost:3000/abort-demo](http://localhost:3000/abort-demo) (Route Handler `app/api/demo/group-schedule`).
 - Демо `BsuirValidationError`: [http://localhost:3000/validation-demo](http://localhost:3000/validation-demo).
 - Логирование исходящих запросов к ИИС в консоль сервера: `BSUIR_DEBUG_FETCH=1` (см. [src/shared/api/bsuir-client.ts](src/shared/api/bsuir-client.ts)).
-- Глобально сырой ответ расписания по умолчанию: `BSUIR_DEFAULT_RAW=1` — в `createBsuirClient` передаётся `defaultRaw: true`. Основной UI шоукейса рассчитан на **normalized**; для отладки и рядом с `?rawSchedule=1` используйте осознанно.
 
 #### Произвольные query-параметры (`ReadOptions.query`)
 

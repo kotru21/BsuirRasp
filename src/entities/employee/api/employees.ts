@@ -15,4 +15,3 @@ export async function getEmployees(): Promise<Employee[]> {
     academicDepartment: e.academicDepartment,
   }));
 }
-

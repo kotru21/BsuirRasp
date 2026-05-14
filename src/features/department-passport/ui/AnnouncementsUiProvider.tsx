@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { getUrlSearchParamsForNavigation } from "@/shared/lib";
 import type { Announcement, Department } from "@/entities";
@@ -19,9 +12,7 @@ interface AnnouncementsUiContextValue {
   closeAnnouncements: () => void;
 }
 
-const AnnouncementsUiContext = createContext<AnnouncementsUiContextValue | null>(
-  null
-);
+const AnnouncementsUiContext = createContext<AnnouncementsUiContextValue | null>(null);
 
 export function useAnnouncementsUi(): AnnouncementsUiContextValue {
   const ctx = useContext(AnnouncementsUiContext);
@@ -77,9 +68,7 @@ export function AnnouncementsUiProvider({
   );
 
   return (
-    <AnnouncementsUiContext.Provider value={value}>
-      {children}
-    </AnnouncementsUiContext.Provider>
+    <AnnouncementsUiContext.Provider value={value}>{children}</AnnouncementsUiContext.Provider>
   );
 }
 

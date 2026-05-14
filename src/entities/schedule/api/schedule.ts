@@ -6,15 +6,11 @@ import type {
   ScheduleFilterOptions,
 } from "../model/types";
 
-export async function getGroupSchedule(
-  groupNumber: string
-): Promise<NormalizedScheduleResponse> {
+export async function getGroupSchedule(groupNumber: string): Promise<NormalizedScheduleResponse> {
   return bsuirClient.schedule.getGroup(groupNumber);
 }
 
-export async function getEmployeeSchedule(
-  urlId: string
-): Promise<NormalizedScheduleResponse> {
+export async function getEmployeeSchedule(urlId: string): Promise<NormalizedScheduleResponse> {
   return bsuirClient.schedule.getEmployee(urlId);
 }
 
@@ -32,15 +28,11 @@ export async function getEmployeeScheduleFiltered(
   return bsuirClient.schedule.getEmployeeFiltered(urlId, filter);
 }
 
-export async function getGroupExams(
-  groupNumber: string
-): Promise<FlattenedScheduleLesson[]> {
+export async function getGroupExams(groupNumber: string): Promise<FlattenedScheduleLesson[]> {
   return bsuirClient.schedule.getGroupExams(groupNumber);
 }
 
-export async function getEmployeeExams(
-  urlId: string
-): Promise<FlattenedScheduleLesson[]> {
+export async function getEmployeeExams(urlId: string): Promise<FlattenedScheduleLesson[]> {
   return bsuirClient.schedule.getEmployeeExams(urlId);
 }
 
@@ -59,14 +51,10 @@ export async function getEmployeeScheduleBySubgroup(
 }
 
 /** Сырой ответ API ИИС (`schedules` может быть `null`, см. README SDK). */
-export async function getGroupScheduleRaw(
-  groupNumber: string
-): Promise<ScheduleResponse> {
+export async function getGroupScheduleRaw(groupNumber: string): Promise<ScheduleResponse> {
   return bsuirClient.schedule.getGroup(groupNumber, { raw: true });
 }
 
-export async function getEmployeeScheduleRaw(
-  urlId: string
-): Promise<ScheduleResponse> {
+export async function getEmployeeScheduleRaw(urlId: string): Promise<ScheduleResponse> {
   return bsuirClient.schedule.getEmployee(urlId, { raw: true });
 }

@@ -16,8 +16,9 @@ export function ApiShowcaseIntro() {
             Интерактивный showcase API
           </h2>
           <p className="max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Всё ниже — реальные вызовы <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">bsuir-iis-api</code> к
-            ИИС БГУИР: поиск группы, расписание, экзамены, фильтры и справочники. Наверху — только
+            Всё ниже — реальные вызовы{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">bsuir-iis-api</code>{" "}
+            к ИИС БГУИР: поиск группы, расписание, экзамены, фильтры и справочники. Наверху — только
             установка, ссылки и минимальный код.
           </p>
         </div>

@@ -23,8 +23,7 @@ export async function fetchRawScheduleIfRequested(input: {
   rawScheduleError: string | null;
 }> {
   const { rawScheduleRequested, scheduleMode, scheduleKey } = input;
-  let rawSchedulePayload: Awaited<ReturnType<typeof getGroupScheduleRaw>> | null =
-    null;
+  let rawSchedulePayload: Awaited<ReturnType<typeof getGroupScheduleRaw>> | null = null;
   let rawScheduleError: string | null = null;
   if (rawScheduleRequested && scheduleMode && scheduleKey) {
     try {
@@ -51,18 +50,13 @@ export async function resolveLastUpdateByNumericId(input: {
     matchesStringKey: null,
   };
 
-  if (
-    loadedSchedule &&
-    scheduleMode === "group" &&
-    loadedSchedule.studentGroupDto?.id != null
-  ) {
+  if (loadedSchedule && scheduleMode === "group" && loadedSchedule.studentGroupDto?.id != null) {
     try {
       const d = await getLastUpdateByGroup({
         id: loadedSchedule.studentGroupDto.id,
       });
       lastUpdateByNumericId.date = d;
-      lastUpdateByNumericId.matchesStringKey =
-        lastUpdateDate != null && d === lastUpdateDate;
+      lastUpdateByNumericId.matchesStringKey = lastUpdateDate != null && d === lastUpdateDate;
     } catch (e) {
       if (!isScheduleLastUpdateUnavailable(e)) {
         lastUpdateByNumericId.error = getBsuirErrorMessage(e);
@@ -78,8 +72,7 @@ export async function resolveLastUpdateByNumericId(input: {
         id: loadedSchedule.employeeDto.id,
       });
       lastUpdateByNumericId.date = d;
-      lastUpdateByNumericId.matchesStringKey =
-        lastUpdateDate != null && d === lastUpdateDate;
+      lastUpdateByNumericId.matchesStringKey = lastUpdateDate != null && d === lastUpdateDate;
     } catch (e) {
       if (!isScheduleLastUpdateUnavailable(e)) {
         lastUpdateByNumericId.error = getBsuirErrorMessage(e);

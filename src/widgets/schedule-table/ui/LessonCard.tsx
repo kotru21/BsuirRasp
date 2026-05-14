@@ -1,8 +1,4 @@
-import {
-  Card,
-  CardContent,
-  Badge,
-} from "@/shared/ui";
+import { Card, CardContent, Badge } from "@/shared/ui";
 import type { ScheduleLesson } from "@/entities";
 import { MapPinIcon, UserIcon, UsersIcon } from "lucide-react";
 import { EmployeePopover } from "./EmployeePopover";
@@ -45,10 +41,7 @@ export function LessonCard({ lesson, showStudentGroups = false }: LessonCardProp
           )}
         </div>
 
-        <div
-          className="font-semibold leading-tight line-clamp-2"
-          title={lesson.subjectFullName}
-        >
+        <div className="font-semibold leading-tight line-clamp-2" title={lesson.subjectFullName}>
           {lesson.subject}
         </div>
 
@@ -63,9 +56,7 @@ export function LessonCard({ lesson, showStudentGroups = false }: LessonCardProp
           {lesson.auditories?.length > 0 && (
             <div className="flex items-center gap-1.5">
               <MapPinIcon className="size-3.5 shrink-0" />
-              <span className="truncate">
-                {lesson.auditories.join(", ")}
-              </span>
+              <span className="truncate">{lesson.auditories.join(", ")}</span>
             </div>
           )}
 
@@ -88,4 +79,3 @@ export function LessonCard({ lesson, showStudentGroups = false }: LessonCardProp
     </Card>
   );
 }
-

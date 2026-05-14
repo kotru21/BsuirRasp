@@ -4,4 +4,3 @@ export {
   DepartmentPassportGate,
   useAnnouncementsUi,
 } from "./ui/AnnouncementsUiProvider";
-

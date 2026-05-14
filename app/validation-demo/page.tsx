@@ -22,8 +22,8 @@ export default async function ValidationDemoPage() {
       </Link>
       <h1 className="text-xl font-semibold">BsuirValidationError</h1>
       <p className="text-sm text-muted-foreground">
-        Сервер вызывает <code className="rounded bg-muted px-1">getGroupSchedule</code> с
-        невалидным номером группы — SDK отклоняет запрос до HTTP (см. README пакета).
+        Сервер вызывает <code className="rounded bg-muted px-1">getGroupSchedule</code> с невалидным
+        номером группы — SDK отклоняет запрос до HTTP (см. README пакета).
       </p>
       <pre className="whitespace-pre-wrap rounded-lg border bg-card p-4 text-sm">{outcome}</pre>
     </main>

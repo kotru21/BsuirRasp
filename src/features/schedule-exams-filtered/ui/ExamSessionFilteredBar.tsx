@@ -32,8 +32,7 @@ function splitPresetsFromParam(param: string | undefined): {
 export function ExamSessionFilteredBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const examTypesParam =
-    getResolvedSearchParams(searchParams).get("examTypes") ?? undefined;
+  const examTypesParam = getResolvedSearchParams(searchParams).get("examTypes") ?? undefined;
   const formKey = `examTypes-${examTypesParam ?? "default"}`;
 
   const initial = useMemo(() => splitPresetsFromParam(examTypesParam), [examTypesParam]);
@@ -73,9 +72,8 @@ export function ExamSessionFilteredBar() {
     >
       <p className="mb-2 text-muted-foreground">
         Параметр URL <code className="rounded bg-muted px-1">examTypes</code> —{" "}
-        <code className="rounded bg-muted px-1">lessonTypeAbbrev</code> для filtered exams. По умолчанию
-        (пустой параметр):{" "}
-        <code className="rounded bg-muted px-1">{defaultDisplay}</code>
+        <code className="rounded bg-muted px-1">lessonTypeAbbrev</code> для filtered exams. По
+        умолчанию (пустой параметр): <code className="rounded bg-muted px-1">{defaultDisplay}</code>
       </p>
       <div className="mb-2 flex flex-wrap items-center gap-4">
         <label className="flex cursor-pointer items-center gap-2">

@@ -9,4 +9,3 @@ export interface Employee {
   degree: string;
   academicDepartment?: string[];
 }
-

@@ -1,8 +1,5 @@
 import { CatalogShowcase } from "@/features/catalog-showcase";
-import {
-  AnnouncementsUiProvider,
-  DepartmentPassportGate,
-} from "@/features/department-passport";
+import { AnnouncementsUiProvider, DepartmentPassportGate } from "@/features/department-passport";
 import { PageErrorToasts } from "@/features/notifications";
 import { SdkProductLanding } from "@/features/sdk-product-landing";
 import { SdkQuickStartSection } from "@/features/sdk-quick-start";
@@ -113,10 +110,7 @@ export function HomePage({
         scheduleFilterError={scheduleFilterError}
         compareGroupError={compareGroupError}
       />
-      <AnnouncementsUiProvider
-        key={announcementsUiRouteKey}
-        initialOpen={showDepartmentPassport}
-      >
+      <AnnouncementsUiProvider key={announcementsUiRouteKey} initialOpen={showDepartmentPassport}>
         <Header groups={groups} employees={employees} />
         <SdkProductLanding>
           <SdkShowcaseHero showJumpLinks />

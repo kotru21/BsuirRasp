@@ -9,8 +9,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/30 px-4 py-6 text-center text-xs text-muted-foreground sm:px-6">
       <p>
-        Showcase на{" "}
-        <code className="rounded bg-muted px-1">bsuir-iis-api</code>{" "}
+        Showcase на <code className="rounded bg-muted px-1">bsuir-iis-api</code>{" "}
         <span className="text-foreground/80">{BSUIR_IIS_API_VERSION}</span>
         {" · "}
         <Link

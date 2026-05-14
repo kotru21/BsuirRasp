@@ -6,6 +6,8 @@ export const BSUIR_RETRY_DELAY_MS = 300;
 export const BSUIR_RETRY_MAX_DELAY_MS = 3000;
 /** Включить jitter для ретраев. */
 export const BSUIR_RETRY_JITTER = true;
+/** Лимит размера ответа от API (байты). */
+export const BSUIR_MAX_RESPONSE_BYTES = 5_000_000;
 /** User-Agent для запросов к BSUIR API. */
 export const BSUIR_USER_AGENT = "BsuirRasp/0.1.0";
 

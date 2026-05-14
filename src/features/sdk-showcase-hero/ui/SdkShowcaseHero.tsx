@@ -66,7 +66,12 @@ export function SdkShowcaseHero({ className, showJumpLinks = false }: SdkShowcas
             Попробовать showcase
             <ArrowRightIcon className="size-4 shrink-0" aria-hidden />
           </a>
-          <Link href={BSUIR_IIS_API_README_URL} className={linkPill} target="_blank" rel="noreferrer">
+          <Link
+            href={BSUIR_IIS_API_README_URL}
+            className={linkPill}
+            target="_blank"
+            rel="noreferrer"
+          >
             Документация
           </Link>
           <Link href={BSUIR_IIS_API_NPM_URL} className={linkPill} target="_blank" rel="noreferrer">

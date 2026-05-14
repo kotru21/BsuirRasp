@@ -28,10 +28,7 @@ function matchGroup(query: string, group: StudentGroup): boolean {
 function matchEmployee(query: string, employee: Employee): boolean {
   const q = query.trim().toLowerCase();
   if (!q) return true;
-  return (
-    employee.fio.toLowerCase().includes(q) ||
-    employee.urlId.toLowerCase().includes(q)
-  );
+  return employee.fio.toLowerCase().includes(q) || employee.urlId.toLowerCase().includes(q);
 }
 
 type SearchItem =
@@ -219,10 +216,7 @@ export function GroupSelect({
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "relative w-full min-w-0 sm:min-w-48 sm:max-w-md lg:max-w-lg",
-        className
-      )}
+      className={cn("relative w-full min-w-0 sm:min-w-48 sm:max-w-md lg:max-w-lg", className)}
     >
       <div className="relative">
         <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -246,9 +240,7 @@ export function GroupSelect({
           aria-autocomplete="list"
           aria-controls="group-suggestions"
           aria-activedescendant={
-            open && filtered[safeHighlightedIndex]
-              ? filtered[safeHighlightedIndex].id
-              : undefined
+            open && filtered[safeHighlightedIndex] ? filtered[safeHighlightedIndex].id : undefined
           }
           role="combobox"
         />
@@ -307,9 +299,7 @@ export function GroupSelect({
               >
                 <span className="font-medium">{g.title}</span>
                 {g.subtitle && (
-                  <span className="text-xs text-muted-foreground line-clamp-1">
-                    {g.subtitle}
-                  </span>
+                  <span className="text-xs text-muted-foreground line-clamp-1">{g.subtitle}</span>
                 )}
               </button>
             ))

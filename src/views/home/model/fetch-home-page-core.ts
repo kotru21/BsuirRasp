@@ -1,9 +1,4 @@
-import type {
-  Announcement,
-  Employee,
-  NormalizedScheduleResponse,
-  StudentGroup,
-} from "@/entities";
+import type { Announcement, Employee, NormalizedScheduleResponse, StudentGroup } from "@/entities";
 import {
   getAnnouncementsByDepartment,
   getAuditories,
@@ -55,14 +50,8 @@ export interface HomePageCoreData {
   };
 }
 
-export async function fetchHomePageCore(
-  ctx: HomeRouteContext
-): Promise<HomePageCoreData> {
-  const {
-    scheduleMode,
-    scheduleKey,
-    departmentId,
-  } = ctx;
+export async function fetchHomePageCore(ctx: HomeRouteContext): Promise<HomePageCoreData> {
+  const { scheduleMode, scheduleKey, departmentId } = ctx;
 
   const [
     groupsResult,

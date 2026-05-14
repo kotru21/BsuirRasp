@@ -23,8 +23,8 @@ export function formatEmployeeTooltip(employee: Employee): string {
   if (employee.degree) extras.push(employee.degree);
 
   const academicDepartment =
-    (employee as unknown as { academicDepartment?: string[] | null })
-      .academicDepartment ?? undefined;
+    (employee as unknown as { academicDepartment?: string[] | null }).academicDepartment ??
+    undefined;
 
   if (academicDepartment?.length) {
     extras.push(academicDepartment.join(", "));

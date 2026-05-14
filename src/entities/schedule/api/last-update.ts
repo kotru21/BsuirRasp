@@ -16,18 +16,14 @@ export function isScheduleLastUpdateUnavailable(error: unknown): boolean {
  * Легаси-эндпоинт ИИС; для части групп ответа нет (404). Дата при успехе может
  * не соответствовать реальности — см. JSDoc `bsuir-iis-api` на `getLastUpdateByGroup`.
  */
-export async function getScheduleLastUpdate(
-  groupNumber: string
-): Promise<string> {
+export async function getScheduleLastUpdate(groupNumber: string): Promise<string> {
   return getLastUpdateByGroup({ groupNumber });
 }
 
 /**
  * Легаси-эндпоинт ИИС; см. `getLastUpdateByEmployee` в `bsuir-iis-api`.
  */
-export async function getScheduleLastUpdateByEmployee(
-  urlId: string
-): Promise<string> {
+export async function getScheduleLastUpdateByEmployee(urlId: string): Promise<string> {
   return getLastUpdateByEmployee({ urlId });
 }
 
@@ -35,8 +31,7 @@ export async function getScheduleLastUpdateByEmployee(
 export async function getLastUpdateByGroup(
   params: { groupNumber: string } | { id: number }
 ): Promise<string> {
-  const { lastUpdateDate } =
-    await bsuirClient.schedule.getLastUpdateByGroup(params);
+  const { lastUpdateDate } = await bsuirClient.schedule.getLastUpdateByGroup(params);
   return lastUpdateDate;
 }
 
@@ -44,7 +39,6 @@ export async function getLastUpdateByGroup(
 export async function getLastUpdateByEmployee(
   params: { urlId: string } | { id: number }
 ): Promise<string> {
-  const { lastUpdateDate } =
-    await bsuirClient.schedule.getLastUpdateByEmployee(params);
+  const { lastUpdateDate } = await bsuirClient.schedule.getLastUpdateByEmployee(params);
   return lastUpdateDate;
 }

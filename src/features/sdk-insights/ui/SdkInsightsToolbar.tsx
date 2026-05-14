@@ -9,9 +9,7 @@ interface SdkInsightsToolbarProps {
   scheduleContextActive?: boolean;
 }
 
-export function SdkInsightsToolbar({
-  scheduleContextActive = true,
-}: SdkInsightsToolbarProps) {
+export function SdkInsightsToolbar({ scheduleContextActive = true }: SdkInsightsToolbarProps) {
   const pathname = usePathname();
   const sp = useSearchParams();
   const resolved = getResolvedSearchParams(sp);
@@ -35,9 +33,7 @@ export function SdkInsightsToolbar({
               : "Сначала выберите группу или преподавателя — сырой ответ строится для текущего расписания"
           }
         >
-          {isRaw
-            ? "Выключить rawSchedule=1"
-            : "Включить rawSchedule=1 (сырой ответ API)"}
+          {isRaw ? "Выключить rawSchedule=1" : "Включить rawSchedule=1 (сырой ответ API)"}
         </Link>
         <Link
           href="/abort-demo"

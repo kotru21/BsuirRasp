@@ -23,9 +23,7 @@ import {
 
 export type { HomePageSearchParams } from "./home-page-search-params";
 
-export async function loadHomePageProps(
-  params: HomePageSearchParams
-): Promise<HomePageProps> {
+export async function loadHomePageProps(params: HomePageSearchParams): Promise<HomePageProps> {
   const ctx = parseHomeRouteContext(params);
   const {
     invalidGroupError,
@@ -54,14 +52,10 @@ export async function loadHomePageProps(
     departmentAnnouncementsResult,
   } = core;
 
-  const effectiveWeek = parseEffectiveWeek(
-    params?.week,
-    currentWeekResult.currentWeek
-  );
+  const effectiveWeek = parseEffectiveWeek(params?.week, currentWeekResult.currentWeek);
 
   const advancedFilterActive =
-    hasAdvancedScheduleFilterParams(filterSearchParams) &&
-    Boolean(scheduleMode && scheduleKey);
+    hasAdvancedScheduleFilterParams(filterSearchParams) && Boolean(scheduleMode && scheduleKey);
 
   const filteredScheduleOptions = advancedFilterActive
     ? buildScheduleFilterOptions(filterSearchParams, effectiveWeek)
@@ -78,20 +72,15 @@ export async function loadHomePageProps(
   const extendedEmployeeAnnouncementsRes = scheduleExtendedResult?.[4];
 
   const advancedFilterLessons =
-    advancedFilterActive && extendedFilteredWeekRes
-      ? extendedFilteredWeekRes.items
-      : null;
+    advancedFilterActive && extendedFilteredWeekRes ? extendedFilteredWeekRes.items : null;
   const scheduleFilterError =
-    advancedFilterActive && extendedFilteredWeekRes?.error
-      ? extendedFilteredWeekRes.error
-      : null;
+    advancedFilterActive && extendedFilteredWeekRes?.error ? extendedFilteredWeekRes.error : null;
 
-  const { rawSchedulePayload, rawScheduleError } =
-    await fetchRawScheduleIfRequested({
-      rawScheduleRequested,
-      scheduleMode,
-      scheduleKey,
-    });
+  const { rawSchedulePayload, rawScheduleError } = await fetchRawScheduleIfRequested({
+    rawScheduleRequested,
+    scheduleMode,
+    scheduleKey,
+  });
 
   const loadedSchedule = scheduleResult.schedule;
   const lastUpdateByNumericId = await resolveLastUpdateByNumericId({
@@ -113,17 +102,14 @@ export async function loadHomePageProps(
 
   const examLessons = extendedExamsRes?.items ?? [];
   const employeeAnnouncements =
-    scheduleMode === "employee"
-      ? (extendedEmployeeAnnouncementsRes?.items ?? [])
-      : [];
+    scheduleMode === "employee" ? (extendedEmployeeAnnouncementsRes?.items ?? []) : [];
 
   const examLessonTypes = parseExamLessonTypesParam(params?.examTypes);
-  const { examFilteredLessons, examFilteredError } =
-    await fetchExamFilteredLessonsForHome({
-      scheduleMode,
-      scheduleKey,
-      examLessonTypes,
-    });
+  const { examFilteredLessons, examFilteredError } = await fetchExamFilteredLessonsForHome({
+    scheduleMode,
+    scheduleKey,
+    examLessonTypes,
+  });
 
   const {
     compareSchedule,
@@ -149,14 +135,10 @@ export async function loadHomePageProps(
     auditoriesResult.error,
     examFilteredError,
     departmentAnnouncementsResult.error,
-    ...(scheduleExtendedResult
-      ? scheduleExtendedResult.map((item) => item.error)
-      : []),
+    ...(scheduleExtendedResult ? scheduleExtendedResult.map((item) => item.error) : []),
   ];
   const sdkInsightsError =
-    uniqueStringsInOrder(
-      sdkInsightsErrorMessages.filter(Boolean) as string[]
-    ).join(". ") || null;
+    uniqueStringsInOrder(sdkInsightsErrorMessages.filter(Boolean) as string[]).join(". ") || null;
 
   const scheduleError =
     uniqueStringsInOrder(
@@ -188,7 +170,7 @@ export async function loadHomePageProps(
     examLessonTypesLabel: examLessonTypes.join(", "),
     employeeAnnouncements,
     compareGroupNumber:
-      scheduleMode === "group" && groupNumber ? compareGroupNumber ?? null : null,
+      scheduleMode === "group" && groupNumber ? (compareGroupNumber ?? null) : null,
     compareSchedule,
     compareScheduleError,
     compareExamLessons,

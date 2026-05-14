@@ -47,7 +47,10 @@ export function WeekSwitcher({
             <span>{w}</span>
             <span className="hidden sm:inline">неделя</span>
             {isCurrent && (
-              <span className="flex size-2 shrink-0 rounded-full bg-primary" title="Текущая неделя" />
+              <span
+                className="flex size-2 shrink-0 rounded-full bg-primary"
+                title="Текущая неделя"
+              />
             )}
           </button>
         );

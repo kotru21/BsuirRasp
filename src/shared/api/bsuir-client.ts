@@ -1,10 +1,12 @@
 import { createBsuirClient } from "bsuir-iis-api";
+import type { BsuirClient, BsuirClientOptions } from "bsuir-iis-api";
 import fs from "node:fs";
 import path from "node:path";
 import tls from "node:tls";
 import { Agent, fetch as undiciFetch } from "undici";
 import {
   API_BASE_URL,
+  BSUIR_MAX_RESPONSE_BYTES,
   BSUIR_RETRY_DELAY_MS,
   BSUIR_RETRY_JITTER,
   BSUIR_RETRY_MAX_DELAY_MS,
@@ -23,6 +25,9 @@ const BSUIR_INTERMEDIATE_PEM = path.join(
  * Fetch с явным CA: лист `*.bsuir.by` приходит с сервера, промежуточный — из `certs/`, корни — из Node.
  * Иначе Node/OpenSSL дают `unable to verify the first certificate` (браузеры подтягивают intermediate сами).
  */
+// bsuir.by does not send its intermediate CA in the TLS handshake.
+// We inject it manually via undici Agent. The SDK fetch option accepts any
+// fetch-compatible implementation, making this the recommended pattern.
 function getFetchForBsuir(): typeof fetch {
   if (typeof process === "undefined" || !process.versions?.node) {
     return globalThis.fetch.bind(globalThis);
@@ -47,12 +52,7 @@ function getFetchForBsuir(): typeof fetch {
 function wrapFetchForDebug(baseFetch: typeof fetch): typeof fetch {
   return async (input, init) => {
     const start = performance.now();
-    const url =
-      typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.href
-          : input.url;
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     try {
       const res = await baseFetch(input, init);
       const ms = Math.round(performance.now() - start);
@@ -66,22 +66,25 @@ function wrapFetchForDebug(baseFetch: typeof fetch): typeof fetch {
 }
 
 const baseFetch = getFetchForBsuir();
-const fetchImpl =
-  process.env.BSUIR_DEBUG_FETCH === "1"
-    ? wrapFetchForDebug(baseFetch)
-    : baseFetch;
+const fetchImpl = process.env.BSUIR_DEBUG_FETCH === "1" ? wrapFetchForDebug(baseFetch) : baseFetch;
 
-const defaultRaw =
-  process.env.BSUIR_DEFAULT_RAW === "1" ? ({ defaultRaw: true } as const) : {};
+const allowedBaseUrlHosts = [new URL(API_BASE_URL).hostname];
 
-export const bsuirClient = createBsuirClient({
+const clientOptions: BsuirClientOptions = {
   baseUrl: API_BASE_URL,
+  allowedBaseUrlHosts,
   timeoutMs: 10000,
   retries: 2,
   retryDelayMs: BSUIR_RETRY_DELAY_MS,
   retryMaxDelayMs: BSUIR_RETRY_MAX_DELAY_MS,
   retryJitter: BSUIR_RETRY_JITTER,
+  maxResponseBytes: BSUIR_MAX_RESPONSE_BYTES,
+  validateResponses: true,
   userAgent: BSUIR_USER_AGENT,
   fetch: fetchImpl,
-  ...defaultRaw,
+};
+
+export const bsuirClient: BsuirClient = createBsuirClient({
+  ...clientOptions,
+  defaultRaw: false,
 });

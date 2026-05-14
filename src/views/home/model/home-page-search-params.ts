@@ -45,14 +45,10 @@ export interface HomeRouteContext {
   filterSearchParams: ScheduleSearchFilterParams;
 }
 
-export function parseHomeRouteContext(
-  params: HomePageSearchParams
-): HomeRouteContext {
+export function parseHomeRouteContext(params: HomePageSearchParams): HomeRouteContext {
   const rawGroupNumber = params?.group?.trim();
-  const groupNumber =
-    rawGroupNumber && /^\d+$/.test(rawGroupNumber) ? rawGroupNumber : undefined;
-  const invalidGroupError =
-    rawGroupNumber && !groupNumber ? "Неверный номер группы" : null;
+  const groupNumber = rawGroupNumber && /^\d+$/.test(rawGroupNumber) ? rawGroupNumber : undefined;
+  const invalidGroupError = rawGroupNumber && !groupNumber ? "Неверный номер группы" : null;
   const rawCompareGroup = params?.compareGroup?.trim();
   const compareGroupNumber =
     rawCompareGroup && /^\d+$/.test(rawCompareGroup) ? rawCompareGroup : undefined;
@@ -99,9 +95,7 @@ export function parseHomeRouteContext(
  * Query-параметры для ключа `AnnouncementsUiProvider`, кроме `announcements` и `departmentId`:
  * переключение панели и выбор кафедры не должны вызывать полный remount клиентского дерева.
  */
-export function buildAnnouncementsUiRouteKey(
-  params: HomePageSearchParams | undefined
-): string {
+export function buildAnnouncementsUiRouteKey(params: HomePageSearchParams | undefined): string {
   if (!params) return "";
   return [
     params.group ?? "",

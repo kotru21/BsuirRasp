@@ -81,7 +81,9 @@ export function SdkQuickStartSection({ className }: SdkQuickStartSectionProps) {
               >
                 TS
               </span>
-              <span className="text-xs font-medium text-muted-foreground dark:text-zinc-400">example.ts</span>
+              <span className="text-xs font-medium text-muted-foreground dark:text-zinc-400">
+                example.ts
+              </span>
             </div>
             <button
               type="button"

@@ -1,8 +1,5 @@
 import type { FlattenedScheduleLesson } from "@/entities";
-import {
-  getEmployeeScheduleFiltered,
-  getGroupScheduleFiltered,
-} from "@/entities/server";
+import { getEmployeeScheduleFiltered, getGroupScheduleFiltered } from "@/entities/server";
 import type { ScheduleFilterOptions } from "@/entities/schedule";
 import { getBsuirErrorMessage } from "@/shared/api";
 

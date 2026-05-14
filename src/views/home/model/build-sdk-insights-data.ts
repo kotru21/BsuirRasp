@@ -133,12 +133,8 @@ export function buildSdkInsightsData(input: {
         requested: rawScheduleRequested,
         payload: rawSchedulePayload,
         error: rawScheduleError,
-        normalizedTopLevelKeys: loadedSchedule
-          ? Object.keys(loadedSchedule).sort()
-          : [],
-        rawTopLevelKeys: rawSchedulePayload
-          ? Object.keys(rawSchedulePayload).sort()
-          : [],
+        normalizedTopLevelKeys: loadedSchedule ? Object.keys(loadedSchedule).sort() : [],
+        rawTopLevelKeys: rawSchedulePayload ? Object.keys(rawSchedulePayload).sort() : [],
       },
       lastUpdateByNumericId,
       lastUpdateNamespaceNote:

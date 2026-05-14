@@ -7,10 +7,7 @@ import { bsuirClient, getBsuirErrorMessage } from "@/shared/api";
 export async function GET(request: Request) {
   const group = new URL(request.url).searchParams.get("group")?.trim();
   if (!group || !/^\d+$/.test(group)) {
-    return Response.json(
-      { error: "Укажите ?group=номер (только цифры)" },
-      { status: 400 }
-    );
+    return Response.json({ error: "Укажите ?group=номер (только цифры)" }, { status: 400 });
   }
 
   try {
@@ -26,9 +23,6 @@ export async function GET(request: Request) {
     if (e instanceof Error && e.name === "AbortError") {
       return Response.json({ aborted: true });
     }
-    return Response.json(
-      { error: getBsuirErrorMessage(e) },
-      { status: 502 }
-    );
+    return Response.json({ error: getBsuirErrorMessage(e) }, { status: 502 });
   }
 }

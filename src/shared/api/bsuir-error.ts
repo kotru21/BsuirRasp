@@ -2,6 +2,7 @@ import {
   BsuirApiError,
   BsuirConfigurationError,
   BsuirNetworkError,
+  BsuirResponseValidationError,
   BsuirTimeoutError,
   BsuirValidationError,
 } from "bsuir-iis-api";
@@ -38,9 +39,12 @@ export function getBsuirErrorMessage(error: unknown): string {
     return "Клиент API не настроен: в среде нет fetch — передайте fetch в createBsuirClient.";
   }
   if (error instanceof BsuirValidationError) return "Неверный запрос";
+  if (error instanceof BsuirResponseValidationError) {
+    return "API вернул неожиданный формат данных";
+  }
   if (error instanceof BsuirTimeoutError) return "Превышено время ожидания";
   if (error instanceof BsuirNetworkError) {
-    const chain = error.causeError ?? error.cause;
+    const chain = error.cause;
     if (isTlsTrustFailure(error) || isTlsTrustFailure(chain)) {
       return "Проверка TLS к API не прошла. За корпоративным прокси: bun run dev:system-ca.";
     }
